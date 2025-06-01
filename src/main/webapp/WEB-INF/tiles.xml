@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+
+<definition name="admin" template="/WEB-INF/jsp/admin/alayout.jsp">
+<put-attribute name="ah" value="/WEB-INF/jsp/admin/ah.jsp"></put-attribute>
+<put-attribute name="ab" value="/WEB-INF/jsp/admin/ab.jsp"></put-attribute>
+<put-attribute name="af" value="/WEB-INF/jsp/admin/af.jsp"></put-attribute>
+</definition>
+
+<definition name="indexx" extends="admin">
+<put-attribute name="ab" value="/WEB-INF/jsp/index.jsp"></put-attribute>
+</definition>
+
+<definition name="loginn" extends="admin">
+<put-attribute name="ab" value="/WEB-INF/jsp/login/login.jsp"></put-attribute>
+</definition>
+
+<definition name="registerr" extends="admin">
+<put-attribute name="ab" value="/WEB-INF/jsp/register/register.jsp"></put-attribute>
+</definition>
+
+<definition name="productt" extends="admin">
+<put-attribute name="ab" value="/WEB-INF/jsp/product.jsp"></put-attribute>
+<!-- <put-attribute name="showSearch" value="true" type="string" /> -->              <!-- issue : don't use this it will not work.it is not setting value= true automatically -->
+</definition>
+
+<definition name="viewProductt" extends="admin">
+<put-attribute name="ab" value="/WEB-INF/jsp/viewProduct.jsp"></put-attribute>
+</definition>
+
+<definition name="adminIndex" extends="admin">
+<put-attribute name="ab" value="/WEB-INF/jsp/admin/index.jsp"></put-attribute>
+</definition>
+
+<definition name="addProductt" extends="admin">
+<put-attribute name="ab" value="/WEB-INF/jsp/admin/addProduct.jsp"></put-attribute>
+</definition>
+
+<definition name="categoryy" extends="admin">
+<put-attribute name="ab" value="/WEB-INF/jsp/admin/category.jsp"></put-attribute>
+</definition>
+
+<definition name="editCategoryy" extends="admin">
+<put-attribute name="ab" value="/WEB-INF/jsp/admin/editcategory.jsp"></put-attribute>
+</definition>
+
+
+</tiles-definitions>
