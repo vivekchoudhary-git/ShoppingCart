@@ -41,11 +41,19 @@ public class WebConfig implements WebMvcConfigurer {
 	          .addResourceLocations("/resources/");
 	        
 	        String uploadDir = environment.getProperty("category.upload.path");
+	        String productUploadDir = environment.getProperty("product.upload.path");
 	        
-	        // this is to read external directory path where we would store uploaded images, suggested by chatGPT
-	        registry.addResourceHandler("/categoryimage/**")
+	        // this is to read external directory path where we would store uploaded category images, suggested by chatGPT
+	        registry
+	          .addResourceHandler("/categoryimage/**")
  //           .addResourceLocations("file:/D:/JAVA/externaldirectory/shoppingcart/categoryimage/");       // this is hard coded
-	        .addResourceLocations("file:"+uploadDir+"/");                                                // this is dynamic
+	          .addResourceLocations("file:"+uploadDir+"/");                                                // this is dynamic
+	        
+	     // this is to read external directory path where we would store uploaded product images, suggested by chatGPT
+	        
+	        registry
+	               .addResourceHandler("/productimage/**")
+	               .addResourceLocations("file:"+productUploadDir+"/");
 	        
 	    }
 	    

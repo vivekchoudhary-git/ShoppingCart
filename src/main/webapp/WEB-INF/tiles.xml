@@ -47,5 +47,9 @@
 <put-attribute name="ab" value="/WEB-INF/jsp/admin/editcategory.jsp"></put-attribute>
 </definition>
 
+<definition name="productss" extends="admin">
+<put-attribute name="ab" value="/WEB-INF/jsp/admin/products.jsp"></put-attribute>
+</definition>
+
 
 </tiles-definitions>

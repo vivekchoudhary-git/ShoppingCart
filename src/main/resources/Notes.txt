@@ -9,4 +9,24 @@
 http://localhost:8080/myapp
 then ${pageContext.request.contextPath} will return /myapp.
    
- ---------------------------------------------------------------------  
+ ------------------------------------------------------------------------------------------------------------  
+ 
+  <!-- below link can throw error sometimes therefore it is not recommended by chatGPT -->
+<!-- 	<link rel="stylesheet" href="resources/css/style.css"> -->
+	
+<!-- 	we can see our css file i.e style.css at http://localhost:8080/resources/css/style.css after using pageContext.request.contextPath -->
+        <!-- this is recommended by chatGPT -->
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
+	
+	
+-------------------------------------------------------------------------------------------------------------	
+
+<c:forEach items="${productsList}" var="prod" varStatus="c">
+<tr>
+      <th scope="row"><c:out value="${c.count}"></c:out></th>
+      <td><c:out value="${cat.name}"></c:out></td>
+ </tr>
+ 
+ over here  varStatus="c" is used to automatically assign serial number in the table    
+ 
+----------------------------------------------------------------------------------------------------------------- 

@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -27,8 +28,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 import com.vivekSpringBoot.shopping.model.Category;
+import com.vivekSpringBoot.shopping.model.Product;
 import com.vivekSpringBoot.shopping.service.CategoryService;
+import com.vivekSpringBoot.shopping.service.ProductService;
 
 
 @Controller
@@ -41,6 +45,9 @@ public class AdminController {
 	@Autowired
 	private CategoryService categoryServiceImpl;
 	
+	@Autowired
+	private ProductService productServiceImpl;
+	
 	@GetMapping("/")
 	public String index() {
 		
@@ -48,7 +55,11 @@ public class AdminController {
 	}
 	
 	@GetMapping("/loadAddProduct")
-	public String addProductPage() {
+	public String addProductPage(Model model) {
+		
+		List<Category> categoryList = categoryServiceImpl.getAllCategory();
+		
+        model.addAttribute("categoryList", categoryList);
 		
 		return "addProductt";
 	}
@@ -112,7 +123,7 @@ public class AdminController {
 //			String uploadDir = "D:/JAVA/externaldirectory/shoppingcart/categoryimage";     // this is hard coded
 			String uploadDir = environment.getProperty("category.upload.path");            // this is dynamic
 			
-            File uploadPath = new File(uploadDir);
+            File uploadPath = new File(uploadDir);                    // check it is required or not
 
             if (!uploadPath.exists()) {
                 uploadPath.mkdirs();           // Create the directory if it doesn't exist
@@ -185,7 +196,7 @@ public class AdminController {
 			if(file != null && !file.isEmpty()) {
 			String uploadDir = environment.getProperty("category.upload.path");
 			
-			File uploadPathFile = new File(uploadDir);
+			File uploadPathFile = new File(uploadDir);                        // check it is required or not
 			
 			Path path = Paths.get(uploadDir,file.getOriginalFilename());
 			
@@ -205,6 +216,80 @@ public class AdminController {
 		return "redirect:/admin/editCategory/"+category.getId();
 	}
 	
+	@PostMapping("/saveProduct")
+	public String insertProductData(@ModelAttribute Product product,@RequestParam("file") MultipartFile file,HttpSession session) throws IOException {
+		
+		String imageName = (file != null && !file.isEmpty()) ? file.getOriginalFilename() : "default.jpg" ;
+		
+		product.setImageName(imageName);
+		
+		System.out.println("product : "+product);
+		
+		Product savedProduct = productServiceImpl.saveProductData(product);
+		
+		System.out.println("savedProduct : "+savedProduct);
+		
+		if(!ObjectUtils.isEmpty(savedProduct)) {
+			
+			if(!file.isEmpty() && file != null) {
+				
+				String productUploadPath = environment.getProperty("product.upload.path");
+				
+				File productUploadPathFile = new File(productUploadPath);
+				
+				if(!productUploadPathFile.exists()) {
+					productUploadPathFile.mkdirs();                      // Create the directory if it doesn't exist
+				}
+				
+				Path productFullPath = Paths.get(productUploadPath,file.getOriginalFilename());
+				
+				Files.copy(file.getInputStream(), productFullPath, StandardCopyOption.REPLACE_EXISTING);
+				
+				session.setAttribute("successMsg", "Successfully data is saved in database");
+				
+			}
+			
+			session.setAttribute("successMsg", "Successfully data is saved in database");
+		}else {
+			
+			session.setAttribute("errorMsg", "Failed data is not saved in database");
+		}
+		
+		return "redirect:/admin/loadAddProduct";
+	}
+	
+	@GetMapping("/viewProducts")
+	public String viewAllProducts(Model model) {
+		
+		String productImageUrl = environment.getProperty("product.image.url");
+		
+		List<Product> productsList = productServiceImpl.getAllProducts();
+		
+		if(!CollectionUtils.isEmpty(productsList)) {
+			
+			model.addAttribute("productsList", productsList);
+			model.addAttribute("productImageUrl", productImageUrl);
+		}
+		
+		return "productss";
+	}
+	
+	
+	@GetMapping("/deleteProduct/{id}")
+	public String deleteProductData(@PathVariable("id") int id,HttpSession session) {
+		
+		Boolean deleteStatus = productServiceImpl.deleteProductById(id);
+		
+		if(deleteStatus) {
+			
+			session.setAttribute("successMsg", "Successfully product is deleted");
+		}else {
+			
+			session.setAttribute("errorMsg", "Failed product is not deleted");
+		}
+		
+		return "redirect:/admin/viewProducts";
+	}
 	
 }
 

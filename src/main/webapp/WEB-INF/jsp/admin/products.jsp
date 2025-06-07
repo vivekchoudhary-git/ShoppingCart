@@ -28,84 +28,71 @@
 <!-- 	we can see our css file i.e style.css at http://localhost:8080/resources/css/style.css after using pageContext.request.contextPath -->
         <!-- this is recommended by chatGPT -->
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
-	
 
 </head>
 <body>
 
-<div class="container p-5 mt-3">
+<div class="container mt-5 p-5" style="font-weight : bolder;">
 
-<div class="row">
-
-<div class="col-md-6 offset-md-3">
 <div class="card card-sh">
-<div class="card-header text-center fs-4">
-<p class="fs-4">Add Product</p>
+
+<div class="card-header text-center">
+<p class="fs-4">View All Products</p>
 
 <c:if test="${not empty sessionScope.successMsg }">
-<div style="color : green;font-size : 20px;font-family : georgia" role="alert">
-<c:out value="${sessionScope.successMsg}"></c:out>
-<!-- remove session value -->
+<div style="color : green;font-size : 20px;font-family : georgia;" role="alert">
+<c:out value="${sessionScope.successMsg}"/>
+<!-- after displaying the message ,remove the session content -->
 <c:remove var="successMsg" scope="session"/>
 </div>
 </c:if>
 
-<c:if test="${not empty sessionScope.errorMsg }">
-<div style="color : red;font-size : 20px;font-family : georgia" role="alert">
-<c:out value="${sessionScope.errorMsg}"></c:out>
-<!-- remove session value -->
-<c:remove var="successMsg" scope="session"/>
+<c:if test="${not empty sessionScope.errorMsg}">
+<div style="color : red;font-size : 20px;font-family : georgia;" role="alert">
+<c:out value="${sessionScope.errorMsg}"/>
+<!-- after displaying the message ,remove the session content -->
+<c:remove var="errorMsg" scope="session"/>
 </div>
 </c:if>
 
 </div>
+
 <div class="card-body">
-<form action="/admin/saveProduct" method="post" enctype="multipart/form-data">
+<table class="table">
 
-<div class="mb-3">
-<label>Enter Title</label><input class="form-control" type="text" name="title">
-</div>
-
-<div class="mb-3">
-<label>Enter Description</label><textarea name="description" rows="3" cols="" class="form-control"></textarea>
-</div>
-
-<div class="mb-3">
-<label>Category</label>
-<select class="form-control" name="category">
-<option value="" disabled="disabled" selected="selected">---- Select ----</option>
-<c:forEach items="${categoryList}" var="cat">
-<option value="${cat.name}">${cat.name}</option>
-</c:forEach>
-</select>
-</div>
-
-<div class="mb-3">
-<label>Enter Price</label><input class="form-control" type="text" name="price">
-</div>
-
-<div class="row">
-
-<div class="mb-3 col">
-<label>Enter Stock</label><input class="form-control" type="text" name="stock">
-</div>
-
-<div class="mb-3 col">
-<label>Upload Image</label><input class="form-control" type="file" name="file">
-</div>
-
-</div>
-
-<button class="btn btn-primary col-md-12">Submit</button>
-
-</form>
-</div>
-</div>
+  <thead>
+    <tr>
+      <th scope="col">Sr No.</th>
+      <th scope="col">Product Image</th>
+      <th scope="col">Title</th>
+      <th scope="col">Category</th>
+      <th scope="col">Price</th>
+      <th scope="col">Stock</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  
+  <tbody>
+  <c:forEach items="${productsList}" var="prod" varStatus="c">
+    <tr>
+      <th scope="row">${c.count}</th>
+      <td><img alt="not found" src="${pageContext.request.contextPath}${productImageUrl}${prod.imageName}" width="50px" height="50px"></td>
+      <td>${prod.title}</td>
+      <td>${prod.category}</td>
+      <td>${prod.price}</td>
+      <td>${prod.stock}</td>
+      <td><a href="#" class="btn btn-primary btn btn-sm"><i class="fa-solid fa-pen-to-square"></i>Edit</a><a href="/admin/deleteProduct/${prod.id}" class="btn btn-danger btn-sm ms-2"><i class="fa-solid fa-trash"></i>Delete</a></td>
+    </tr>
+    </c:forEach>
+  </tbody>
+  
+</table>
 </div>
 
 </div>
 
 </div>
+
 
 
 

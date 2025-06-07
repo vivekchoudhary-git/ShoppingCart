@@ -19,7 +19,11 @@
 	integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
 	crossorigin="anonymous" referrerpolicy="no-referrer" />
 	
-	<link rel="stylesheet" href="resources/css/style.css">
+	<!-- <link rel="stylesheet" href="resources/css/style.css"> -->
+	
+		<!-- 	we can see our css file i.e style.css at http://localhost:8080/resources/css/style.css after using pageContext.request.contextPath -->
+<!-- this is recommended by chatGPT -->
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
 
 </head>
 <body>

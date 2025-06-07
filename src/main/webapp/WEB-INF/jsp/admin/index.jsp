@@ -19,7 +19,12 @@
 	integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
 	crossorigin="anonymous" referrerpolicy="no-referrer" />
 	
-	<link rel="stylesheet" href="resources/css/style.css">
+	<!-- below link can throw error sometimes therefore it is not recommended by chatGPT -->
+	<!-- <link rel="stylesheet" href="resources/css/style.css"> -->
+	
+	<!-- 	we can see our css file i.e style.css at http://localhost:8080/resources/css/style.css after using pageContext.request.contextPath -->
+<!-- this is recommended by chatGPT -->
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
 
 
 </head>
@@ -53,7 +58,7 @@
 </div>
 
 <div class="col-md-4">
-<a class="text-decoration-none" href="#">
+<a class="text-decoration-none" href="/admin/viewProducts">
 <div class="card card-sh">
 <div class="card-body text-center text-success">
 <i class="fa-solid fa-book-open fa-3x"></i>
