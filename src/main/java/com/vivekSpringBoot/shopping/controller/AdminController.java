@@ -310,10 +310,21 @@ public class AdminController {
 		return "editProductt";
 	}
 	
-	@PostMapping("/updateProduct/{id}")
-	public void updateProductData(@PathVariable("id") int id) {
+	@PostMapping("/updateProduct")
+	public String updateProductData(@ModelAttribute Product product,@RequestParam("file") MultipartFile file,HttpSession session) throws IOException {
 		
+		Product savedUpdatedProduct = productServiceImpl.updateProduct(product, file);
 		
+		if(savedUpdatedProduct != null) {
+			
+			session.setAttribute("successMsg", "Successfully Product is Updated");
+			
+		}else {
+			
+			session.setAttribute("errorMsg", "Failed Product is not Updated");
+		}
+		
+		return "redirect:/admin/editProduct/"+product.getId();
 	}
 	
 }

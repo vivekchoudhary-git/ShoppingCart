@@ -1,10 +1,17 @@
 package com.vivekSpringBoot.shopping.serviceimpl;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.vivekSpringBoot.shopping.model.Product;
 import com.vivekSpringBoot.shopping.repository.ProductRepo;
@@ -15,6 +22,9 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	private ProductRepo productRepo;
+	
+	@Autowired
+	private Environment environment;
 	
 	@Override
 	public Product saveProductData(Product product) {
@@ -58,6 +68,42 @@ public class ProductServiceImpl implements ProductService {
 			
 			Product product = productOptional.get();
 			return product;
+		}
+		
+		return null;
+	}
+
+	@Override
+	public Product updateProduct(Product product,MultipartFile file) throws IOException {
+	
+		Optional<Product> oldProductOptional = productRepo.findById(product.getId());
+		
+		if(!oldProductOptional.isEmpty()) {
+			
+			Product oldProduct = oldProductOptional.get();
+			
+	       String updatedImageName = (!file.isEmpty() && file != null) ? file.getOriginalFilename() : oldProduct.getImageName();
+			
+			oldProduct.setTitle(product.getTitle());
+			oldProduct.setDescription(product.getDescription());
+			oldProduct.setCategory(product.getCategory());
+			oldProduct.setPrice(product.getPrice());
+			oldProduct.setStock(product.getStock());
+			oldProduct.setImageName(updatedImageName);
+			
+			Product savedUpdatedProduct = productRepo.save(oldProduct);
+			
+			if(!file.isEmpty() && file != null) {
+				
+                String productUploadPath = environment.getProperty("product.upload.path");
+				
+				Path productImageFullPath = Paths.get(productUploadPath, file.getOriginalFilename());
+				
+				Files.copy(file.getInputStream(), productImageFullPath, StandardCopyOption.REPLACE_EXISTING);
+				
+			}
+			
+			return savedUpdatedProduct;
 		}
 		
 		return null;

@@ -59,7 +59,9 @@
 
 </div>
 <div class="card-body">
-<form action="#" method="post" enctype="multipart/form-data">
+<form action="/admin/updateProduct" method="post" enctype="multipart/form-data">
+
+<input type="hidden" name="id" value="${oldProduct.id}">
 
 <div class="mb-3">
 <label>Enter Title</label><input class="form-control" type="text" name="title" value="${oldProduct.title }">
