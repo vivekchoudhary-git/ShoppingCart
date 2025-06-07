@@ -81,7 +81,7 @@
       <td>${prod.category}</td>
       <td>${prod.price}</td>
       <td>${prod.stock}</td>
-      <td><a href="#" class="btn btn-primary btn btn-sm"><i class="fa-solid fa-pen-to-square"></i>Edit</a><a href="/admin/deleteProduct/${prod.id}" class="btn btn-danger btn-sm ms-2"><i class="fa-solid fa-trash"></i>Delete</a></td>
+      <td><a href="/admin/editProduct/${prod.id}" class="btn btn-primary btn btn-sm"><i class="fa-solid fa-pen-to-square"></i>Edit</a><a href="/admin/deleteProduct/${prod.id}" class="btn btn-danger btn-sm ms-2"><i class="fa-solid fa-trash"></i>Delete</a></td>
     </tr>
     </c:forEach>
   </tbody>

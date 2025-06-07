@@ -291,6 +291,31 @@ public class AdminController {
 		return "redirect:/admin/viewProducts";
 	}
 	
+	@GetMapping("/editProduct/{id}")
+	public String editProductData(@PathVariable("id") int id,Model model) {
+		
+		List<Category> categoryList = categoryServiceImpl.getAllCategory();
+		
+		String productImageUrl = environment.getProperty("product.image.url");
+		
+		Product oldProduct = productServiceImpl.getProductById(id);
+		
+		if(oldProduct != null) {
+			model.addAttribute("oldProduct", oldProduct);
+		}
+		
+		model.addAttribute("categoryList", categoryList);
+		model.addAttribute("productImageUrl", productImageUrl);
+		
+		return "editProductt";
+	}
+	
+	@PostMapping("/updateProduct/{id}")
+	public void updateProductData(@PathVariable("id") int id) {
+		
+		
+	}
+	
 }
 
 

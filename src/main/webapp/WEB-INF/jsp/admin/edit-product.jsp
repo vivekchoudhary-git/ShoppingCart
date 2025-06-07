@@ -28,7 +28,6 @@
 <!-- 	we can see our css file i.e style.css at http://localhost:8080/resources/css/style.css after using pageContext.request.contextPath -->
         <!-- this is recommended by chatGPT -->
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
-	
 
 </head>
 <body>
@@ -40,7 +39,7 @@
 <div class="col-md-6 offset-md-3">
 <div class="card card-sh">
 <div class="card-header text-center fs-4">
-<p class="fs-4" style="font-weight : bold">Add Product</p>
+<p class="fs-4" style="font-weight : bold">Edit Product</p>
 
 <c:if test="${not empty sessionScope.successMsg }">
 <div style="color : green;font-size : 20px;font-family : georgia" role="alert">
@@ -60,20 +59,20 @@
 
 </div>
 <div class="card-body">
-<form action="/admin/saveProduct" method="post" enctype="multipart/form-data">
+<form action="#" method="post" enctype="multipart/form-data">
 
 <div class="mb-3">
-<label>Enter Title</label><input class="form-control" type="text" name="title">
+<label>Enter Title</label><input class="form-control" type="text" name="title" value="${oldProduct.title }">
 </div>
 
 <div class="mb-3">
-<label>Enter Description</label><textarea name="description" rows="3" cols="" class="form-control"></textarea>
+<label>Enter Description</label><textarea name="description" rows="3" cols="" class="form-control">${oldProduct.description}</textarea>
 </div>
 
 <div class="mb-3">
 <label>Category</label>
 <select class="form-control" name="category">
-<option value="" disabled="disabled" selected="selected">---- Select ----</option>
+<option value="${oldProduct.category}" selected="selected">${oldProduct.category}</option>
 <c:forEach items="${categoryList}" var="cat">
 <option value="${cat.name}">${cat.name}</option>
 </c:forEach>
@@ -81,13 +80,13 @@
 </div>
 
 <div class="mb-3">
-<label>Enter Price</label><input class="form-control" type="text" name="price">
+<label>Enter Price</label><input class="form-control" type="text" name="price" value="${oldProduct.price}">
 </div>
 
 <div class="row">
 
 <div class="mb-3 col">
-<label>Enter Stock</label><input class="form-control" type="text" name="stock">
+<label>Enter Stock</label><input class="form-control" type="text" name="stock" value="${oldProduct.stock}">
 </div>
 
 <div class="mb-3 col">
@@ -96,7 +95,11 @@
 
 </div>
 
-<button class="btn btn-primary col-md-12">Submit</button>
+<div class="text-center mb-1">
+<img alt="not found" src="${pageContext.request.contextPath}${productImageUrl}${oldProduct.imageName}" width="100px" height="100px">
+</div>
+
+<button class="btn btn-primary col-md-12">Update</button>
 
 </form>
 </div>
@@ -106,6 +109,7 @@
 </div>
 
 </div>
+
 
 
 

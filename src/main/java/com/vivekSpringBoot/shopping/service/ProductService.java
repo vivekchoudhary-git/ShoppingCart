@@ -9,5 +9,6 @@ public interface ProductService {
 	public Product saveProductData(Product product);
 	public List<Product> getAllProducts();
 	public Boolean deleteProductById(int id);
+	public Product getProductById(int id);
 	
 }

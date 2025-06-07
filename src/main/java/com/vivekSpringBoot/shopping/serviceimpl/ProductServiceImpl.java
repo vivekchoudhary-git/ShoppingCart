@@ -49,4 +49,18 @@ public class ProductServiceImpl implements ProductService {
 		return false;
 	}
 
+	@Override
+	public Product getProductById(int id) {
+		
+		Optional<Product> productOptional = productRepo.findById(id);
+		
+		if(!productOptional.isEmpty()) {
+			
+			Product product = productOptional.get();
+			return product;
+		}
+		
+		return null;
+	}
+
 }
