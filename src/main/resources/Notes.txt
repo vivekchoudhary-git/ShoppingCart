@@ -29,4 +29,7 @@ then ${pageContext.request.contextPath} will return /myapp.
  
  over here  varStatus="c" is used to automatically assign serial number in the table    
  
------------------------------------------------------------------------------------------------------------------ 
+----------------------------------------------------------------------------------------------------------------------------------------------------- 
+
+use AJAX or jQuery in addProduct.jsp so that when we enter the discount after price then automatically it should show discounted price on the same page.
+

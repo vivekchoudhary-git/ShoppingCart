@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.vivekSpringBoot.shopping.model.Product;
 import com.vivekSpringBoot.shopping.repository.ProductRepo;
 import com.vivekSpringBoot.shopping.service.ProductService;
+import com.vivekSpringBoot.shopping.utility.DiscountUtility;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -25,6 +26,9 @@ public class ProductServiceImpl implements ProductService {
 	
 	@Autowired
 	private Environment environment;
+	
+	@Autowired
+	private DiscountUtility discountUtility;
 	
 	@Override
 	public Product saveProductData(Product product) {
@@ -76,6 +80,10 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Product updateProduct(Product product,MultipartFile file) throws IOException {
 	
+        Double discountedPrice = discountUtility.calculateDiscountedPrice(product.getDiscount(), product.getPrice());
+		
+		product.setDiscountedPrice(discountedPrice);
+		
 		Optional<Product> oldProductOptional = productRepo.findById(product.getId());
 		
 		if(!oldProductOptional.isEmpty()) {
@@ -88,6 +96,8 @@ public class ProductServiceImpl implements ProductService {
 			oldProduct.setDescription(product.getDescription());
 			oldProduct.setCategory(product.getCategory());
 			oldProduct.setPrice(product.getPrice());
+			oldProduct.setDiscount(product.getDiscount());
+			oldProduct.setDiscountedPrice(product.getDiscountedPrice());
 			oldProduct.setStock(product.getStock());
 			oldProduct.setImageName(updatedImageName);
 			

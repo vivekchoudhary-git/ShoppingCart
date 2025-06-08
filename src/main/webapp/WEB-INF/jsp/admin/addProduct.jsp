@@ -54,7 +54,7 @@
 <div style="color : red;font-size : 20px;font-family : georgia" role="alert">
 <c:out value="${sessionScope.errorMsg}"></c:out>
 <!-- remove session value -->
-<c:remove var="successMsg" scope="session"/>
+<c:remove var="errorMsg" scope="session"/>
 </div>
 </c:if>
 
@@ -70,8 +70,10 @@
 <label>Enter Description</label><textarea name="description" rows="3" cols="" class="form-control"></textarea>
 </div>
 
-<div class="mb-3">
-<label>Category</label>
+<div class="row">
+
+<div class="mb-3 col">
+<label>Category ( <i class="fa-solid fa-list"></i> ) </label>
 <select class="form-control" name="category">
 <option value="" disabled="disabled" selected="selected">---- Select ----</option>
 <c:forEach items="${categoryList}" var="cat">
@@ -80,18 +82,32 @@
 </select>
 </div>
 
-<div class="mb-3">
-<label>Enter Price</label><input class="form-control" type="text" name="price">
+<div class="mb-3 col">
+<label>Enter Price ( <i class="fa-solid fa-indian-rupee-sign"></i> )</label><input class="form-control" type="number" name="price">
+</div>
+
 </div>
 
 <div class="row">
 
 <div class="mb-3 col">
-<label>Enter Stock</label><input class="form-control" type="text" name="stock">
+<label>Enter Discount ( <i class="fa-solid fa-percent"></i> )</label><input class="form-control" type="number" name="discount">
 </div>
 
 <div class="mb-3 col">
-<label>Upload Image</label><input class="form-control" type="file" name="file">
+<label>Discounted Price ( <i class="fa-solid fa-indian-rupee-sign"></i> ) </label><input class="form-control" type="number" name="discountedPrice" readonly="readonly">
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="mb-3 col">
+<label>Enter Stock ( <i class="fa-solid fa-layer-group"></i> ) </label><input class="form-control" type="number" name="stock">
+</div>
+
+<div class="mb-3 col">
+<label>Upload Image ( <i class="fa-solid fa-cloud-arrow-up"></i> ) </label><input class="form-control" type="file" name="file">
 </div>
 
 </div>

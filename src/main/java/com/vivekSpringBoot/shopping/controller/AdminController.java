@@ -33,6 +33,7 @@ import com.vivekSpringBoot.shopping.model.Category;
 import com.vivekSpringBoot.shopping.model.Product;
 import com.vivekSpringBoot.shopping.service.CategoryService;
 import com.vivekSpringBoot.shopping.service.ProductService;
+import com.vivekSpringBoot.shopping.utility.DiscountUtility;
 
 
 @Controller
@@ -47,6 +48,9 @@ public class AdminController {
 	
 	@Autowired
 	private ProductService productServiceImpl;
+	
+	@Autowired
+	private DiscountUtility discountUtility;
 	
 	@GetMapping("/")
 	public String index() {
@@ -223,8 +227,21 @@ public class AdminController {
 		
 		product.setImageName(imageName);
 		
-		System.out.println("product : "+product);
+		// set Discounted Price of the product
 		
+		if(product.getDiscount() == null) {
+			
+			product.setDiscount(0);
+		}else if (product.getDiscount() < 0 || product.getDiscount() > 100) {
+			
+			session.setAttribute("errorMsg", "Invalid Discount");
+			return "redirect:/admin/loadAddProduct";
+		}
+		
+		Double discountedPrice = discountUtility.calculateDiscountedPrice(product.getDiscount(), product.getPrice());
+		
+		product.setDiscountedPrice(discountedPrice);
+
 		Product savedProduct = productServiceImpl.saveProductData(product);
 		
 		System.out.println("savedProduct : "+savedProduct);
@@ -312,6 +329,17 @@ public class AdminController {
 	
 	@PostMapping("/updateProduct")
 	public String updateProductData(@ModelAttribute Product product,@RequestParam("file") MultipartFile file,HttpSession session) throws IOException {
+		
+		        // set Discounted Price of the product
+		
+				if(product.getDiscount() == null) {
+					
+					product.setDiscount(0);
+				}else if (product.getDiscount() < 0 || product.getDiscount() > 100) {
+					
+					session.setAttribute("errorMsg", "Invalid Discount");
+					return "redirect:/admin/editProduct/"+product.getId();
+				}
 		
 		Product savedUpdatedProduct = productServiceImpl.updateProduct(product, file);
 		

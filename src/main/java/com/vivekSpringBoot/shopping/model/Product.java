@@ -31,7 +31,10 @@ public class Product {
 	@Column(length = 5000)
 	private String description;
 	private String category;
-	private double price;
+	private Double price;
+	@Column(nullable = true)
+	private Integer discount;                          // added later  // use Integer to handle null values
+	private Double discountedPrice;            // added later
 	private int stock;
 	private String imageName;
 	

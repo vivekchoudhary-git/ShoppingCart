@@ -67,6 +67,8 @@
       <th scope="col">Title</th>
       <th scope="col">Category</th>
       <th scope="col">Price</th>
+      <th scope="col">Discount</th>
+      <th scope="col">Discounted Price</th>
       <th scope="col">Stock</th>
       <th scope="col">Action</th>
     </tr>
@@ -80,6 +82,8 @@
       <td>${prod.title}</td>
       <td>${prod.category}</td>
       <td>${prod.price}</td>
+      <td>${prod.discount}</td>
+      <td>${prod.discountedPrice}</td>
       <td>${prod.stock}</td>
       <td><a href="/admin/editProduct/${prod.id}" class="btn btn-primary btn btn-sm"><i class="fa-solid fa-pen-to-square"></i>Edit</a><a href="/admin/deleteProduct/${prod.id}" class="btn btn-danger btn-sm ms-2"><i class="fa-solid fa-trash"></i>Delete</a></td>
     </tr>
