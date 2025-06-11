@@ -101,6 +101,24 @@
 
 </div>
 
+<div class="mb-3">
+<label>Status</label>
+
+<div class="form-check">
+  <input class="form-check-input" type="radio" name="isActive" id="radioDefault1" <c:if test="${oldProduct.isActive == true}">checked</c:if> value="true">
+  <label class="form-check-label" for="radioDefault1">
+    Active
+  </label>
+</div>
+<div class="form-check">
+  <input class="form-check-input" type="radio" name="isActive" id="radioDefault2" <c:if test="${oldProduct.isActive == false}">checked</c:if> value="false">
+  <label class="form-check-label" for="radioDefault2">
+   Inactive
+  </label>
+</div>
+
+</div>
+
 <div class="row">
 
 <div class="mb-3 col">

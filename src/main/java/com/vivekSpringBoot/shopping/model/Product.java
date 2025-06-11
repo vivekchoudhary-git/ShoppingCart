@@ -37,7 +37,7 @@ public class Product {
 	private Double discountedPrice;            // added later
 	private int stock;
 	private String imageName;
-	
+	private Boolean isActive;
 	
 	
 }
