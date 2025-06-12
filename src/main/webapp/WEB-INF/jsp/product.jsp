@@ -33,13 +33,15 @@
 <div class="col-md-2 p-0">
 <div class="card shadow-sm p-0 mb-5 bg-body-tertiary rounded">
 <div class="card-body">
-<div class="list-group">
+<div class="list-group text-center">
   <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
     Category
   </a>
-  <a href="#" class="list-group-item list-group-item-action">Electronics</a>
-  <a href="#" class="list-group-item list-group-item-action">Mobile Phones</a>
-  <a href="#" class="list-group-item list-group-item-action">Clothes</a>
+  
+  <c:forEach items="${activeCategoryList}" var="cat">
+  <a href="#" class="list-group-item list-group-item-action">${cat.name}</a>
+  </c:forEach>
+  
 </div>
 </div>
 </div>
@@ -50,74 +52,22 @@
 <div class="card-body">
 <p class="fs-3 text-center">Products</p>
 <div class="row">
+
+<c:forEach items="${activeProductList}" var="prod">
 <div class="col-md-3">
 <div class="card">
 <div class="card-body">
-<img alt="image not found" src='<c:url value="resources/images/product_img/laptop.jpg" ></c:url>' width="100%" height="150px">
-<p class="fs-5 text-center">Laptop</p>
+<img alt="image not found" src='<c:url value="resources/images/product_img/${prod.imageName}" ></c:url>' width="100%" height="150px">
+<p class="fs-5 text-center">${prod.title}</p>
 <div class="row text-center">
-<p class="fs-6 fw-bold">&#8377; 500 <span class="fs-6 text-success">20% off</span></p>
+<p class="fs-6 fw-bold">&#8377; ${prod.discountedPrice} <span class="text-decoration-line-through text-secondary"> ${prod.price} </span><span class="fs-6 text-success">${prod.discount}% off</span></p>
 <a class="btn btn-primary col-md-7 offset-md-2" href="/viewProduct">View Details</a>
 </div>
 
 </div> 
 </div>
 </div>
-
-<!-- TODO : Remove after backend implement -->
-<!-- 2nd product starts -->
-
-<div class="col-md-3">
-<div class="card">
-<div class="card-body">
-<img alt="image not found" src='<c:url value="resources/images/product_img/laptop.jpg" ></c:url>' width="100%" height="150px">
-<p class="fs-5 text-center">Laptop</p>
-<div class="row text-center">
-<p class="fs-6 fw-bold">&#8377; 500 <span class="fs-6 text-success">20% off</span></p>
-<a class="btn btn-primary col-md-7 offset-md-2" href="/viewProduct">View Details</a>
-</div>
-
-</div> 
-</div>
-</div>
-
-<!-- 2nd product ends -->
-
-<!-- 3rd product starts -->
-
-<div class="col-md-3">
-<div class="card">
-<div class="card-body">
-<img alt="image not found" src='<c:url value="resources/images/product_img/laptop.jpg" ></c:url>' width="100%" height="150px">
-<p class="fs-5 text-center">Laptop</p>
-<div class="row text-center">
-<p class="fs-6 fw-bold">&#8377; 500 <span class="fs-6 text-success">20% off</span></p>
-<a class="btn btn-primary col-md-7 offset-md-2" href="/viewProduct">View Details</a>
-</div>
-
-</div> 
-</div>
-</div>
-
-<!-- 3rd product ends -->
-
-<!-- 4th product starts -->
-
-<div class="col-md-3">
-<div class="card">
-<div class="card-body">
-<img alt="image not found" src='<c:url value="resources/images/product_img/laptop.jpg" ></c:url>' width="100%" height="150px">
-<p class="fs-5 text-center">Laptop</p>
-<div class="row text-center">
-<p class="fs-6 fw-bold">&#8377; 500 <span class="fs-6 text-success">20% off</span></p>
-<a class="btn btn-primary col-md-7 offset-md-2" href="/viewProduct">View Details</a>
-</div>
-
-</div> 
-</div>
-</div>
-
-<!-- 4th product ends -->
+</c:forEach>
 
 </div>
 </div>

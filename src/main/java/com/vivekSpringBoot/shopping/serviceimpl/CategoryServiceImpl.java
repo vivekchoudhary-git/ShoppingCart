@@ -1,9 +1,11 @@
 package com.vivekSpringBoot.shopping.serviceimpl;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import com.vivekSpringBoot.shopping.model.Category;
@@ -70,6 +72,19 @@ public class CategoryServiceImpl implements CategoryService {
 		Category updatedCategory = categoryRepo.save(category);
 		
 		return updatedCategory;
+	}
+
+	@Override
+	public List<Category> getAllActiveCategoriesList() {
+	
+		List<Category> activeCategoryList = categoryRepo.findByIsActiveTrue();
+		
+		if(CollectionUtils.isEmpty(activeCategoryList)) {
+			
+			System.out.println("activeCategoryList is Empty");
+		}
+		
+		return activeCategoryList;
 	}
 
 	
