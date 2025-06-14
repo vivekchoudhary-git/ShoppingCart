@@ -42,6 +42,7 @@ public class WebConfig implements WebMvcConfigurer {
 	        
 	        String uploadDir = environment.getProperty("category.upload.path");
 	        String productUploadDir = environment.getProperty("product.upload.path");
+	        String userImageUploadPath = environment.getProperty("userimage.upload.path");
 	        
 	        // this is to read external directory path where we would store uploaded category images, suggested by chatGPT
 	        registry
@@ -56,10 +57,11 @@ public class WebConfig implements WebMvcConfigurer {
 	               .addResourceLocations("file:"+productUploadDir+"/");
 	        
 	     // this is to read external directory path where we would store uploaded user profile images, suggested by chatGPT
+	     // i would recommend below code to define image location 
 	        
 	        registry
-	                .addResourceHandler("/D:/JAVA/externaldirectory/shoppingcart/userimage/**")
-	                .addResourceLocations("file:D:/JAVA/externaldirectory/shoppingcart/userimage/");
+            .addResourceHandler("/shoppingcart/userimage/**")
+	        .addResourceLocations("file:///"+userImageUploadPath+"/");
 	      
 	    }
 	    
