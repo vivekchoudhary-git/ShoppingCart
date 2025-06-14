@@ -14,6 +14,6 @@ public interface ProductService {
 	public Boolean deleteProductById(int id);
 	public Product getProductById(int id);
 	public Product updateProduct(Product product,MultipartFile file) throws IOException;
-	public List<Product> getAllActiveProductsList();
+	public List<Product> getAllActiveProductsList(String category);
 	
 }

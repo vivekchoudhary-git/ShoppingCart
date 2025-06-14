@@ -3,9 +3,12 @@ package com.vivekSpringBoot.shopping.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.vivekSpringBoot.shopping.model.Category;
 import com.vivekSpringBoot.shopping.model.Product;
@@ -20,6 +23,9 @@ public class HomeController {
 	
 	@Autowired
 	private ProductService productServiceImpl;
+	
+	@Autowired
+	private Environment environment;
 	
 	@GetMapping("/")
 	public String index() {
@@ -40,21 +46,34 @@ public class HomeController {
 	}
 	
 	@GetMapping("/product")
-	public String product(Model model) {
+	public String product(@RequestParam(value = "category",defaultValue = "all") String category,Model model) {
 		
 		model.addAttribute("showSearch", true);                          /* to show search bar in header */
 		
+		String productImageUrl = environment.getProperty("product.image.url");
+		
 		List<Category> activeCategoryList = categoryServiceImpl.getAllActiveCategoriesList();
-		List<Product> activeProductList = productServiceImpl.getAllActiveProductsList();
+		List<Product> activeProductList = productServiceImpl.getAllActiveProductsList(category);
 		
 		model.addAttribute("activeCategoryList", activeCategoryList);
 		model.addAttribute("activeProductList", activeProductList);
+		model.addAttribute("paramValue", category);                           // it will be used to highlight selected category option
+		model.addAttribute("productImageUrl", productImageUrl);
 		
 		return "productt";
 	}
 	
-	@GetMapping("/viewProduct")
-	public String viewProduct() {
+	@GetMapping("/viewProduct/{id}")
+	public String viewProduct(@PathVariable("id") int id,Model model) {
+		
+		String productImageUrl = environment.getProperty("product.image.url");
+		
+		Product product = productServiceImpl.getProductById(id);
+		
+		System.out.println("home controller product : "+product);
+		
+		model.addAttribute("product", product);
+		model.addAttribute("productImageUrl", productImageUrl);
 		
 		return "viewProductt";
 	}

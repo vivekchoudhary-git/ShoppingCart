@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,23 +35,31 @@
 <div class="row">
 
 <div class="col-md-6 text-end">
-<img alt="image not found" src="resources/images/product_img/hp laptop.jpg" width="330px" height="400px">
+<img alt="image not found" src="${pageContext.request.contextPath}${productImageUrl}${product.imageName}" width="330px" height="400px">
 </div>
 
 <div class="col-md-6">
-<p class="fs-3">Laptop</p>
-<p class="fw-bold">Description : <br>
-HP 256 gb SSD
+<p class="fs-3">${product.title}</p>
+<p><span class="fw-bold">Description : </span><br>
+${product.description}
 </p>
 
-<p><span class="fw-bold">Product Details : </span><br>Status :<span class="badge bg-success">Available</span>
-<span class="badge bg-warning">Out of Stock</span><br>
-Category : Laptop <br> Policy : 7 Days Replacement and Return
+<p><span class="fw-bold">Product Details : </span><br>Status :
+<c:if test="${product.stock > 0}">
+<span class="badge bg-success">Available</span>
+</c:if>
+
+<c:if test="${product.stock <= 0}">
+<span class="badge bg-warning">Out of Stock</span>
+ </c:if>
+<br>
+Category : ${product.category} <br> Policy : 7 Days Replacement and Return
  </p>
+
  
  <p class="fs-5 fw-bold">
- Price :  <i class="fa-solid fa-rupee-sign"></i> 7000
- <span class="fs-6 text-decoration-line-through text-secondary">14000</span><span class="fs-6 text-success"> 50% Off</span>
+ Price :  <i class="fa-solid fa-rupee-sign"></i> ${product.discountedPrice}
+ <span class="fs-6 text-decoration-line-through text-secondary">${product.price}</span><span class="fs-6 text-success"> ${product.discount}% Off</span>
  </p>
  
  
@@ -71,7 +82,13 @@ Category : Laptop <br> Policy : 7 Days Replacement and Return
  
  </div>
  
+ <c:if test="${product.stock > 0}">
  <a href="/login" class="btn btn-danger col-md-12">Add to Cart</a>
+ </c:if>
+ 
+ <c:if test="${product.stock <= 0}">
+ <a href="#" class="btn btn-warning col-md-12 text-white">Out of Stock</a>
+ </c:if>
  
 </div>
 
