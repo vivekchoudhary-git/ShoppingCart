@@ -33,7 +33,7 @@ public class WebConfig implements WebMvcConfigurer {
 	    }
 	
 	    // we are using this method to get images file path (suggested by chatGPT)
-	    // usually we dont have to use this method.
+	    // usually we dont have to use this method when images are saved inside project and not in external directory.
 	    @Override
 	    public void addResourceHandlers(ResourceHandlerRegistry registry) {
 	        registry
@@ -55,6 +55,12 @@ public class WebConfig implements WebMvcConfigurer {
 	               .addResourceHandler("/productimage/**")
 	               .addResourceLocations("file:"+productUploadDir+"/");
 	        
+	     // this is to read external directory path where we would store uploaded user profile images, suggested by chatGPT
+	        
+	        registry
+	                .addResourceHandler("/D:/JAVA/externaldirectory/shoppingcart/userimage/**")
+	                .addResourceLocations("file:D:/JAVA/externaldirectory/shoppingcart/userimage/");
+	      
 	    }
 	    
 }
