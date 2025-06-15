@@ -83,7 +83,7 @@
 				<c:choose>
 					<c:when test="${user == null}">
 						<li class="nav-item">
-							<a class="nav-link active" href="login"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+							<a class="nav-link active" href="signin"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link active" href="/register">Register</a>

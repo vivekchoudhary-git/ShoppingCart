@@ -55,5 +55,9 @@
 <put-attribute name="ab" value="/WEB-INF/jsp/admin/edit-product.jsp"></put-attribute>
 </definition>
 
+<definition name="userHome" extends="admin">
+<put-attribute name="ab" value="/WEB-INF/jsp/user/home.jsp"></put-attribute>
+</definition>
+
 
 </tiles-definitions>

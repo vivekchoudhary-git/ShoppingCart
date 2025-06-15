@@ -33,3 +33,181 @@ then ${pageContext.request.contextPath} will return /myapp.
 
 use AJAX or jQuery in addProduct.jsp so that when we enter the discount after price then automatically it should show discounted price on the same page.
 
+---------------------------------------------------------------------------------------------------------------
+
+                                   Notes related to Spring Security Login
+
+Refer class SecurityConfig
+
+1)  .loginPage("/signin")
+
+This tells Spring Security which page to show when a user needs to log in.
+
+You must have a controller that maps /signin and returns a login JSP/HTML page.
+
+
+2) .loginProcessingUrl("/login")
+
+This is the URL where your login form submits credentials (username/password).
+
+Spring Security handles this URL internally — you do not need to create a controller for it.
+
+It will:
+
+Check the credentials
+
+Authenticate the user
+
+Call your successHandler or go to a default success page
+
+
+3) .logoutUrl("/logout")
+This is the URL to trigger logout.
+
+When a user visits or sends a POST to /logout, Spring Security:
+
+Invalidates the session
+
+Clears the authentication
+
+Redirects to the logout success page
+
+📌 Important:
+
+Spring Security only accepts POST by default (as of 5.x and up).
+
+If you want logout via GET (e.g. from a link), you must allow it explicitly (not recommended for security).
+
+✅ Recommended logout form (safe way):
+
+html
+Copy
+Edit
+<form action="/logout" method="post">
+    <button type="submit">Logout</button>
+</form>
+If you still want to enable logout via GET, use:
+
+.logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
+
+
+4) .logoutSuccessUrl("/signin?logout=true")
+After logout, the user will be redirected to /signin?logout=true
+
+You can use this query param in your JSP to show a logout message:
+
+<c:if test="${not empty param.logout}">
+    <div style="color: green;">You have been logged out successfully.</div>
+</c:if>
+
+
+--------------------------------------------------------------------------------------------------------------------
+                                          Login Page related notes
+        
+
+Question :   what is param ?
+
+
+ChatGPT said:
+In JSP, param is a built-in implicit object provided by the JSP Expression Language (EL). It gives you access to request parameters, which typically come from:
+
+URL query strings (like ?error=true)
+
+Form submissions (<form method="get/post" action="/...">)
+
+✅ Examples
+🔹 URL: http://localhost:8080/signin?error=true
+jsp
+Copy
+Edit
+<c:if test="${not empty param.error}">
+    <!-- This block will run -->
+</c:if>
+🔹 URL: http://localhost:8080/signin?logout=true
+jsp
+Copy
+Edit
+<c:if test="${param.logout == 'true'}">
+    You have been logged out!
+</c:if>
+✅ How param Works
+Expression	Meaning
+${param.error}	Gets value of the error query parameter
+${param.logout}	Gets value of the logout query parameter
+${param.username}	Gets value of the username from a form or URL
+
+note :
+param scope is read-only.
+
+You can’t modify query parameters in JSP — they’re part of the HTTP request.
+
+
+----------------------------------------------------------------------------------------------------------------------
+                                   Login Page related notes
+ 
+ 
+Question :  do we have to first  get logout=true in controller and then send to jsp using Model
+
+
+ChatGPT said:
+No — you don’t have to do anything in your controller.
+
+param.logout (and param.error, param.anythingElse) is read directly from the request’s query‑string parameters. When Spring Security redirects the user to
+
+
+/signin?logout=true
+after a successful logout, that ?logout=true part is automatically available in the JSP EL via the implicit param map. The JSP engine does roughly the same thing you would do manually in a servlet:
+
+
+String logout = request.getParameter("logout");   // ← already there
+So in the view you can simply write:
+
+
+<c:if test="${not empty param.logout}">
+    <div class="alert alert-success">Logged out successfully</div>
+</c:if>
+and it will work without any controller code or Model attributes.
+
+
+----------------------------------------------------------------------------------------------------------------
+                                     Login Page related notes
+
+Question :  Does spring boot automatically sets the error message in session
+
+
+ChatGPT said:
+Yes, ✅ Spring Security automatically sets the error message in the session when login fails.
+
+🔍 Specifically:
+When authentication fails, Spring Security stores the exception in the session using this key:
+
+
+SPRING_SECURITY_LAST_EXCEPTION
+This is available in JSP as:
+
+
+${sessionScope.SPRING_SECURITY_LAST_EXCEPTION}
+The exception object is usually a subclass of AuthenticationException, such as:
+
+BadCredentialsException → message: "Bad credentials"
+
+DisabledException → message: "User is disabled"
+
+LockedException, AccountExpiredException, etc.
+
+✅ How it gets there:
+When login fails, Spring Security's default SimpleUrlAuthenticationFailureHandler:
+
+Redirects back to the login page (like /signin?error)
+
+Stores the exception in HttpSession:
+
+
+request.getSession().setAttribute(WebAttributes.AUTHENTICATION_EXCEPTION, exception);
+which is effectively:
+
+
+SPRING_SECURITY_LAST_EXCEPTION
+
+
+-----------------------------------------------------------------------------------------------------------------------

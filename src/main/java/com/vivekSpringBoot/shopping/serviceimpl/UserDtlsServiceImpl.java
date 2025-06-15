@@ -1,6 +1,7 @@
 package com.vivekSpringBoot.shopping.serviceimpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.vivekSpringBoot.shopping.model.UserDtls;
@@ -13,8 +14,17 @@ public class UserDtlsServiceImpl implements UserDtlsService {
 	@Autowired
 	private UserDtlsRepo userDtlsRepo;
 	
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
 	@Override
 	public UserDtls saveUserDtlsData(UserDtls userDtls) {
+		
+		userDtls.setRole("ROLE_USER");
+		
+		String encodedPassword = bCryptPasswordEncoder.encode(userDtls.getPassword());
+		
+		userDtls.setPassword(encodedPassword);
 		
 		UserDtls savedUserDtls = userDtlsRepo.save(userDtls);
 		

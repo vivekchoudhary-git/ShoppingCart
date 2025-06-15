@@ -36,12 +36,57 @@
 <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
 <div class="card-header">
 <p class="fs-4 text-center">Login</p>
+
+<!-- start : show logout message -->
+<c:if test="${not empty param.logout}">
+
+<div style="color:green;font-size : 20px; font-family : georgia;text-align:center;">
+<c:out value="Logout Successful"></c:out>
+</div>
+
+ <!-- using javaScript to remove ?logout=true from the URL after displaying the message -->
+ <script>
+        if (window.location.search.includes('logout=true')) {
+            const url = new URL(window.location.href);
+            url.searchParams.delete('logout');
+            window.history.replaceState({}, document.title, url.pathname);
+        }
+ </script>
+
+</c:if>
+<!-- ends : show logout message -->
+
+
+<!-- start : show Login error messages -->
+
+    <c:if test="${not empty sessionScope.SPRING_SECURITY_LAST_EXCEPTION}">
+    <c:choose>
+        <c:when test="${sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message == 'Bad credentials'}">
+            <p class="text-center text-danger fs-5">Invalid username or password. Please try again.</p>
+        </c:when>
+        <c:when test="${sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message == 'User is disabled'}">
+            <p class="text-center text-danger fs-5">Your account is disabled. Contact support.</p>
+        </c:when>
+        <c:otherwise>
+            <p class="text-center text-danger fs-5">
+                <c:out value="${sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message}" />
+            </p>
+        </c:otherwise>
+    </c:choose>
+    
+   <!--  remove session value after displaying the message -->
+    <c:remove var="SPRING_SECURITY_LAST_EXCEPTION" scope="session"/>
+    
+</c:if>
+
+<!-- ends : show Login error messages -->
+
 </div>
 <div class="card-body">
-<form action="">
+<form action="/login" method="post">
 
 <div class="mb-3">
-<label class="form-label">Email</label><input class="form-control" name="email" type="email">
+<label class="form-label">Email</label><input class="form-control" name="username" type="email">
 </div>
 
 <div class="mb-3">
