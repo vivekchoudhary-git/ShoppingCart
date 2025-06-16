@@ -31,4 +31,12 @@ public class UserDtlsServiceImpl implements UserDtlsService {
 		return savedUserDtls;
 	}
 
+	@Override
+	public UserDtls getUserDtlsDataByEmail(String email) {
+		
+		UserDtls userDtls = userDtlsRepo.findByEmail(email);
+		
+		return userDtls;
+	}
+
 }

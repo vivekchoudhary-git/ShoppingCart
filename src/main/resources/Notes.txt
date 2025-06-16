@@ -211,3 +211,76 @@ SPRING_SECURITY_LAST_EXCEPTION
 
 
 -----------------------------------------------------------------------------------------------------------------------
+                                    Notes related to class AuthSuccessHandlerImpl
+ 
+ 
+✅ Step-by-Step Explanation
+1. authentication.getAuthorities()
+This returns a collection of GrantedAuthority objects that represent the roles/authorities assigned to the authenticated user.
+
+These come from your custom UserDetailsService:
+
+When you return a UserDetails object (usually a User), you provide a collection of GrantedAuthority in that object.
+
+Example:
+
+java
+Copy
+Edit
+return new org.springframework.security.core.userdetails.User(
+    user.getEmail(),
+    user.getPassword(),
+    Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"))
+);
+
+2. AuthorityUtils.authorityListToSet(...)
+This utility method converts the collection of authorities into a Set<String>, where each string is the authority name — like "ROLE_ADMIN" or "ROLE_USER".
+
+So if your authenticated user has:
+
+java
+Copy
+Edit
+SimpleGrantedAuthority("ROLE_ADMIN")
+Then rolesSet will contain:
+
+java
+Copy
+Edit
+["ROLE_ADMIN"]
+🔁 In Summary:
+Expression	Purpose
+authentication.getAuthorities()	Fetches roles/authorities of logged-in user
+AuthorityUtils.authorityListToSet(...)	Converts them to a set of role strings
+rolesSet.contains("ROLE_ADMIN")	Checks if user has the "ROLE_ADMIN" role
+
+If you want to confirm this works, you can log it like:
+
+java
+Copy
+Edit
+System.out.println("Roles: " + rolesSet);
+
+
+------------------------------------------------------------------------------------------------------------------
+                                   Notes related to JSP
+        
+ 1) Try to use HTML-5 with Bootstrap 5 instead of HTML-4.                                  
+
+
+-----------------------------------------------------------------------------------------------------------------------
+                                   Notes related to @ModelAttribute annotation use in Controller method
+                                   
+Runs before every request handler method
+Since this method has @ModelAttribute without any value, it is called before every @RequestMapping, @GetMapping, or @PostMapping method in the same controller.
+
+So for example, even when /product or /register is requested, this method runs first, and the attributes it sets are added to the Model.                                
+
+SUMMARY :
+
+@ModelAttribute method is a preprocessor for every request in that controller.
+It makes common model data (like logged-in user and category list) automatically available to every view, without repeating the code.
+
+Let me know if you want to make this global for all controllers (not just HomeController) — that’s possible too using a @ControllerAdvice.
+
+----------------------------------------------------------------------------------------------------------------------------------

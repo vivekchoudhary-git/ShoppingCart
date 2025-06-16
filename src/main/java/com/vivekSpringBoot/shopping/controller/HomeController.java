@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.security.Principal;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -62,6 +63,25 @@ public class HomeController {
 		
 		return "registerr";
 	}
+	
+	// handled this in GlobalModelAttribute class
+	// add this method to all controller so that whenever any controller gets called we can fetch logged in user data
+//	@ModelAttribute                               // when this controller will be called then this method will automatically called.
+//	public void getLoggedInUserDetails(Principal principal,Model model) {
+//		
+//		if(principal != null) {
+//		String userEmail = principal.getName();
+//		
+//		UserDtls userDtls = userDtlsServiceImpl.getUserDtlsDataByEmail(userEmail);
+//		
+//		model.addAttribute("userDtls", userDtls);
+//		}
+//		
+//		List<Category> allActiveCatgList = categoryServiceImpl.getAllActiveCategoriesList();
+//		model.addAttribute("activeCatg", allActiveCatgList);
+//			
+//	}
+	
 	
 	@GetMapping("/product")
 	public String product(@RequestParam(value = "category",defaultValue = "all") String category,Model model) {
@@ -130,5 +150,6 @@ public class HomeController {
 		
 		return "redirect:/register";
 	}
+	
 	
 }

@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,8 +32,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 import com.vivekSpringBoot.shopping.model.Category;
 import com.vivekSpringBoot.shopping.model.Product;
+import com.vivekSpringBoot.shopping.model.UserDtls;
 import com.vivekSpringBoot.shopping.service.CategoryService;
 import com.vivekSpringBoot.shopping.service.ProductService;
+import com.vivekSpringBoot.shopping.serviceimpl.UserDtlsServiceImpl;
 import com.vivekSpringBoot.shopping.utility.DiscountUtility;
 
 
@@ -51,6 +54,9 @@ public class AdminController {
 	
 	@Autowired
 	private DiscountUtility discountUtility;
+	
+	@Autowired
+	private UserDtlsServiceImpl userDtlsServiceImpl;
 	
 	@GetMapping("/")
 	public String index() {
@@ -85,6 +91,26 @@ public class AdminController {
 		
 		return "categoryy";
 	}
+	
+	
+	// handled this in GlobalModelAttribute class
+   // add this method to all controller so that whenever any controller gets called we can fetch logged in user data
+//	@ModelAttribute                               // when this controller will be called then this method will automatically called.
+//	public void getLoggedInUserDetails(Principal principal,Model model) {
+//		
+//		if(principal != null) {
+//		String userEmail = principal.getName();
+//		
+//		UserDtls userDtls = userDtlsServiceImpl.getUserDtlsDataByEmail(userEmail);
+//		
+//		model.addAttribute("userDtls", userDtls);
+//		}
+//		
+//		List<Category> allActiveCatgList = categoryServiceImpl.getAllActiveCategoriesList();
+//		model.addAttribute("activeCatg", allActiveCatgList);
+//			
+//	}
+	
 	
 	@PostMapping("/saveCategory")
 	public String insertCategoryData(@ModelAttribute Category category,@RequestParam("file") MultipartFile file,HttpSession session) throws IOException {

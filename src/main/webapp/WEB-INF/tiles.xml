@@ -5,7 +5,8 @@
 <tiles-definitions>
 
 <definition name="admin" template="/WEB-INF/jsp/admin/alayout.jsp">
-<put-attribute name="ah" value="/WEB-INF/jsp/admin/ah.jsp"></put-attribute>
+<!-- <put-attribute name="ah" value="/WEB-INF/jsp/admin/ah.jsp"></put-attribute> -->
+<put-attribute name="ah" value="/WEB-INF/jsp/admin/new-header.jsp"></put-attribute>
 <put-attribute name="ab" value="/WEB-INF/jsp/admin/ab.jsp"></put-attribute>
 <put-attribute name="af" value="/WEB-INF/jsp/admin/af.jsp"></put-attribute>
 </definition>
@@ -58,6 +59,7 @@
 <definition name="userHome" extends="admin">
 <put-attribute name="ab" value="/WEB-INF/jsp/user/home.jsp"></put-attribute>
 </definition>
+
 
 
 </tiles-definitions>

@@ -6,4 +6,6 @@ public interface UserDtlsService {
 
 	public UserDtls saveUserDtlsData(UserDtls userDtls);
 	
+	public UserDtls getUserDtlsDataByEmail(String email);
+	
 }
