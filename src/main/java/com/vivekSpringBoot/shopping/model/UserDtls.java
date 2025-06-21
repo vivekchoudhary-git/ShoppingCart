@@ -31,7 +31,8 @@ public class UserDtls {
 	private String state;
 	private String pincode;
 	private String password;
-	private String profileImage;                       // this is profile image name
-	private String role;                             // added later
+	private String profileImage;                             // this is profile image name
+	private String role;                                   // added later
+	private Boolean isEnabled;                           // added later
 	
 }

@@ -80,11 +80,11 @@
 </div>
 
 <div class="col-md-4 mt-3">
-<a class="text-decoration-none" href="#">
+<a class="text-decoration-none" href="/admin/viewUsers">
 <div class="card card-sh">
 <div class="card-body text-center text-primary">
-<i class="fa-solid fa-circle-user fa-3x"></i>
-<h4>User</h4>
+<i class="fa-solid fa-users fa-3x"></i>
+<h4>Users</h4>
 </div>
 </div>
 </a>

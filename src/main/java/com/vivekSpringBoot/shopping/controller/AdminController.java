@@ -381,6 +381,43 @@ public class AdminController {
 		return "redirect:/admin/editProduct/"+product.getId();
 	}
 	
+	
+	@GetMapping("/viewUsers")
+	public String viewAllUsers(Model model) {
+		
+		String userImageUrl = environment.getProperty("userimage.url");
+		
+		List<UserDtls> userDtlsList = userDtlsServiceImpl.getAllUsersByRole("ROLE_USER");
+		
+		if(!CollectionUtils.isEmpty(userDtlsList)) {
+			
+			model.addAttribute("usersListRoleWise", userDtlsList);
+		}
+		
+		    model.addAttribute("userImageUrl",userImageUrl);
+		
+		return "viewUsers";
+	}
+	
+	// here updating status i.e isEnabled Property of UserDtls
+	@GetMapping("/updateStatus")
+	public String updateUserStatus(@RequestParam("id") int id,@RequestParam("status") Boolean status,HttpSession session) {
+		
+		UserDtls updatedUserDtls = userDtlsServiceImpl.updateUserDtlsStatus(id, status);
+		
+		System.out.println("updatedUserDtls checking : "+updatedUserDtls);
+		
+		if(!ObjectUtils.isEmpty(updatedUserDtls)) {
+			
+			session.setAttribute("successMsg", "Status is Updated");
+		}else {
+			session.setAttribute("errorMsg", "Failed Status is not Updated");
+		}
+		
+		return "redirect:/admin/viewUsers";
+	}
+	
+	
 }
 
 
