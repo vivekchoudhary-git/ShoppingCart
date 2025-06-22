@@ -15,4 +15,10 @@ public interface UserDtlsService {
 	// updating isEnabled property of UserDtls
 	public UserDtls updateUserDtlsStatus(int id,Boolean status);
 	
+	public void increaseFailedAttempt(UserDtls userDtls);
+	
+	public void lockUserAccount(UserDtls userDtls);
+	
+	public boolean unlockUserAccount(UserDtls userDtls);
+	
 }

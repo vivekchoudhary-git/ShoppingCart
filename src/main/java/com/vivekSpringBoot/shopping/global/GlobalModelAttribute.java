@@ -41,7 +41,7 @@ public class GlobalModelAttribute {
 		}
 		
 		List<Category> allActiveCatgList = categoryServiceImpl.getAllActiveCategoriesList();
-		System.out.println("allActiveCatgList is loaded at GlobalModelAttribute");
+//		System.out.println("allActiveCatgList is loaded at GlobalModelAttribute");
 		model.addAttribute("activeCatg", allActiveCatgList);
 			
 	}

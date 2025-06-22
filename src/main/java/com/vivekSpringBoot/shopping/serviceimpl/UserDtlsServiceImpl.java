@@ -1,5 +1,6 @@
 package com.vivekSpringBoot.shopping.serviceimpl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.util.ObjectUtils;
 import com.vivekSpringBoot.shopping.model.UserDtls;
 import com.vivekSpringBoot.shopping.repository.UserDtlsRepo;
 import com.vivekSpringBoot.shopping.service.UserDtlsService;
+import com.vivekSpringBoot.shopping.utility.AppConstant;
 
 @Service
 public class UserDtlsServiceImpl implements UserDtlsService {
@@ -26,6 +28,9 @@ public class UserDtlsServiceImpl implements UserDtlsService {
 		
 		userDtls.setRole("ROLE_USER");
 		userDtls.setIsEnabled(true);
+		userDtls.setIsAccountNonLocked(true);
+		userDtls.setFailedAttempt(0);
+		userDtls.setLockTime(null);
 		
 		String encodedPassword = bCryptPasswordEncoder.encode(userDtls.getPassword());
 		
@@ -69,6 +74,47 @@ public class UserDtlsServiceImpl implements UserDtlsService {
 		}
 		
 		return userDtls;
+	}
+
+	@Override
+	public void increaseFailedAttempt(UserDtls userDtls) {
+		
+		Integer failedAttempt = userDtls.getFailedAttempt();
+		failedAttempt = failedAttempt+1;
+		
+		userDtls.setFailedAttempt(failedAttempt);
+		userDtlsRepo.save(userDtls);
+		
+	}
+
+	
+	@Override
+	public void lockUserAccount(UserDtls userDtls) {
+		
+		userDtls.setIsAccountNonLocked(false);
+		userDtls.setLockTime(new Date());
+		userDtlsRepo.save(userDtls);
+		
+	}
+
+	@Override
+	public boolean unlockUserAccount(UserDtls userDtls) {
+		
+		long lockTime = userDtls.getLockTime().getTime();
+		
+		long unLockTime = lockTime+AppConstant.UNLOCK_TIME_DURATION;
+		
+		if(unLockTime < System.currentTimeMillis()) {
+			
+			userDtls.setIsAccountNonLocked(true);
+			userDtls.setFailedAttempt(0);
+			userDtls.setLockTime(null);
+			userDtlsRepo.save(userDtls);
+			
+			return true;
+		}
+		
+		return false;
 	}
 
 

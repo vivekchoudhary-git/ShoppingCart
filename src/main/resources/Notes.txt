@@ -284,3 +284,56 @@ It makes common model data (like logged-in user and category list) automatically
 Let me know if you want to make this global for all controllers (not just HomeController) — that’s possible too using a @ControllerAdvice.
 
 ----------------------------------------------------------------------------------------------------------------------------------
+                              Notes related to AuthFailureHandlerImpl Class
+
+✅ Line 2: super.onAuthenticationFailure(request, response, exception);
+This actually executes the default failure behavior:
+
+It processes the exception (like LockedException, BadCredentialsException, etc.).
+
+Then it performs the redirect to the URL set above (/signin?error).
+
+🔧 Why call super.onAuthenticationFailure(...)?
+Because you've overridden the onAuthenticationFailure(...) method, if you don't call super, Spring won't know how to handle the failure unless you write the entire logic manually (like redirection, session management, etc.).
+
+
+🛠️ Optional Enhancement
+You can customize the failure URL based on reason (account locked, disabled, etc.):
+
+java
+Copy
+Edit
+if (exception instanceof LockedException) {
+    super.setDefaultFailureUrl("/signin?locked");
+} else if (exception instanceof DisabledException) {
+    super.setDefaultFailureUrl("/signin?disabled");
+} else {
+    super.setDefaultFailureUrl("/signin?error");
+}
+Then on your login page, use:
+
+jsp
+Copy
+Edit
+<c:if test="${param.locked != null}">
+    <div class="alert alert-danger">Your account is locked.</div>
+</c:if>
+<c:if test="${param.disabled != null}">
+    <div class="alert alert-warning">Your account is disabled.</div>
+</c:if>
+<c:if test="${param.error != null}">
+    <div class="alert alert-danger">Invalid credentials.</div>
+</c:if>
+
+
+Question : Instead of using param.locked,param.disabled and param.error can we use sessionScope.SPRING_SECURITY_LAST_EXCEPTION ?
+
+Answer : Yes! ✅ Absolutely — you can use sessionScope.SPRING_SECURITY_LAST_EXCEPTION to display custom error messages on your login page instead of relying solely on query parameters like ?error or ?locked.
+
+This attribute is automatically set by Spring Security in the session after a failed login, and it contains the actual AuthenticationException that caused the failure (like BadCredentialsException, LockedException, etc.).
+
+✅ Final Recommendation
+Yes — using sessionScope.SPRING_SECURITY_LAST_EXCEPTION is a cleaner and more flexible approach for real-world applications, especially when you're customizing failure messages.
+
+
+-------------------------------------------------------------------------------------------------------------------------

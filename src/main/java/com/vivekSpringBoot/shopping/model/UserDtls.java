@@ -1,5 +1,7 @@
 package com.vivekSpringBoot.shopping.model;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,5 +36,8 @@ public class UserDtls {
 	private String profileImage;                             // this is profile image name
 	private String role;                                   // added later
 	private Boolean isEnabled;                           // added later
+	private Boolean isAccountNonLocked;                    // added later
+	private Integer failedAttempt;                            // added later
+	private Date lockTime;                                       // added later
 	
 }
