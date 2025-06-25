@@ -2,6 +2,7 @@ package com.vivekSpringBoot.shopping.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,11 +10,15 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.List;
+import java.util.UUID;
 
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
@@ -30,6 +35,7 @@ import com.vivekSpringBoot.shopping.model.UserDtls;
 import com.vivekSpringBoot.shopping.service.CategoryService;
 import com.vivekSpringBoot.shopping.service.ProductService;
 import com.vivekSpringBoot.shopping.service.UserDtlsService;
+import com.vivekSpringBoot.shopping.utility.EmailUtility;
 
 @Controller
 public class HomeController {
@@ -45,6 +51,12 @@ public class HomeController {
 	
 	@Autowired
 	private UserDtlsService userDtlsServiceImpl;
+	
+	@Autowired
+	private EmailUtility emailUtility;
+	
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	@GetMapping("/")
 	public String index() {
@@ -151,5 +163,99 @@ public class HomeController {
 		return "redirect:/register";
 	}
 	
+	
+	@GetMapping("/forgotPass")
+	public String forgotPassword() {
+		
+		return "forgotPassw";
+	}
+	
+	@GetMapping("/forgotPassEmail")
+	public String forgotPasswordEmail(@RequestParam("email") String email,HttpSession session,HttpServletRequest request) throws UnsupportedEncodingException, MessagingException {
+		
+		UserDtls userDtls = userDtlsServiceImpl.getUserDtlsDataByEmail(email);
+		
+		if(ObjectUtils.isEmpty(userDtls)) {
+			
+			session.setAttribute("errorMsg", "This email does not exist");
+			
+			return "redirect:/forgotPass";
+		}else {
+			
+			// send email to user email address to reset the password
+			String passResetToken = UUID.randomUUID().toString();
+			
+			userDtlsServiceImpl.updatePassResetToken(email, passResetToken);
+			
+			String modifiedURL = EmailUtility.generateURL(request);
+			// modifiedURL : http://localhost:8080/
+			
+			String passResetEmailURL = modifiedURL+"resetPass?resetToken="+passResetToken;
+			
+			if(emailUtility.sendEmailToResetPassword(passResetEmailURL, email)) {
+				
+				session.setAttribute("successMsg", "Check your email to reset your password");
+			}else {
+				session.setAttribute("errorMsg", "Something went wrong.Please enter your Email again");
+			}
+			
+			return "redirect:/forgotPass";
+		}
+		
+	}
+	
+	// Below mapping is done to open Email reset Password link
+	@GetMapping("/resetPass")
+	public String showResetPassword(@RequestParam("resetToken") String resetToken,Model model) {
+		
+		UserDtls userDtls = userDtlsServiceImpl.getUserDtlsByToken(resetToken);
+		
+		if(userDtls == null) {
+			
+			model.addAttribute("msg", "Your Link is invalid or Expired");
+			
+			return "messagee";
+		}else {
+			
+			model.addAttribute("resetToken", resetToken);
+			
+			return "resetPasw";
+		}
+		
+		
+	}
+	
+	// note : here request mapping name is same as mentioned above (study about this)
+	@PostMapping("/resetPass")
+	public String resetPassword(@RequestParam("resetToken") String resetToken,@RequestParam("password") String password,Model model) {
+		
+		UserDtls userDtls = userDtlsServiceImpl.getUserDtlsByToken(resetToken);
+		
+		if(ObjectUtils.isEmpty(userDtls)) {
+			
+			model.addAttribute("msg", "Your Link is invalid or Expired");
+			
+			return "messagee";
+		}else {
+			
+			userDtls.setPassResetToken(null);
+			
+			String encodedPass = bCryptPasswordEncoder.encode(password);
+			
+			userDtls.setPassword(encodedPass);
+			
+			UserDtls updatedUserDtls = userDtlsServiceImpl.updateUserDtlsData(userDtls);
+			
+			if(updatedUserDtls != null) {
+				
+			    model.addAttribute("msg", "Your Password has been changed Successfully");
+			} else {
+				model.addAttribute("msg", "Your Link is invalid or Expired");
+			}
+			
+		}
+		return "messagee";
+		
+	}
 	
 }

@@ -117,6 +117,35 @@ public class UserDtlsServiceImpl implements UserDtlsService {
 		return false;
 	}
 
+	@Override
+	public void updatePassResetToken(String email, String resetToken) {
+		
+		UserDtls userDtls = userDtlsRepo.findByEmail(email);
+		
+		if(!ObjectUtils.isEmpty(userDtls)) {
+			
+			userDtls.setPassResetToken(resetToken);
+			userDtlsRepo.save(userDtls);
+		}
+		
+	}
+
+	@Override
+	public UserDtls getUserDtlsByToken(String resetToken) {
+		
+		UserDtls userDtls = userDtlsRepo.findByPassResetToken(resetToken);
+		
+		return userDtls;
+	}
+
+	@Override
+	public UserDtls updateUserDtlsData(UserDtls userDtls) {
+	
+		UserDtls updatedUserDtls = userDtlsRepo.save(userDtls);
+		
+		return updatedUserDtls;
+	}
+
 
 
 }

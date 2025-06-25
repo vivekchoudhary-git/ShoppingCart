@@ -39,5 +39,5 @@ public class UserDtls {
 	private Boolean isAccountNonLocked;                    // added later
 	private Integer failedAttempt;                            // added later
 	private Date lockTime;                                       // added later
-	
+	private String passResetToken;                      // to reset the password
 }

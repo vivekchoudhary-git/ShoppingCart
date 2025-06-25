@@ -21,4 +21,10 @@ public interface UserDtlsService {
 	
 	public boolean unlockUserAccount(UserDtls userDtls);
 	
+	public void updatePassResetToken(String email,String resetToken);
+	
+	public UserDtls getUserDtlsByToken(String resetToken);
+	
+	public UserDtls updateUserDtlsData(UserDtls userDtls);
+	
 }

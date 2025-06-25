@@ -11,6 +11,7 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import com.vivekSpringBoot.shopping.model.UserDtls;
 import com.vivekSpringBoot.shopping.service.UserDtlsService;
@@ -30,6 +31,8 @@ public class AuthFailureHandlerImpl extends SimpleUrlAuthenticationFailureHandle
 		
 		  UserDtls userDtls = userDtlsServiceImpl.getUserDtlsDataByEmail(email);
 		  
+		  if(!ObjectUtils.isEmpty(userDtls)) {
+			  
 		  if(userDtls.getIsEnabled()) {
 			  
 			  if(userDtls.getIsAccountNonLocked()) {
@@ -61,6 +64,10 @@ public class AuthFailureHandlerImpl extends SimpleUrlAuthenticationFailureHandle
 			  
 			  exception = new LockedException("Your account is Inactive or Blocked");
 			  
+		  }
+		  }else {
+			  
+			  exception = new LockedException("Invalid Email or Password");
 		  }
 		
 		  super.setDefaultFailureUrl("/signin?error");

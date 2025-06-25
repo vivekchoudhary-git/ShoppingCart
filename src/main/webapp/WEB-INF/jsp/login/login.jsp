@@ -99,7 +99,7 @@
 </div>
 
 <div class="card-footer text-center">
-<a href="#" class="text-decoration-none">Forgot Password</a><br>
+<a href="/forgotPass" class="text-decoration-none">Forgot Password</a><br>
 Don't have an account ? <a href="/register" class="text-decoration-none">Create One</a>
 </div>
 

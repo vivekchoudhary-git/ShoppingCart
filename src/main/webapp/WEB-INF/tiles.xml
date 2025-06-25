@@ -64,6 +64,17 @@
 <put-attribute name="ab" value="/WEB-INF/jsp/admin/users.jsp"></put-attribute>
 </definition>
 
+<definition name="forgotPassw" extends="admin">
+<put-attribute name="ab" value="/WEB-INF/jsp/login/forgot-pass.jsp"></put-attribute>
+</definition>
+
+<definition name="resetPasw" extends="admin">
+<put-attribute name="ab" value="/WEB-INF/jsp/login/reset-pass.jsp"></put-attribute>
+</definition>
+
+<definition name="messagee" extends="admin">
+<put-attribute name="ab" value="/WEB-INF/jsp/login/message.jsp"></put-attribute>
+</definition>
 
 
 </tiles-definitions>

@@ -115,6 +115,12 @@
     <artifactId>spring-boot-starter-security</artifactId>
     <!-- <version>3.3.5</version> -->
     </dependency>
+    
+    <!-- this is used for sending email suggested by becoder youtube -->
+	<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-mail</artifactId>
+	</dependency>
 		
 	</dependencies>
 

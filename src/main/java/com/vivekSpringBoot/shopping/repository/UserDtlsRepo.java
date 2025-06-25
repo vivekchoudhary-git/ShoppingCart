@@ -14,4 +14,6 @@ public interface UserDtlsRepo extends JpaRepository<UserDtls, Integer> {
 	
 	public UserDtls findById(int id);
 	
+	public UserDtls findByPassResetToken(String resetToken);
+	
 }
