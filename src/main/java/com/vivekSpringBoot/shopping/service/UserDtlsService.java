@@ -27,4 +27,6 @@ public interface UserDtlsService {
 	
 	public UserDtls updateUserDtlsData(UserDtls userDtls);
 	
+	public UserDtls getUserDtlsDataById(Integer id);
+	
 }

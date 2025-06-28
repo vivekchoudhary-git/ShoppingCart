@@ -2,6 +2,7 @@ package com.vivekSpringBoot.shopping.serviceimpl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -144,6 +145,24 @@ public class UserDtlsServiceImpl implements UserDtlsService {
 		UserDtls updatedUserDtls = userDtlsRepo.save(userDtls);
 		
 		return updatedUserDtls;
+	}
+
+	@Override
+	public UserDtls getUserDtlsDataById(Integer id) {
+		
+		Optional<UserDtls> optionalUserDtls = userDtlsRepo.findById(id);                      // note : Optional is accessible only when data type is Integer and not int
+		
+		UserDtls userDtls = null;
+		
+		if(!optionalUserDtls.isEmpty()) {
+			
+			userDtls = optionalUserDtls.get();
+		}else {
+			
+			System.out.println("UserDtls object is null");
+		}
+		
+		return userDtls;
 	}
 
 

@@ -34,6 +34,27 @@
 <div class="col-md-12 p-5">
 <div class="row">
 
+<!-- starts : showing success and error message -->
+
+<c:if test="${not empty sessionScope.successMsg}">
+<div style="color:green;font-size:20px;font-family:georgia;text-align:center">
+<c:out value="${sessionScope.successMsg}"></c:out>
+</div>
+<!-- removing successMsg value -->
+<c:remove var="successMsg" scope="session"/>
+</c:if>
+
+<c:if test="${not empty sessionScope.errorMsg}">
+<div style="color:red;font-size:20px;font-family:georgia;text-align:center">
+<c:out value="${sessionScope.errorMsg}"></c:out>
+</div>
+<!-- removing successMsg value -->
+<c:remove var="errorMsg" scope="session"/>
+</c:if>
+
+
+<!-- ends : showing success and error message -->
+
 <div class="col-md-6 text-end">
 <img alt="image not found" src="${pageContext.request.contextPath}${productImageUrl}${product.imageName}" width="330px" height="400px">
 </div>
@@ -82,13 +103,32 @@ Category : ${product.category} <br> Policy : 7 Days Replacement and Return
  
  </div>
  
+  <!-- here logic is if user is not logged in and click on add to cart then user will be redirected to login page otherwise stay on same page -->
+ 
+ <c:choose>
+ 
+ <c:when test="${not empty userDtls}">
  <c:if test="${product.stock > 0}">
- <a href="/login" class="btn btn-danger col-md-12">Add to Cart</a>
+ <a href="/user/addCart?pid=${product.id}&uid=${userDtls.id}" class="btn btn-danger col-md-12">Add to Cart</a>
  </c:if>
  
  <c:if test="${product.stock <= 0}">
  <a href="#" class="btn btn-warning col-md-12 text-white">Out of Stock</a>
  </c:if>
+ </c:when>
+ 
+ <c:otherwise>
+ <c:if test="${product.stock > 0}">
+ <a href="/signin" class="btn btn-danger col-md-12">Add to Cart</a>
+ </c:if>
+ 
+ <c:if test="${product.stock <= 0}">
+ <a href="#" class="btn btn-warning col-md-12 text-white">Out of Stock</a>
+ </c:if>
+ </c:otherwise>
+ 
+ </c:choose>
+ 
  
 </div>
 
