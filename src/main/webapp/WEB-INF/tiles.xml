@@ -76,5 +76,9 @@
 <put-attribute name="ab" value="/WEB-INF/jsp/login/message.jsp"></put-attribute>
 </definition>
 
+<definition name="cartt" extends="admin">
+<put-attribute name="ab" value="/WEB-INF/jsp/user/cart.jsp"></put-attribute>
+</definition>
+
 
 </tiles-definitions>

@@ -35,4 +35,7 @@ public class Cart {
 	@Transient                               // this annotation will not allow to create  totalPrice column in table
 	private Double totalPrice;
 	
+	@Transient
+	private Double totalOrderPrice;           // added later
+	
 }

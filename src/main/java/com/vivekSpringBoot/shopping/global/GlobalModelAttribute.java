@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.vivekSpringBoot.shopping.model.Category;
 import com.vivekSpringBoot.shopping.model.UserDtls;
+import com.vivekSpringBoot.shopping.service.CartService;
 import com.vivekSpringBoot.shopping.service.CategoryService;
 import com.vivekSpringBoot.shopping.service.ProductService;
 import com.vivekSpringBoot.shopping.service.UserDtlsService;
@@ -23,6 +24,8 @@ public class GlobalModelAttribute {
 	@Autowired
 	private UserDtlsService userDtlsServiceImpl;
 	
+	@Autowired
+	private CartService cartServiceImpl;
 	
 	@ModelAttribute                               
 	public void getLoggedInUserDetails(Principal principal,Model model) {
@@ -45,6 +48,28 @@ public class GlobalModelAttribute {
 		model.addAttribute("activeCatg", allActiveCatgList);
 			
 	}
+	
+	
+	@ModelAttribute
+	public void getCartDetails(Principal principal,Model model) {
+		
+		if(principal != null) {
+		String userEmail = principal.getName();
+		
+		UserDtls userDtls = userDtlsServiceImpl.getUserDtlsDataByEmail(userEmail);
+		
+		Integer cartCount = cartServiceImpl.countCartByUserId(userDtls.getId());
+		
+		model.addAttribute("cartCount", cartCount);
+		
+		}else {
+			
+			System.out.println("no user has logged in");
+		}
+		
+		
+	}
+	
 	
 }
 

@@ -42,9 +42,11 @@
 
 				<c:choose>
 					<c:when test="${userDtls == null}">
+					
 						<li class="nav-item">
 							<a class="nav-link active" aria-current="page" href="/"><i class="fa-solid fa-house-chimney"></i> Home</a>
 						</li>
+						
 					</c:when>
 					<c:otherwise>
 						<c:if test="${userDtls.role == 'ROLE_ADMIN'}">
@@ -83,6 +85,7 @@
 				<c:choose>
 				
 					<c:when test="${empty userDtls}">
+					
 						<li class="nav-item">
 							<a class="nav-link active" href="signin"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
 						</li>
@@ -92,9 +95,11 @@
 						<li class="nav-item">
 							<a class="nav-link active" href="/admin/">Admin</a>
 						</li>
+						
 					</c:when>
 					
 						<c:when test="${not empty userDtls}">
+						
 						<li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-user"></i> ${userDtls.name}</a>
 							
@@ -102,6 +107,8 @@
 							
 							<li><a class="dropdown-item" href="#">Profile</a></li>
 							<li><a class="dropdown-item" href="#">Other Actions</a></li>
+							<li><a class="dropdown-item" href="#">Testing Only</a></li>
+							
 							
 							</ul>
 							
@@ -110,9 +117,11 @@
 						<li class="nav-item">
 							<a class="nav-link active" href="/logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
 						</li>
+					
 					</c:when>
 				
 				</c:choose>
+				
 			</ul>
 		</div>
 	</div>

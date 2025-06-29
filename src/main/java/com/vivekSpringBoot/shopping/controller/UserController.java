@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
@@ -34,6 +35,9 @@ public class UserController {
 	
 	@Autowired
 	private CartService cartServiceImpl;
+	
+	@Autowired
+	private Environment environment;
 	
 
 	@GetMapping("/")
@@ -68,14 +72,57 @@ public class UserController {
 		
 		if(!ObjectUtils.isEmpty(savedCart)) {
 			
-			session.setAttribute("successMsg", "Cart is saved successfully");
+			session.setAttribute("successMsg", "Product is added in Cart");
 		}else {
 			
-			session.setAttribute("errorMsg", "Failed cart is not saved");
+			session.setAttribute("errorMsg", "Product is not added in Cart");
 		}
 		
 		return "redirect:/viewProduct/"+pid;
 	}
 	
+	@GetMapping("openCart")
+	public String viewCart(Principal principal,Model model) {
+		
+		String productImageUrl = environment.getProperty("product.image.url");
+		
+		UserDtls userDtls = getLoggedInUserDetails(principal);
+		
+		if(!ObjectUtils.isEmpty(userDtls)) {
+			
+			List<Cart> updatedCartList = cartServiceImpl.getCartsByUserId(userDtls.getId());
+			
+			Cart lastIndexCart = updatedCartList.get(updatedCartList.size()-1);
+			
+			Double totalOrderPrice = lastIndexCart.getTotalOrderPrice();
+			
+			model.addAttribute("cartsList", updatedCartList);
+			model.addAttribute("productImageUrl", productImageUrl);
+			model.addAttribute("totalOrderPrice", totalOrderPrice);
+			
+		}
+		
+		return "cartt";
+	}
+
+	
+	// created method to get logged in user details
+	private UserDtls getLoggedInUserDetails(Principal principal) {
+		
+        String userEmail = principal.getName();
+		
+		UserDtls userDtls = userDtlsServiceImpl.getUserDtlsDataByEmail(userEmail);
+		
+		return userDtls;
+	}
+	
+	
+	@GetMapping("/upCartQty")
+	public String updateCartQuantity(@RequestParam("symbol") String symbol,@RequestParam("cid") Integer cid) {
+		
+		cartServiceImpl.updateCartQuantityById(cid, symbol);
+		
+		return "redirect:/user/openCart";
+	}
 	
 }
