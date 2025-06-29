@@ -93,7 +93,7 @@
 </table>
 
 <div class="text-center">
-<a class="btn btn-warning" href="#">Proceed to Payment</a>
+<a class="btn btn-warning" href="/user/order">Proceed to Payment</a>
 </div>
 
 </div>

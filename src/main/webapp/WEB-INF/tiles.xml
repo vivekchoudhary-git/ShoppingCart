@@ -80,5 +80,9 @@
 <put-attribute name="ab" value="/WEB-INF/jsp/user/cart.jsp"></put-attribute>
 </definition>
 
+<definition name="orderr" extends="admin">
+<put-attribute name="ab" value="/WEB-INF/jsp/user/order.jsp"></put-attribute>
+</definition>
+
 
 </tiles-definitions>

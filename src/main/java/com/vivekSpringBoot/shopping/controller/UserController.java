@@ -125,4 +125,12 @@ public class UserController {
 		return "redirect:/user/openCart";
 	}
 	
+	
+	@GetMapping("/order")
+	public String loadOrderPage() {
+		
+		return "orderr";
+	}
+	
+	
 }
