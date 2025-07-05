@@ -13,14 +13,17 @@ import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.vivekSpringBoot.shopping.model.Cart;
 import com.vivekSpringBoot.shopping.model.Category;
+import com.vivekSpringBoot.shopping.model.OrderRequest;
 import com.vivekSpringBoot.shopping.model.UserDtls;
 import com.vivekSpringBoot.shopping.service.CartService;
 import com.vivekSpringBoot.shopping.service.CategoryService;
+import com.vivekSpringBoot.shopping.service.OrderService;
 import com.vivekSpringBoot.shopping.serviceimpl.UserDtlsServiceImpl;
 
 @Controller
@@ -38,6 +41,9 @@ public class UserController {
 	
 	@Autowired
 	private Environment environment;
+	
+	@Autowired
+	private OrderService orderServiceImpl;
 	
 
 	@GetMapping("/")
@@ -127,10 +133,39 @@ public class UserController {
 	
 	
 	@GetMapping("/order")
-	public String loadOrderPage() {
+	public String loadOrderPage(Principal principal,Model model) {
+		
+		UserDtls userDtls = getLoggedInUserDetails(principal);
+		
+		List<Cart> updatedCartsList = cartServiceImpl.getCartsByUserId(userDtls.getId());
+		
+		// this price does not include GST and Delivery charges
+		Double totalOrderPrice = updatedCartsList.get(updatedCartsList.size()-1).getTotalOrderPrice();
+		
+		// this price includes Tax (Rs 100) and Delivery(Rs 250) charges
+		Double finalOrderTotalPrice = totalOrderPrice+250+100;
+		
+		model.addAttribute("totalOrderPrice", totalOrderPrice);
+		model.addAttribute("finalOrderTotalPrice", finalOrderTotalPrice);
 		
 		return "orderr";
 	}
 	
+	
+	@PostMapping("/saveOrder")
+	public String saveOrderDetails(@ModelAttribute OrderRequest orderRequest,Principal principal) {
+		
+		UserDtls userDtls = getLoggedInUserDetails(principal);
+		
+		orderServiceImpl.saveOrderData(userDtls.getId(), orderRequest);
+		
+		return "redirect:/user/success";                                // here we are redirecting so that on refresh the order does not get saved again and again
+	}
+	
+	@GetMapping("/success")
+	public String getSuccessPage() {
+		
+		return "successs";
+	}
 	
 }

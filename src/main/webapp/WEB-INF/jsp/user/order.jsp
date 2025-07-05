@@ -31,54 +31,55 @@
 
 <div class="container mt-5 p-5">
 
+<form action="/user/saveOrder" method="post">
 <div class="row">
 <div class="col-md-6">
-<form action="">
+<!-- <form action=""> -->
 
 <div class="mb-3 row">
-<p class="text-center fs-2">Fill Address</p>
+<p class="text-center fs-2">Billing Address</p>
 <hr>
 
 <div class="col p-1">
-<label>First Name</label><input type="text" name="fname" class="form-control mt-1">
+<label>First Name</label><input type="text" name="firstName" class="form-control mt-1" required="required">
 </div>
 
 <div class="col p-1">
-<label>Last Name</label><input type="text" name="lname" class="form-control mt-1">
+<label>Last Name</label><input type="text" name="lastName" class="form-control mt-1" required="required">
 </div>
 </div>
 
 <div class="mb-3 row">
 <div class="col p-1">
-<label>Email</label><input type="email" name="fname" class="form-control mt-1">
+<label>Email</label><input type="email" name="email" class="form-control mt-1" required="required">
 </div>
 
 <div class="col p-1">
-<label>Mobile No</label><input type="text" name="lname" class="form-control mt-1">
+<label>Mobile No</label><input type="text" name="mobileNo" class="form-control mt-1" required="required">
 </div>
 </div>
 
 <div class="mb-3 row">
 <div class="col p-1">
-<label>Address</label><input type="text" name="fname" class="form-control mt-1">
+<label>Address</label><input type="text" name="address" class="form-control mt-1" required="required">
 </div>
 
 <div class="col p-1">
-<label>City</label><input type="text" name="lname" class="form-control mt-1">
+<label>City</label><input type="text" name="city" class="form-control mt-1" required="required">
 </div>
 </div>
 
 <div class="mb-3 row">
 <div class="col p-1">
-<label>State</label><input type="text" name="fname" class="form-control mt-1">
+<label>State</label><input type="text" name="state" class="form-control mt-1" required="required">
 </div>
 
 <div class="col p-1">
-<label>Pincode</label><input type="text" name="lname" class="form-control mt-1">
+<label>Pincode</label><input type="text" name="pincode" class="form-control mt-1" required="required">
 </div>
 </div>
 
-</form>
+<!-- </form> -->
 
 </div>
 
@@ -92,10 +93,10 @@
 
 <table class="table table-borderless">
 <tbody>
-<tr><td>Total Price</td><td> : </td><td>&#8377 5478</td></tr>
-<tr><td>Delivery charge</td><td> : </td><td>&#8377 100</td></tr>
-<tr><td>Tax</td><td> : </td><td>&#8377 10</td></tr>
-<tr class="border-top"><td>Total Amount</td><td> : </td><td>&#8377 54875</td></tr>
+<tr><td>Total Price</td><td> : </td><td>&#8377 ${totalOrderPrice}</td></tr>
+<tr><td>Delivery charge</td><td> : </td><td>&#8377 250</td></tr>
+<tr><td>Tax</td><td> : </td><td>&#8377 100</td></tr>
+<tr class="border-top"><td>Total Amount</td><td> : </td><td>&#8377 ${finalOrderTotalPrice}</td></tr>
 </tbody>
 </table>
 
@@ -105,28 +106,29 @@
 <div class="card shadow p-3 mb-5 mt-2 bg-bd-tertiary rounded">
 <div class="card-body">
 
-<form action="">
+<!-- <form action=""> -->
 <div class="mb-3">
 <label class="form-label">Payment Mode</label>
-<select class="form-control">
+<select class="form-control" name="paymentType">
 <option>---- Select ----</option>
-<option>Cash On Delivery</option>
-<option>Net Banking</option>
+<option>COD</option>
+<option>ONLINE</option>
 <option>UPI</option>
 </select>
 </div>
 
 <button class="btn btn-primary col-md-12">Place Order</button>
 
+<!-- </form> -->
+</div>
+</div>
+
+</div>
+
+
+</div>
+
 </form>
-</div>
-</div>
-
-</div>
-
-
-</div>
-
 
 </div>
 
