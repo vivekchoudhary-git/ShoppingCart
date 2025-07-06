@@ -21,19 +21,25 @@ public enum OrderStatus {
 		return id;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
 	public String getName() {
 		return name;
 	}
-
-	public void setName(String name) {
-		this.name = name;
+	
+	// Study about enum to understand all concepts (refer : Engineering Digest Youtube)
+	// created custom method to get name by id
+	public static String getNameById(Integer id) {
+		
+		for(OrderStatus os : OrderStatus.values()) {
+			
+			if(os.getId().equals(id)) {
+				
+				return os.getName();
+			}
+			
+		}
+		return null;
+		
 	}
-	
-	
 	
 	
 	

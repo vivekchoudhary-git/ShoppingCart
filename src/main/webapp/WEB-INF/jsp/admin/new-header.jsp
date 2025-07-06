@@ -106,15 +106,16 @@
 							<ul class="dropdown-menu dropdown-menu-end">
 							
 							<li><a class="dropdown-item" href="#">Profile</a></li>
-							<li><a class="dropdown-item" href="#">Other Actions</a></li>
+							<li><a class="dropdown-item" href="/user/userOrders">My Orders</a></li>
+							<li><a class="dropdown-item" href="/logout">Logout</a></li>
 							
 							</ul>
 							
 						</li>
 						
-						<li class="nav-item">
+						<!-- <li class="nav-item">
 							<a class="nav-link active" href="/logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
-						</li>
+						</li> -->
 					</c:when>
 				
 				</c:choose>

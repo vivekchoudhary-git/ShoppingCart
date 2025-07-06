@@ -2,10 +2,12 @@ package com.vivekSpringBoot.shopping.serviceimpl;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.vivekSpringBoot.shopping.model.Cart;
 import com.vivekSpringBoot.shopping.model.OrderAddress;
@@ -60,6 +62,37 @@ public class OrderServiceImpl implements OrderService {
 		}
 		
 		
+	}
+
+	@Override
+	public List<ProductOrder> getAllOrdersByUserDtlsId(Integer userId) {
+		
+		List<ProductOrder> ordersList = productOrderRepo.findByUserDtlsId(userId);
+		
+		if(CollectionUtils.isEmpty(ordersList)) {
+			
+			System.out.println("ordersList is null");
+		}
+		
+		return ordersList;
+	}
+
+	@Override
+	public Boolean updateOrderStatusByUser(Integer oid, String status) {
+		
+		Optional<ProductOrder> productOrderOptional = productOrderRepo.findById(oid);
+		
+	   if(productOrderOptional.isPresent()) {
+		   
+		   ProductOrder productOrder = productOrderOptional.get();
+		   
+		   productOrder.setStatus(status);
+		   productOrderRepo.save(productOrder);
+		   
+		   return true;
+	   }
+	   
+		return false;
 	}
 
 	

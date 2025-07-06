@@ -34,7 +34,7 @@
 <form action="/user/saveOrder" method="post">
 <div class="row">
 <div class="col-md-6">
-<!-- <form action=""> -->
+
 
 <div class="mb-3 row">
 <p class="text-center fs-2">Billing Address</p>
@@ -79,7 +79,7 @@
 </div>
 </div>
 
-<!-- </form> -->
+
 
 </div>
 
@@ -106,7 +106,7 @@
 <div class="card shadow p-3 mb-5 mt-2 bg-bd-tertiary rounded">
 <div class="card-body">
 
-<!-- <form action=""> -->
+
 <div class="mb-3">
 <label class="form-label">Payment Mode</label>
 <select class="form-control" name="paymentType">
@@ -119,7 +119,7 @@
 
 <button class="btn btn-primary col-md-12">Place Order</button>
 
-<!-- </form> -->
+
 </div>
 </div>
 

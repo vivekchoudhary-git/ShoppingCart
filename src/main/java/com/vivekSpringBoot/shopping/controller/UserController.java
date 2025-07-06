@@ -20,11 +20,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.vivekSpringBoot.shopping.model.Cart;
 import com.vivekSpringBoot.shopping.model.Category;
 import com.vivekSpringBoot.shopping.model.OrderRequest;
+import com.vivekSpringBoot.shopping.model.ProductOrder;
 import com.vivekSpringBoot.shopping.model.UserDtls;
 import com.vivekSpringBoot.shopping.service.CartService;
 import com.vivekSpringBoot.shopping.service.CategoryService;
 import com.vivekSpringBoot.shopping.service.OrderService;
 import com.vivekSpringBoot.shopping.serviceimpl.UserDtlsServiceImpl;
+import com.vivekSpringBoot.shopping.utility.OrderStatus;
 
 @Controller
 @RequestMapping("/user")
@@ -167,5 +169,36 @@ public class UserController {
 		
 		return "successs";
 	}
+	
+	// to view all orders of the logged in user
+	@GetMapping("/userOrders")
+	public String viewUserOrders(Principal principal,Model model) {
+		
+		UserDtls userDtls = getLoggedInUserDetails(principal);
+		
+		List<ProductOrder> ordersList = orderServiceImpl.getAllOrdersByUserDtlsId(userDtls.getId());
+		
+		model.addAttribute("ordersList", ordersList);
+		
+		return "myOrderss";
+	}
+	
+	
+	@GetMapping("/changeStatus")
+	public String updateOrderStatus(@RequestParam("oid") Integer oid,@RequestParam("statusId") Integer statusId,HttpSession session) {
+		
+		String statusName = OrderStatus.getNameById(statusId);
+		
+		if(orderServiceImpl.updateOrderStatusByUser(oid, statusName)) {
+			
+			session.setAttribute("successMsg", "Order Status Changed");
+		}else {
+			
+			session.setAttribute("errorMsg", "Order Status is not Changed");
+		}
+		return "redirect:/user/userOrders";
+		
+	}
+	
 	
 }
