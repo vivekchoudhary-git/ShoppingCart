@@ -69,7 +69,7 @@
 </div>
 
 <div class="col-md-4 mt-3">
-<a class="text-decoration-none" href="#">
+<a class="text-decoration-none" href="/admin/allOrders">
 <div class="card card-sh">
 <div class="card-body text-center text-warning">
 <i class="fa-solid fa-box-open fa-3x"></i>

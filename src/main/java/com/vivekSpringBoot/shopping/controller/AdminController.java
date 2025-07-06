@@ -32,11 +32,14 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 import com.vivekSpringBoot.shopping.model.Category;
 import com.vivekSpringBoot.shopping.model.Product;
+import com.vivekSpringBoot.shopping.model.ProductOrder;
 import com.vivekSpringBoot.shopping.model.UserDtls;
 import com.vivekSpringBoot.shopping.service.CategoryService;
+import com.vivekSpringBoot.shopping.service.OrderService;
 import com.vivekSpringBoot.shopping.service.ProductService;
 import com.vivekSpringBoot.shopping.serviceimpl.UserDtlsServiceImpl;
 import com.vivekSpringBoot.shopping.utility.DiscountUtility;
+import com.vivekSpringBoot.shopping.utility.OrderStatus;
 
 
 @Controller
@@ -57,6 +60,9 @@ public class AdminController {
 	
 	@Autowired
 	private UserDtlsServiceImpl userDtlsServiceImpl;
+	
+	@Autowired
+	private OrderService orderServiceImpl;
 	
 	@GetMapping("/")
 	public String index() {
@@ -415,6 +421,33 @@ public class AdminController {
 		}
 		
 		return "redirect:/admin/viewUsers";
+	}
+	
+	
+	@GetMapping("/allOrders")
+	public String viewAllOrders(Model model) {
+		
+		List<ProductOrder> allOrdersList = orderServiceImpl.getAllOrders();
+		model.addAttribute("allOrdersList", allOrdersList);
+		
+		return "orderss";
+	}
+	
+	
+	@PostMapping("/changeStatusAdmin")
+	public String updateOrderStatusAdmin(@RequestParam("oid") Integer oid,@RequestParam("statusId") Integer statusId,HttpSession session) {
+		
+		String statusName = OrderStatus.getNameById(statusId);
+		
+		if(orderServiceImpl.updateOrderStatus(oid, statusName)) {
+			
+			session.setAttribute("successMsg", "Order Status Changed");
+		}else {
+			
+			session.setAttribute("errorMsg", "Order Status is not Changed");
+		}
+		return "redirect:/admin/allOrders";
+		
 	}
 	
 	

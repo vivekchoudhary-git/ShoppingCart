@@ -96,9 +96,11 @@
 					
 						<c:when test="${not empty userDtls}">
 						
+						<c:if test="${userDtls.role == 'ROLE_USER'}">
 						<li class="nav-item">
 							<a class="nav-link active" href="/user/openCart"><i class="fa-solid fa-cart-shopping"></i> Cart [ ${cartCount} ]</a>
 						</li>
+						</c:if>
 						
 						<li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-user"></i> ${userDtls.name}</a>

@@ -189,7 +189,7 @@ public class UserController {
 		
 		String statusName = OrderStatus.getNameById(statusId);
 		
-		if(orderServiceImpl.updateOrderStatusByUser(oid, statusName)) {
+		if(orderServiceImpl.updateOrderStatus(oid, statusName)) {
 			
 			session.setAttribute("successMsg", "Order Status Changed");
 		}else {

@@ -78,7 +78,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public Boolean updateOrderStatusByUser(Integer oid, String status) {
+	public Boolean updateOrderStatus(Integer oid, String status) {
 		
 		Optional<ProductOrder> productOrderOptional = productOrderRepo.findById(oid);
 		
@@ -93,6 +93,19 @@ public class OrderServiceImpl implements OrderService {
 	   }
 	   
 		return false;
+	}
+
+	@Override
+	public List<ProductOrder> getAllOrders() {
+
+		List<ProductOrder> allOrdersList = productOrderRepo.findAll();
+		
+		if(!CollectionUtils.isEmpty(allOrdersList)) {
+			
+			return allOrdersList;
+		}
+		
+		return null;
 	}
 
 	
