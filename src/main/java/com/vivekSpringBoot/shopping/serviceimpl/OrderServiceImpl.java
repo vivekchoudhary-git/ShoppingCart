@@ -1,13 +1,17 @@
 package com.vivekSpringBoot.shopping.serviceimpl;
 
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.mail.MessagingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 import com.vivekSpringBoot.shopping.model.Cart;
 import com.vivekSpringBoot.shopping.model.OrderAddress;
@@ -15,6 +19,7 @@ import com.vivekSpringBoot.shopping.model.OrderRequest;
 import com.vivekSpringBoot.shopping.model.ProductOrder;
 import com.vivekSpringBoot.shopping.repository.ProductOrderRepo;
 import com.vivekSpringBoot.shopping.service.OrderService;
+import com.vivekSpringBoot.shopping.utility.EmailUtility;
 import com.vivekSpringBoot.shopping.utility.OrderStatus;
 
 @Service
@@ -26,8 +31,11 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	private ProductOrderRepo productOrderRepo;
 	
+	@Autowired
+	private EmailUtility emailUtility;
+	
 	@Override
-	public void saveOrderData(Integer userid, OrderRequest orderRequest) {
+	public void saveOrderData(Integer userid, OrderRequest orderRequest) throws UnsupportedEncodingException, MessagingException {
 		
 		List<Cart> cartsList = cartServiceImpl.getCartsByUserId(userid);
 		
@@ -57,8 +65,17 @@ public class OrderServiceImpl implements OrderService {
             
             productOrder.setOrderAddress(orderAddress);
             
-            productOrderRepo.save(productOrder);
-			
+            ProductOrder savedOrder = productOrderRepo.save(productOrder);
+            
+            if(!ObjectUtils.isEmpty(cartsList)) {
+            
+            emailUtility.sendEmailToUserAboutOrderStatus(savedOrder, OrderStatus.SUCCESS.getName());
+            }else {
+            	
+            	System.out.println("Email could not be sent");
+            }
+            
+            
 		}
 		
 		
@@ -78,7 +95,7 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public Boolean updateOrderStatus(Integer oid, String status) {
+	public ProductOrder updateOrderStatus(Integer oid, String status) {
 		
 		Optional<ProductOrder> productOrderOptional = productOrderRepo.findById(oid);
 		
@@ -87,12 +104,12 @@ public class OrderServiceImpl implements OrderService {
 		   ProductOrder productOrder = productOrderOptional.get();
 		   
 		   productOrder.setStatus(status);
-		   productOrderRepo.save(productOrder);
+		   ProductOrder updatedProductOrder = productOrderRepo.save(productOrder);
 		   
-		   return true;
+		   return updatedProductOrder;
 	   }
 	   
-		return false;
+		return null;
 	}
 
 	@Override

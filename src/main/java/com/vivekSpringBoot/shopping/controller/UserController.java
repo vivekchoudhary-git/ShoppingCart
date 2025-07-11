@@ -1,8 +1,10 @@
 package com.vivekSpringBoot.shopping.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.util.List;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -26,6 +28,7 @@ import com.vivekSpringBoot.shopping.service.CartService;
 import com.vivekSpringBoot.shopping.service.CategoryService;
 import com.vivekSpringBoot.shopping.service.OrderService;
 import com.vivekSpringBoot.shopping.serviceimpl.UserDtlsServiceImpl;
+import com.vivekSpringBoot.shopping.utility.EmailUtility;
 import com.vivekSpringBoot.shopping.utility.OrderStatus;
 
 @Controller
@@ -47,7 +50,10 @@ public class UserController {
 	@Autowired
 	private OrderService orderServiceImpl;
 	
-
+	@Autowired
+	private EmailUtility emailUtility;
+	
+	
 	@GetMapping("/")
 	public String userHome() {
 		
@@ -155,7 +161,7 @@ public class UserController {
 	
 	
 	@PostMapping("/saveOrder")
-	public String saveOrderDetails(@ModelAttribute OrderRequest orderRequest,Principal principal) {
+	public String saveOrderDetails(@ModelAttribute OrderRequest orderRequest,Principal principal) throws UnsupportedEncodingException, MessagingException {
 		
 		UserDtls userDtls = getLoggedInUserDetails(principal);
 		
@@ -185,19 +191,30 @@ public class UserController {
 	
 	
 	@GetMapping("/changeStatus")
-	public String updateOrderStatus(@RequestParam("oid") Integer oid,@RequestParam("statusId") Integer statusId,HttpSession session) {
+	public String updateOrderStatus(@RequestParam("oid") Integer oid,@RequestParam("statusId") Integer statusId,HttpSession session) throws UnsupportedEncodingException, MessagingException {
 		
 		String statusName = OrderStatus.getNameById(statusId);
 		
-		if(orderServiceImpl.updateOrderStatus(oid, statusName)) {
+		ProductOrder updatedOrderStatus = orderServiceImpl.updateOrderStatus(oid, statusName);
+			
+		if(!ObjectUtils.isEmpty(updatedOrderStatus)) {
 			
 			session.setAttribute("successMsg", "Order Status Changed");
-		}else {
-			
-			session.setAttribute("errorMsg", "Order Status is not Changed");
-		}
-		return "redirect:/user/userOrders";
 		
+			if(emailUtility.sendEmailToUserAboutOrderStatus(updatedOrderStatus, statusName)) {
+				
+				session.setAttribute("successMsg", "Order Status Changed,Please check email");
+			}else {
+				
+				session.setAttribute("successMsg", "Order Status Changed,Email could not sent");
+			}
+			
+		}else {
+			session.setAttribute("errorMsg", "Order Status is not Changed");
+		
+		}
+		
+		return "redirect:/user/userOrders";
 	}
 	
 	

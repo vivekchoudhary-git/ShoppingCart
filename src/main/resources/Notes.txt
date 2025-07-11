@@ -337,3 +337,32 @@ Yes — using sessionScope.SPRING_SECURITY_LAST_EXCEPTION is a cleaner and more 
 
 
 -------------------------------------------------------------------------------------------------------------------------
+                           Notes related to EmailUtility Class
+                           
+✅ Basic Explanation:
+%s = string placeholder
+
+When using String.format(), each %s is replaced by the corresponding argument passed after the format string.
+
+✅ Example:
+java
+Copy
+Edit
+String name = "Vivek";
+String status = "Delivered";
+
+String message = String.format("Hello %s, your order is %s.", name, status);
+System.out.println(message);
+Output:
+
+vbnet
+Copy
+Edit
+Hello Vivek, your order is Delivered.
+✅ Other Common Format Specifiers:
+Specifier	Meaning	Example Value
+%s	String	"Hello"
+%d	Integer	42
+%f	Floating-point number	3.14
+%n	New line (like \n)	-                         
+
