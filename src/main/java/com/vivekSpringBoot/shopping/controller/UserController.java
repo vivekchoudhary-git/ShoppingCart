@@ -1,6 +1,11 @@
 package com.vivekSpringBoot.shopping.controller;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.List;
 
@@ -10,6 +15,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
@@ -18,6 +24,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.vivekSpringBoot.shopping.model.Cart;
 import com.vivekSpringBoot.shopping.model.Category;
@@ -27,6 +34,7 @@ import com.vivekSpringBoot.shopping.model.UserDtls;
 import com.vivekSpringBoot.shopping.service.CartService;
 import com.vivekSpringBoot.shopping.service.CategoryService;
 import com.vivekSpringBoot.shopping.service.OrderService;
+import com.vivekSpringBoot.shopping.service.UserDtlsService;
 import com.vivekSpringBoot.shopping.serviceimpl.UserDtlsServiceImpl;
 import com.vivekSpringBoot.shopping.utility.EmailUtility;
 import com.vivekSpringBoot.shopping.utility.OrderStatus;
@@ -36,7 +44,7 @@ import com.vivekSpringBoot.shopping.utility.OrderStatus;
 public class UserController {
 
 	@Autowired
-	private UserDtlsServiceImpl userDtlsServiceImpl;
+	private UserDtlsService userDtlsServiceImpl;
 	
 	@Autowired
 	private CategoryService categoryServiceImpl;
@@ -53,6 +61,8 @@ public class UserController {
 	@Autowired
 	private EmailUtility emailUtility;
 	
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	@GetMapping("/")
 	public String userHome() {
@@ -217,5 +227,84 @@ public class UserController {
 		return "redirect:/user/userOrders";
 	}
 	
+	
+	@GetMapping("/viewProfile")
+	public String loadProfilePage(Model model) {
+		
+		String userImageUrl = environment.getProperty("userimage.url");
+		model.addAttribute("userImageUrl", userImageUrl);
+		
+		return "profilee";
+	}
+	
+	
+	@PostMapping("/updateProfile")
+	public String updateProfileData(@ModelAttribute UserDtls userDtls,@RequestParam("file") MultipartFile file,HttpSession session) throws IOException {
+		
+		String userImageUploadPath = environment.getProperty("userimage.upload.path");
+		
+		String imageName = file.getOriginalFilename();
+		
+		if(imageName != null && !imageName.isEmpty()) {
+			
+		userDtls.setProfileImage(imageName);
+		}
+		
+		UserDtls updatedUserDtlsData = userDtlsServiceImpl.updateUserDtlsData(userDtls);
+		
+		if(!ObjectUtils.isEmpty(updatedUserDtlsData)) {
+			
+			if(!file.isEmpty() && file != null) {
+				
+				Path userImagePath = Paths.get(userImageUploadPath);
+				
+				if(!Files.exists(userImagePath)) {
+				
+					Files.createDirectories(userImagePath);
+				}
+				
+				Path fullUserImagePath = userImagePath.resolve(file.getOriginalFilename());
+				
+				Files.copy(file.getInputStream(), fullUserImagePath, StandardCopyOption.REPLACE_EXISTING);
+			}
+			
+			
+			session.setAttribute("successMsg", "Profile is Updated");
+		}else {
+			
+			session.setAttribute("errorMsg", "Profile is not Updated");
+		}
+		
+		return "redirect:/user/viewProfile";
+	}
+	
+	
+	@PostMapping("/changePassword")
+	public String changePassword(@RequestParam("currentPassword") String currentPassword,@RequestParam("newPassword") String newPassword,Principal principal,HttpSession session) {
+		
+		UserDtls userDtls = getLoggedInUserDetails(principal);
+		
+		boolean passResult = bCryptPasswordEncoder.matches(currentPassword, userDtls.getPassword());
+		
+		if(passResult) {
+			
+			String encodedNewPass = bCryptPasswordEncoder.encode(newPassword);
+			
+			userDtls.setPassword(encodedNewPass);
+			UserDtls updatedUserDtls = userDtlsServiceImpl.updateUserDtlsData(userDtls);
+			
+			if(!ObjectUtils.isEmpty(updatedUserDtls)) {
+				
+				session.setAttribute("successMsg", "Password is Updated");
+			}else {
+				session.setAttribute("errorMsg", "Password is not Updated");
+			}
+			
+		}else {
+			session.setAttribute("errorMsg", "Invalid Password");
+		}
+		
+		return "redirect:/user/viewProfile";
+	}
 	
 }

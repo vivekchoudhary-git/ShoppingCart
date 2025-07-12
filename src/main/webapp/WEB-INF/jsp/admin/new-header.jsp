@@ -107,7 +107,7 @@
 							
 							<ul class="dropdown-menu dropdown-menu-end">
 							
-							<li><a class="dropdown-item" href="#">Profile</a></li>
+							<li><a class="dropdown-item" href="/user/viewProfile">Profile</a></li>
 							<li><a class="dropdown-item" href="/user/userOrders">My Orders</a></li>
 							<li><a class="dropdown-item" href="/logout">Logout</a></li>
 							
