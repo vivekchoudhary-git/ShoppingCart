@@ -28,9 +28,9 @@
 <div class="container-fluid bg-primary py-1 mt-5" style="height : 50px;border : 1px solid black;">
 <div class="row">
 <div class="col-md-8 offset-md-1 mb-5">
-<form action="">
+<form action="/searchProduct">
 <div class="input-group">
-<input class="form-control" type="text" name="search">
+<input class="form-control" type="text" name="keyword">
 <button class="btn btn-light text-dark ms-3 col-md-2"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
 </div>
 </form>

@@ -125,6 +125,19 @@ public class OrderServiceImpl implements OrderService {
 		return null;
 	}
 
+	@Override
+	public ProductOrder getOrderDataByOrderId(String orderId) {
+		
+		ProductOrder productOrder = productOrderRepo.findByorderId(orderId);
+		
+		if(!ObjectUtils.isEmpty(productOrder)) {
+			
+			return productOrder;
+		}
+		
+		return null;
+	}
+
 	
 	
 }

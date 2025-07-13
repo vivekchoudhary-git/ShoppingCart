@@ -21,6 +21,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -254,8 +255,38 @@ public class HomeController {
 			}
 			
 		}
-		return "messagee";
 		
+		return "messagee";
 	}
+	
+	
+	// search product by keyword
+	@GetMapping("/searchProduct")
+	public String searchAnyProduct(@RequestParam("keyword") String keyword,@RequestParam(value = "category",defaultValue = "all") String category,Model model ,HttpSession session) {
+		
+		model.addAttribute("showSearch", true);                          /* to show search bar in header */
+		
+		String productImageUrl = environment.getProperty("product.image.url");
+		
+		if(keyword.trim() == null || keyword.trim().isEmpty()) {
+			
+			List<Product> allActiveProductsList = productServiceImpl.getAllActiveProductsList(category);
+			model.addAttribute("activeProductList", allActiveProductsList);
+		}else {
+			
+			List<Product> searchedProductList = productServiceImpl.searchProductByKeyword(keyword);
+			model.addAttribute("activeProductList", searchedProductList);
+		}
+		
+		   List<Category> activeCategoryList = categoryServiceImpl.getAllActiveCategoriesList();
+		
+			model.addAttribute("productImageUrl", productImageUrl);
+			model.addAttribute("activeCategoryList", activeCategoryList);
+			model.addAttribute("paramValue", category);                           // it will be used to highlight selected category option
+		
+		
+		return "productt";
+	}
+	
 	
 }

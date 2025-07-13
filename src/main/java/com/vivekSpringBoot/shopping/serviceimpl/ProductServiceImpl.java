@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.vivekSpringBoot.shopping.model.Product;
@@ -140,6 +141,19 @@ public class ProductServiceImpl implements ProductService {
 		}
 		
 		return activeProductsList;
+	}
+
+	@Override
+	public List<Product> searchProductByKeyword(String keyword) {
+	
+		List<Product> productList = productRepo.searchAnyProductByTitleOrCategory(keyword);
+		
+		if(!ObjectUtils.isEmpty(productList)) {
+			
+			return productList;
+		}
+		
+		return null;
 	}
 
 }

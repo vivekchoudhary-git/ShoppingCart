@@ -433,6 +433,8 @@ public class AdminController {
 	@GetMapping("/allOrders")
 	public String viewAllOrders(Model model) {
 		
+		model.addAttribute("orderDisplayLogic", true);    // testing only
+		
 		List<ProductOrder> allOrdersList = orderServiceImpl.getAllOrders();
 		model.addAttribute("allOrdersList", allOrdersList);
 		
@@ -466,6 +468,27 @@ public class AdminController {
 		
 		return "redirect:/admin/allOrders";
 	}
+	
+	@GetMapping("/searchOrder")
+	public String searchAnyOrder(@RequestParam("orderId") String orderId,Model model) {
+		
+		model.addAttribute("orderDisplayLogic", true);                  // logic to display order list or order object based on condition
+		
+		ProductOrder productOrder = orderServiceImpl.getOrderDataByOrderId(orderId);
+		
+		if(!ObjectUtils.isEmpty(productOrder)) {
+			
+			model.addAttribute("searchOrder", productOrder);
+			model.addAttribute("orderDisplayLogic", false); 
+		}else {
+			
+			List<ProductOrder> allOrdersList = orderServiceImpl.getAllOrders();
+			model.addAttribute("allOrdersList", allOrdersList);
+		}
+		
+		return "orderss";
+	}
+	
 	
 	
 }

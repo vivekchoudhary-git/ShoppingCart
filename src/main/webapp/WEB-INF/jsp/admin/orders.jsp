@@ -43,11 +43,11 @@
 <!-- search option starts -->
 <div class="row">
 <div class="col-md-4">
-<form action="">
+<form action="/admin/searchOrder">
 <div class="row">
 
 <div class="col">
-<input type="text" name="" placeholder="Enter Order ID" class="form-control">
+<input type="text" name="orderId" placeholder="Enter Order ID" class="form-control">
 </div>
 
 <div class="col">
@@ -85,6 +85,7 @@
 </div>
 
 <div class="card-body">
+<c:if test="${orderDisplayLogic == true}">
 <table class="table">
 
   <thead>
@@ -161,6 +162,84 @@
   </tbody>
   
 </table>
+</c:if>
+
+<c:if test="${orderDisplayLogic == false}">
+<table class="table">
+
+  <thead>
+    <tr>
+      <th scope="col">Order Id</th>
+      <th scope="col">Delivery Details</th>
+      <th scope="col">Order Date</th>
+      <th scope="col">Product Detail</th>
+      <th scope="col">Price</th>
+      <th scope="col">Status</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  
+  <tbody>
+    <tr>
+      <td>${searchOrder.orderId}</td>
+      <td>Name : ${searchOrder.orderAddress.firstName} ${order.orderAddress.lastName} <br>
+          Email : ${searchOrder.orderAddress.email} <br>
+          Mobile No : ${searchOrder.orderAddress.mobileNo} <br>
+          Address : ${searchOrder.orderAddress.address} <br>
+          City : ${searchOrder.orderAddress.city} <br>
+          State : ${searchOrder.orderAddress.state} <br>
+          Pincode : ${searchOrder.orderAddress.pincode} <br>
+      
+      </td>
+      <td>${searchOrder.orderDate}</td>
+      <td>${searchOrder.product.title}</td>
+      <td>Quantity : ${searchOrder.quantity} <br>
+          Price : ${searchOrder.price} <br>
+          Total Price : ${searchOrder.quantity * order.price}
+      </td>
+      <td>${searchOrder.status}</td>
+          
+     <td>
+    <form action="/admin/changeStatusAdmin" method="post">
+    <div class="row">
+
+    <div class="col">
+    
+    <input type="hidden" value="${searchOrder.id}" name="oid">
+    
+    <select class="form-control" name="statusId">
+    <option value="" disabled="disabled" selected="selected">-- Select --</option>
+    <option value="1">In Progress</option>
+    <option value="2">Order Received</option>
+    <option value="3">Product is packed</option>
+    <option value="4">Out for delivery</option>
+    <option value="5">Delivered</option>
+    <option value="6">Cancelled</option>
+    </select>
+    </div>
+
+    <div class="col">
+    <c:choose>
+    <c:when test="${searchOrder.status == 'Cancelled' || searchOrder.status == 'Delivered' }">
+    <button class="btn btn-sm btn-primary disabled">Update</button>
+    </c:when>
+    
+    <c:otherwise>
+      <button class="btn btn-sm btn-primary">Update</button>
+    </c:otherwise>
+    </c:choose>
+    
+    </div>
+    </div>
+    </form>
+    </td>
+      
+      
+    </tr>
+  </tbody>
+  
+</table>
+</c:if>
 </div>
 
 </div>
