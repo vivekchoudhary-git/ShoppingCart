@@ -313,12 +313,22 @@ public class AdminController {
 		return "redirect:/admin/loadAddProduct";
 	}
 	
+	
+	// applying logic if admin does not search anything then all products will be shown otherwise only searched products will be shown
 	@GetMapping("/viewProducts")
-	public String viewAllProducts(Model model) {
+	public String viewAllProducts(@RequestParam(value = "keyword",defaultValue = "") String keyword,Model model) {
 		
 		String productImageUrl = environment.getProperty("product.image.url");
 		
-		List<Product> productsList = productServiceImpl.getAllProducts();
+		List<Product> productsList = null;
+		
+		if(keyword == null || keyword.isEmpty()) {
+		
+		productsList = productServiceImpl.getAllProducts();
+		}else {
+			
+			productsList = productServiceImpl.searchProductByKeyword(keyword);
+		}
 		
 		if(!CollectionUtils.isEmpty(productsList)) {
 			

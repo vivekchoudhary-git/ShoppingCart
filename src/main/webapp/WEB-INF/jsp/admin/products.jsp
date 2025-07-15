@@ -32,7 +32,32 @@
 </head>
 <body>
 
-<div class="container mt-5 p-5" style="font-weight : bolder;">
+<div class="container mt-4 p-5" style="font-weight : bolder;">
+
+<div class="row">
+<div class="col-md-2 mb-2">
+<a href="/admin/"><button class="btn btn-sm btn-warning"><i class="fa-solid fa-arrow-left"></i> Back</button></a>
+</div>
+</div>
+
+<!-- search option starts -->
+<div class="row">
+<div class="col-md-4">
+<form action="/admin/viewProducts">
+<div class="row">
+
+<div class="col">
+<input type="text" name="keyword" class="form-control">
+</div>
+
+<div class="col">
+<button class="btn btn-sm btn-primary">Search</button>
+</div>
+</div>
+</form>
+</div>
+</div>
+<!-- search option ends -->
 
 <div class="card card-sh">
 

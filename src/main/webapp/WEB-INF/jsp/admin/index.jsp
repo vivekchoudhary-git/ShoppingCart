@@ -62,7 +62,7 @@
 <div class="card card-sh">
 <div class="card-body text-center text-success">
 <i class="fa-solid fa-book-open fa-3x"></i>
-<h4>View Product</h4>
+<h4>View Products</h4>
 </div>
 </div>
 </a>
