@@ -54,8 +54,8 @@
 <p class="fs-3 text-center">Products</p>
 <div class="row">
 
-<c:if test="${not empty activeProductList}">
-<c:forEach items="${activeProductList}" var="prod">
+<c:if test="${not empty activeProductsListPaginated}">
+<c:forEach items="${activeProductsListPaginated}" var="prod">
 <div class="col-md-3">
 <div class="card">
 <div class="card-body">
@@ -70,9 +70,48 @@
 </div>
 </div>
 </c:forEach>
+
+
+<!-- Pagination Starts -->
+<div class="row mt-5">
+
+<div class="col-md-4">
+<p>Total Products : ${totalProducts}</p>
+</div>
+
+<div class="col-md-6">
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+    <li class="page-item ${isFirst ? 'disabled' : '' }">
+      <a class="page-link" href="/product?pageNo=${pageNo-1}&pageSize=4" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    
+    <!-- Note : here i is a local variable -->
+    <c:forEach begin="1" end="${totalPages}" var="i">
+    
+    <li class="page-item ${pageNo+1 == i ? 'active':''}"><a class="page-link" href="/product?pageNo=${i-1}&pageSize=4">${i}</a></li>
+    
+    </c:forEach>
+    
+    <li class="page-item ${isLast ? 'disabled' : '' }">
+      <a class="page-link" href="/product?pageNo=${pageNo+1}&pageSize=4" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+</div>
+
+</div>
+ <!-- Pagination Ends -->
+
+
+
 </c:if>
 
-<c:if test="${empty activeProductList}">
+<c:if test="${empty activeProductsListPaginated}">
 
 <p class="text-center" style="color:red;font-family:georgia;font-size :25px;">Product Not Available</p>
 
@@ -81,11 +120,14 @@
 </div>
 </div>
 </div>
-</div>
+
 
 </div>
 
 </div>
+
+</div>
+
 
 
 <!-- note : when i remove below script only then Category and User dropdown works in header. study why it happens -->

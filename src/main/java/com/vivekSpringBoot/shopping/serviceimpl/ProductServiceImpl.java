@@ -10,6 +10,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -122,6 +125,8 @@ public class ProductServiceImpl implements ProductService {
 		return null;
 	}
 
+	
+	// this method is not for pagination
 	@Override
 	public List<Product> getAllActiveProductsList(String category) {
 		
@@ -155,5 +160,31 @@ public class ProductServiceImpl implements ProductService {
 		
 		return null;
 	}
+	
+	
+	// this method is for pagination
+	@Override
+	public Page<Product> getAllActiveProductsListPaginated(String category,Integer pageNo,Integer pageSize) {
+		
+		
+		Pageable pageable = PageRequest.of(pageNo, pageSize);
+		
+		Page<Product> activeProductsListPage = null;
+		
+		if(category.equals("all")) {
+			
+			activeProductsListPage = productRepo.findByIsActiveTrue(pageable);
+		}else {
+			
+			activeProductsListPage = productRepo.fetchActiveProductByCategory(category,pageable);
+		}
+		
+		return activeProductsListPage;
+	}
+	
+	
+	
+	
+	
 
 }

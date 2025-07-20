@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -97,17 +98,28 @@ public class HomeController {
 	
 	
 	@GetMapping("/product")
-	public String product(@RequestParam(value = "category",defaultValue = "all") String category,Model model) {
+	public String product(@RequestParam(value = "category",defaultValue = "all") String category,@RequestParam(value = "pageNo",defaultValue = "0") Integer pageNo,@RequestParam(value = "pageSize",defaultValue = "4") Integer pageSize,Model model) {
 		
 		model.addAttribute("showSearch", true);                          /* to show search bar in header */
 		
 		String productImageUrl = environment.getProperty("product.image.url");
 		
 		List<Category> activeCategoryList = categoryServiceImpl.getAllActiveCategoriesList();
-		List<Product> activeProductList = productServiceImpl.getAllActiveProductsList(category);
+//		List<Product> activeProductList = productServiceImpl.getAllActiveProductsList(category);         // replacing this with paginated list
+		
+		Page<Product> activeProductsPaginated = productServiceImpl.getAllActiveProductsListPaginated(category, pageNo, pageSize);
+		
+		List<Product> activeProductsListPaginated = activeProductsPaginated.getContent();
+		
+		model.addAttribute("activeProductsListPaginated", activeProductsListPaginated);
+		model.addAttribute("totalPages", activeProductsPaginated.getTotalPages());
+		model.addAttribute("totalProducts", activeProductsPaginated.getTotalElements());
+		model.addAttribute("pageNo", activeProductsPaginated.getNumber());
+		model.addAttribute("isFirst", activeProductsPaginated.isFirst());
+		model.addAttribute("isLast", activeProductsPaginated.isLast());
 		
 		model.addAttribute("activeCategoryList", activeCategoryList);
-		model.addAttribute("activeProductList", activeProductList);
+//		model.addAttribute("activeProductList", activeProductList);
 		model.addAttribute("paramValue", category);                           // it will be used to highlight selected category option
 		model.addAttribute("productImageUrl", productImageUrl);
 		
