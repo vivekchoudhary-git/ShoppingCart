@@ -34,6 +34,19 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
 	// this method is for pagination
 	Page<Product> findByIsActiveTrue(Pageable pageable);
 	
+	// this method is for pagination (including both active and inactive products
+	@Query(value = "SELECT * FROM product " +
+            "WHERE " +
+            "(LOWER(title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "OR LOWER(category) LIKE LOWER(CONCAT('%', :keyword, '%')))",
+    countQuery = "SELECT COUNT(*) FROM product " +
+                 "WHERE " +
+                 "(LOWER(title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+                 "OR LOWER(category) LIKE LOWER(CONCAT('%', :keyword, '%')))",
+    nativeQuery = true)
+    Page<Product> searchAnyProductByTitleOrCategoryPaginated(@Param("keyword") String keyword, Pageable pageable);
+
+	
 }
 
 

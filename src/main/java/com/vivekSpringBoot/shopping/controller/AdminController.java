@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
@@ -316,23 +317,37 @@ public class AdminController {
 	
 	// applying logic if admin does not search anything then all products will be shown otherwise only searched products will be shown
 	@GetMapping("/viewProducts")
-	public String viewAllProducts(@RequestParam(value = "keyword",defaultValue = "") String keyword,Model model) {
+	public String viewAllProducts(@RequestParam(value = "keyword",defaultValue = "") String keyword,@RequestParam(value = "pageNo",defaultValue = "0") Integer pageNo,@RequestParam(value = "pageSize",defaultValue = "3") Integer pageSize,Model model) {
 		
 		String productImageUrl = environment.getProperty("product.image.url");
 		
-		List<Product> productsList = null;
+//		List<Product> productsList = null;
+		
+		Page<Product> productsListPaginated = null;
 		
 		if(keyword == null || keyword.isEmpty()) {
 		
-		productsList = productServiceImpl.getAllProducts();
+//		productsList = productServiceImpl.getAllProducts();
+		
+		productsListPaginated = productServiceImpl.getAllProductsPaginated(pageNo, pageSize);
+		
 		}else {
 			
-			productsList = productServiceImpl.searchProductByKeyword(keyword);
+//			productsList = productServiceImpl.searchProductByKeyword(keyword);
+			
+			productsListPaginated = productServiceImpl.searchProductByKeywordPaginated(keyword, pageNo, pageSize);
 		}
 		
-		if(!CollectionUtils.isEmpty(productsList)) {
+		List<Product> paginatedList = productsListPaginated.getContent();
+		
+		if(!CollectionUtils.isEmpty(paginatedList)) {
 			
-			model.addAttribute("productsList", productsList);
+			model.addAttribute("productsList", paginatedList);
+			model.addAttribute("totalProducts",productsListPaginated.getTotalElements());
+			model.addAttribute("isFirst", productsListPaginated.isFirst());
+			model.addAttribute("isLast", productsListPaginated.isLast());
+			model.addAttribute("totalPages",productsListPaginated.getTotalPages());
+			model.addAttribute("pageNo", pageNo);
 			model.addAttribute("productImageUrl", productImageUrl);
 		}
 		
@@ -441,12 +456,22 @@ public class AdminController {
 	
 	
 	@GetMapping("/allOrders")
-	public String viewAllOrders(Model model) {
+	public String viewAllOrders(@RequestParam(value = "pageNo",defaultValue = "0") Integer pageNo,@RequestParam(value = "pageSize",defaultValue = "3") Integer pageSize,Model model) {
 		
 		model.addAttribute("orderDisplayLogic", true);    // testing only
 		
-		List<ProductOrder> allOrdersList = orderServiceImpl.getAllOrders();
-		model.addAttribute("allOrdersList", allOrdersList);
+//		List<ProductOrder> allOrdersList = orderServiceImpl.getAllOrders();
+		
+		Page<ProductOrder> allOrdersListPaginated = orderServiceImpl.getAllOrdersPaginated(pageNo, pageSize);
+		
+		List<ProductOrder> ordersListPaginated = allOrdersListPaginated.getContent();
+		
+		model.addAttribute("allOrdersList", ordersListPaginated);
+		model.addAttribute("totalOrders", allOrdersListPaginated.getTotalElements());
+		model.addAttribute("isFirst", allOrdersListPaginated.isFirst());
+		model.addAttribute("isLast", allOrdersListPaginated.isLast());
+		model.addAttribute("totalPages", allOrdersListPaginated.getTotalPages());
+		model.addAttribute("pageNo", pageNo);
 		
 		return "orderss";
 	}
@@ -480,7 +505,7 @@ public class AdminController {
 	}
 	
 	@GetMapping("/searchOrder")
-	public String searchAnyOrder(@RequestParam("orderId") String orderId,Model model) {
+	public String searchAnyOrder(@RequestParam("orderId") String orderId,@RequestParam(value = "pageNo",defaultValue = "0") Integer pageNo,@RequestParam(value = "pageSize",defaultValue = "3") Integer pageSize,Model model) {
 		
 		model.addAttribute("orderDisplayLogic", true);                  // logic to display order list or order object based on condition
 		
@@ -492,8 +517,22 @@ public class AdminController {
 			model.addAttribute("orderDisplayLogic", false); 
 		}else {
 			
-			List<ProductOrder> allOrdersList = orderServiceImpl.getAllOrders();
-			model.addAttribute("allOrdersList", allOrdersList);
+			// showing all orders when orderId is empty in searh bar
+			
+//			List<ProductOrder> allOrdersList = orderServiceImpl.getAllOrders();
+//			model.addAttribute("allOrdersList", allOrdersList);
+			
+			Page<ProductOrder> allOrdersListPaginated = orderServiceImpl.getAllOrdersPaginated(pageNo, pageSize);
+			
+			List<ProductOrder> ordersListPaginated = allOrdersListPaginated.getContent();
+			
+			model.addAttribute("allOrdersList", ordersListPaginated);
+			model.addAttribute("totalOrders", allOrdersListPaginated.getTotalElements());
+			model.addAttribute("isFirst", allOrdersListPaginated.isFirst());
+			model.addAttribute("isLast", allOrdersListPaginated.isLast());
+			model.addAttribute("totalPages", allOrdersListPaginated.getTotalPages());
+			model.addAttribute("pageNo", pageNo);
+			
 		}
 		
 		return "orderss";

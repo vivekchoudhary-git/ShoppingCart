@@ -9,6 +9,9 @@ import java.util.UUID;
 import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -136,6 +139,16 @@ public class OrderServiceImpl implements OrderService {
 		}
 		
 		return null;
+	}
+
+	@Override
+	public Page<ProductOrder> getAllOrdersPaginated(Integer pageNo, Integer pageSize) {
+		
+		Pageable pageable = PageRequest.of(pageNo, pageSize);
+		
+		Page<ProductOrder> ordersListPaginated = productOrderRepo.findAll(pageable);
+		
+		return ordersListPaginated;
 	}
 
 	

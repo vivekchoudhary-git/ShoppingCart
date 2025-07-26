@@ -162,6 +162,42 @@
   </tbody>
   
 </table>
+
+<!-- Pagination Starts -->
+<div class="row mt-5">
+
+<div class="col-md-4">
+<p>Total Orders : ${totalOrders}</p>
+</div>
+
+<div class="col-md-6">
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+    <li class="page-item ${isFirst ? 'disabled' : '' }">
+      <a class="page-link" href="/admin/allOrders?pageNo=${pageNo-1}&pageSize=3" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    
+    <!-- Note : here i is a local variable -->
+    <c:forEach begin="1" end="${totalPages}" var="i">
+    
+    <li class="page-item ${pageNo+1 == i ? 'active':''}"><a class="page-link" href="/admin/allOrders?pageNo=${i-1}&pageSize=3">${i}</a></li>
+    
+    </c:forEach>
+    
+    <li class="page-item ${isLast ? 'disabled' : '' }">
+      <a class="page-link" href="/admin/allOrders?pageNo=${pageNo+1}&pageSize=3" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+</div>
+
+</div>
+ <!-- Pagination Ends -->
+
 </c:if>
 
 <c:if test="${orderDisplayLogic == false}">

@@ -12,7 +12,13 @@ import com.vivekSpringBoot.shopping.model.Product;
 public interface ProductService {
 
 	public Product saveProductData(Product product);
+	
+	// this method is not for pagination
 	public List<Product> getAllProducts();
+	
+	// this method is for pagination
+	public Page<Product> getAllProductsPaginated(Integer pageNo,Integer pageSize);
+	
 	public Boolean deleteProductById(int id);
 	public Product getProductById(int id);
 	public Product updateProduct(Product product,MultipartFile file) throws IOException;
@@ -24,5 +30,8 @@ public interface ProductService {
 	
 	// this method is for pagination
 	Page<Product> getAllActiveProductsListPaginated(String category,Integer pageNo,Integer pageSize);
+	
+	// this method is for pagination
+	public Page<Product> searchProductByKeywordPaginated(String keyword,Integer pageNo,Integer pageSize);
 	
 }
