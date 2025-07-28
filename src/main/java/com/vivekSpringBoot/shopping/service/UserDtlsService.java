@@ -29,4 +29,6 @@ public interface UserDtlsService {
 	
 	public UserDtls getUserDtlsDataById(Integer id);
 	
+	public UserDtls saveAdminUserDtlsData(UserDtls userDtls);
+	
 }

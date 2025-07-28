@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>users.jsp (admin)</title>
 
 <!-- this link is to use bootstrap taken from bootstrap website -->
 <link
@@ -38,7 +38,14 @@
 <div class="card card-sh">
 
 <div class="card-header text-center">
-<p class="fs-4">Users</p>
+
+<c:if test="${userType == 1}">
+<p class="fs-4"> Users </p>
+</c:if>
+
+<c:if test="${userType == 2}">
+<p class="fs-4"> Admins </p>
+</c:if>
 
 <c:if test="${not empty sessionScope.successMsg }">
 <div style="color : green;font-size : 20px;font-family : georgia;" role="alert">
@@ -85,8 +92,8 @@
       <td>${user.address},${user.city},${user.state},${user.pincode}</td>
       <td>${user.isEnabled}</td>
       <td><div class="d-flex">
-      <a href="/admin/updateStatus?id=${user.id}&status=true" class="btn btn-success btn-sm"><i class="fa-solid fa-person-arrow-up-from-line"></i>Active</a>
-      <a href="/admin/updateStatus?id=${user.id}&status=false" class="btn btn-danger btn-sm ms-2"><i class="fa-solid fa-person-arrow-down-to-line"></i>InActive</a>
+      <a href="/admin/updateStatus?id=${user.id}&status=true&userType=${userType}" class="btn btn-success btn-sm"><i class="fa-solid fa-person-arrow-up-from-line"></i>Active</a>
+      <a href="/admin/updateStatus?id=${user.id}&status=false&userType=${userType}" class="btn btn-danger btn-sm ms-2"><i class="fa-solid fa-person-arrow-down-to-line"></i>InActive</a>
       </div>
       </td>
     </tr>

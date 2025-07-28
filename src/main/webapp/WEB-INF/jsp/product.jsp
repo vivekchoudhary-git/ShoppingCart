@@ -71,7 +71,7 @@
 </div>
 </c:forEach>
 
-
+<c:if test="${searchBarPagination == false }">
 <!-- Pagination Starts -->
 <div class="row mt-5">
 
@@ -106,7 +106,44 @@
 
 </div>
  <!-- Pagination Ends -->
+</c:if>
 
+<c:if test="${searchBarPagination == true }">
+<!-- Pagination Starts -->
+<div class="row mt-5">
+
+<div class="col-md-4">
+<p>Total Products : ${totalProducts}</p>
+</div>
+
+<div class="col-md-6">
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+    <li class="page-item ${isFirst ? 'disabled' : '' }">
+      <a class="page-link" href="/searchProduct?pageNo=${pageNo-1}&pageSize=4&keyword=${keyword}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    
+    <!-- Note : here i is a local variable -->
+    <c:forEach begin="1" end="${totalPages}" var="i">
+    
+    <li class="page-item ${pageNo+1 == i ? 'active':''}"><a class="page-link" href="/searchProduct?pageNo=${i-1}&pageSize=4&keyword=${keyword}">${i}</a></li>
+    
+    </c:forEach>
+    
+    <li class="page-item ${isLast ? 'disabled' : '' }">
+      <a class="page-link" href="/searchProduct?pageNo=${pageNo+1}&pageSize=4&keyword=${keyword}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+</div>
+
+</div>
+ <!-- Pagination Ends -->
+</c:if>
 
 
 </c:if>

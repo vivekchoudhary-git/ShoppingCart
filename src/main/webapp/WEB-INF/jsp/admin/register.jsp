@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title> register.jsp (user) </title>
+<title>register.jsp (admin)</title>
 
 <!-- this link is to use bootstrap taken from bootstrap website -->
 <link
@@ -28,7 +28,7 @@
 <div class="container mt-5 p-9">
 <div class="row">
 <div class="col-md-6 p-4">
-<img alt="not found" src="resources/images/ecom.png">
+<img alt="not found" src="${pageContext.request.contextPath}/resources/images/ecom.png">
 </div>
 <div class="col-md-6 mt-3 p-5">
 <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
@@ -53,7 +53,7 @@
 
 </div>
 <div class="card-body">
-<form action="/saveReg" method="post" enctype="multipart/form-data">
+<form action="/admin/saveAdminReg" method="post" enctype="multipart/form-data">
 
 <div class="row">
 <div class="col">

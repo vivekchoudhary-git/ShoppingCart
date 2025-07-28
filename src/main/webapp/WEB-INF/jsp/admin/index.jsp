@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>index.jsp (admin)</title>
 
 <!-- this link is to use bootstrap taken from bootstrap website -->
 <link
@@ -80,7 +80,7 @@
 </div>
 
 <div class="col-md-4 mt-3">
-<a class="text-decoration-none" href="/admin/viewUsers">
+<a class="text-decoration-none" href="/admin/viewUsers?userType=1">
 <div class="card card-sh">
 <div class="card-body text-center text-primary">
 <i class="fa-solid fa-users fa-3x"></i>
@@ -91,11 +91,22 @@
 </div>
 
 <div class="col-md-4 mt-3">
-<a class="text-decoration-none" href="#">
+<a class="text-decoration-none" href="/admin/register">
 <div class="card card-sh">
 <div class="card-body text-center text-danger">
 <i class="fa-solid fa-circle-user fa-3x"></i>
 <h4>Add Admin</h4>
+</div>
+</div>
+</a>
+</div>
+
+<div class="col-md-4 mt-3">
+<a class="text-decoration-none" href="/admin/viewUsers?userType=2">
+<div class="card card-sh">
+<div class="card-body text-center text-danger">
+<i class="fa-solid fa-circle-user fa-3x"></i>
+<h4>Admins</h4>
 </div>
 </div>
 </a>

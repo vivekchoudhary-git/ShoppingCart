@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
@@ -33,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
+import com.vivekSpringBoot.shopping.dto.AdminRegDTO;
 import com.vivekSpringBoot.shopping.model.Category;
 import com.vivekSpringBoot.shopping.model.Product;
 import com.vivekSpringBoot.shopping.model.ProductOrder;
@@ -70,6 +72,11 @@ public class AdminController {
 	
 	@Autowired
 	private EmailUtility emailUtility;
+	
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+	
 	
 	@GetMapping("/")
 	public String index() {
@@ -420,11 +427,19 @@ public class AdminController {
 	
 	
 	@GetMapping("/viewUsers")
-	public String viewAllUsers(Model model) {
+	public String viewAllUsers(@RequestParam("userType") Integer userType,Model model) {
 		
 		String userImageUrl = environment.getProperty("userimage.url");
 		
-		List<UserDtls> userDtlsList = userDtlsServiceImpl.getAllUsersByRole("ROLE_USER");
+		List<UserDtls> userDtlsList = null;
+		
+		if(userType == 1) {
+			
+		 userDtlsList = userDtlsServiceImpl.getAllUsersByRole("ROLE_USER");
+		}else if(userType == 2) {
+			
+			userDtlsList = userDtlsServiceImpl.getAllUsersByRole("ROLE_ADMIN");
+		}
 		
 		if(!CollectionUtils.isEmpty(userDtlsList)) {
 			
@@ -432,13 +447,14 @@ public class AdminController {
 		}
 		
 		    model.addAttribute("userImageUrl",userImageUrl);
+		    model.addAttribute("userType", userType);
 		
 		return "viewUsers";
 	}
 	
 	// here updating status i.e isEnabled Property of UserDtls
 	@GetMapping("/updateStatus")
-	public String updateUserStatus(@RequestParam("id") int id,@RequestParam("status") Boolean status,HttpSession session) {
+	public String updateUserStatus(@RequestParam("id") int id,@RequestParam("status") Boolean status,@RequestParam("userType") Integer userType,HttpSession session) {
 		
 		UserDtls updatedUserDtls = userDtlsServiceImpl.updateUserDtlsStatus(id, status);
 		
@@ -451,7 +467,7 @@ public class AdminController {
 			session.setAttribute("errorMsg", "Failed Status is not Updated");
 		}
 		
-		return "redirect:/admin/viewUsers";
+		return "redirect:/admin/viewUsers?userType="+userType;
 	}
 	
 	
@@ -539,6 +555,156 @@ public class AdminController {
 	}
 	
 	
+	@GetMapping("/register")
+	public String loadAdminRegistration() {
+		
+		
+		return "registerAdminn";
+	}
+	
+	
+	@PostMapping("/saveAdminReg")
+	public String saveAdminRegistrationDetails(@ModelAttribute AdminRegDTO adminRegDTO,@RequestParam("file") MultipartFile file,HttpSession session) throws IOException {
+		
+String userImageName = (!file.isEmpty() && file != null) ? file.getOriginalFilename() : "default.jpg";
+		
+		String userImageUploadPath = environment.getProperty("userimage.upload.path");
+		
+		adminRegDTO.setProfileImage(userImageName);
+		
+		UserDtls newAdmin = new UserDtls();
+		
+		newAdmin.setName(adminRegDTO.getName());
+		newAdmin.setPhoneNo(adminRegDTO.getPhoneNo());
+		newAdmin.setEmail(adminRegDTO.getEmail());
+		newAdmin.setAddress(adminRegDTO.getAddress());
+		newAdmin.setCity(adminRegDTO.getCity());
+		newAdmin.setState(adminRegDTO.getState());
+		newAdmin.setPincode(adminRegDTO.getPincode());
+		newAdmin.setPassword(adminRegDTO.getPassword());
+		newAdmin.setProfileImage(adminRegDTO.getProfileImage());
+		
+		UserDtls savedUserDtls = userDtlsServiceImpl.saveAdminUserDtlsData(newAdmin);
+		
+		if(!ObjectUtils.isEmpty(savedUserDtls)) {
+			
+			if(!file.isEmpty() && file != null) {
+			
+			Path userImagePath = Paths.get(userImageUploadPath);
+			
+			if(!Files.exists(userImagePath)) {
+				
+				Files.createDirectories(userImagePath);
+			}
+			
+			Path fullUserImagePath = userImagePath.resolve(file.getOriginalFilename());
+			
+			Files.copy(file.getInputStream(), fullUserImagePath, StandardCopyOption.REPLACE_EXISTING);
+			
+			}
+			session.setAttribute("successMsg", "Successfully Admin Details are saved");
+		}else {
+			session.setAttribute("errorMsg", "Failed Admin Details are not saved");
+		}
+		
+		return "redirect:/admin/register";
+		
+	}
+	
+	
+	@GetMapping("/viewAdmProfile")
+	public String viewAdminProfile(Model model) {
+		
+		String userImageUrl = environment.getProperty("userimage.url");
+		model.addAttribute("userImageUrl", userImageUrl);
+		
+		return "adminProfile";
+	}
+	
+	
+	@PostMapping("/updateAdmProfile")
+	public String updateAdminProfile(@ModelAttribute UserDtls userDtls,@RequestParam("file") MultipartFile file,HttpSession session) throws IOException {
+		
+        String userImageUploadPath = environment.getProperty("userimage.upload.path");
+		
+		String imageName = file.getOriginalFilename();
+		
+		if(imageName != null && !imageName.isEmpty()) {
+			
+		userDtls.setProfileImage(imageName);
+		}
+		
+		UserDtls updatedUserDtlsData = userDtlsServiceImpl.updateUserDtlsData(userDtls);
+		
+		if(!ObjectUtils.isEmpty(updatedUserDtlsData)) {
+			
+			if(!file.isEmpty() && file != null) {
+				
+				Path userImagePath = Paths.get(userImageUploadPath);
+				
+				if(!Files.exists(userImagePath)) {
+				
+					Files.createDirectories(userImagePath);
+				}
+				
+				Path fullUserImagePath = userImagePath.resolve(file.getOriginalFilename());
+				
+				Files.copy(file.getInputStream(), fullUserImagePath, StandardCopyOption.REPLACE_EXISTING);
+			}
+			
+			
+			session.setAttribute("successMsg", "Admin Profile is Updated");
+		}else {
+			
+			session.setAttribute("errorMsg", "Admin Profile is not Updated");
+		}
+		
+		return "redirect:/admin/viewAdmProfile";
+		
+	}
+	
+	
+	// created method to get logged in user details
+	private UserDtls getLoggedInUserDetails(Principal principal) {
+		
+        String userEmail = principal.getName();
+		
+		UserDtls userDtls = userDtlsServiceImpl.getUserDtlsDataByEmail(userEmail);
+		
+		return userDtls;
+	}
+	
+	
+	@PostMapping("/changeAdmPassword")
+	public String changeAdminPassword(@RequestParam("currentPassword") String currentPassword,@RequestParam("newPassword") String newPassword,Principal principal,HttpSession session) {
+		
+		UserDtls userDtls = getLoggedInUserDetails(principal);
+		
+		boolean passResult = bCryptPasswordEncoder.matches(currentPassword, userDtls.getPassword());
+		
+		if(passResult) {
+			
+			String encodedNewPass = bCryptPasswordEncoder.encode(newPassword);
+			
+			userDtls.setPassword(encodedNewPass);
+			UserDtls updatedUserDtls = userDtlsServiceImpl.updateUserDtlsData(userDtls);
+			
+			if(!ObjectUtils.isEmpty(updatedUserDtls)) {
+				
+				session.setAttribute("successMsg", "Password is Updated");
+			}else {
+				session.setAttribute("errorMsg", "Password is not Updated");
+			}
+			
+		}else {
+			session.setAttribute("errorMsg", "Invalid Password");
+		}
+		
+		return "redirect:/admin/viewAdmProfile";
+	}
+	
+		
+	
 	
 }
 
@@ -548,3 +714,7 @@ public class AdminController {
 // --------------- Notes -------------
 
 // we can also use "RedirectAttributes" instead of "Session" to display alert messages on JSP.
+
+
+// userType == 1 for ROLE_USER
+// userType == 2 for ROLE_ADMIN

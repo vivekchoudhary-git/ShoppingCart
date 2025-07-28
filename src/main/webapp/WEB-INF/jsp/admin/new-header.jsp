@@ -100,7 +100,6 @@
 						<li class="nav-item">
 							<a class="nav-link active" href="/user/openCart"><i class="fa-solid fa-cart-shopping"></i> Cart [ ${cartCount} ]</a>
 						</li>
-						</c:if>
 						
 						<li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-user"></i> ${userDtls.name}</a>
@@ -115,9 +114,24 @@
 							
 						</li>
 						
-						<!-- <li class="nav-item">
-							<a class="nav-link active" href="/logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
-						</li> -->
+						</c:if>
+						
+						<!-- use eq instead of == in jsp to compare strings (recommended by chatGPT) -->
+						
+						<c:if test="${userDtls.role eq 'ROLE_ADMIN'}">
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-user"></i> ${userDtls.name}</a>
+							
+							<ul class="dropdown-menu dropdown-menu-end">
+							
+							<li><a class="dropdown-item" href="/admin/viewAdmProfile">Profile</a></li>
+							<li><a class="dropdown-item" href="/logout">Logout</a></li>
+							
+							</ul>
+							
+						</li>
+						</c:if>
+						
 					</c:when>
 				
 				</c:choose>

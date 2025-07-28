@@ -102,6 +102,8 @@ public class HomeController {
 		
 		model.addAttribute("showSearch", true);                          /* to show search bar in header */
 		
+		model.addAttribute("searchBarPagination", false);                     /* to control route to controller (href) in product.jsp */
+		
 		String productImageUrl = environment.getProperty("product.image.url");
 		
 		List<Category> activeCategoryList = categoryServiceImpl.getAllActiveCategoriesList();
@@ -274,20 +276,46 @@ public class HomeController {
 	
 	// search product by keyword
 	@GetMapping("/searchProduct")
-	public String searchAnyProduct(@RequestParam("keyword") String keyword,@RequestParam(value = "category",defaultValue = "all") String category,Model model ,HttpSession session) {
+	public String searchAnyProduct(@RequestParam("keyword") String keyword,@RequestParam(value = "category",defaultValue = "all") String category,@RequestParam(value = "pageNo",defaultValue = "0") Integer pageNo,@RequestParam(value = "pageSize",defaultValue = "4") Integer pageSize,Model model ,HttpSession session) {
 		
-		model.addAttribute("showSearch", true);                          /* to show search bar in header */
+		model.addAttribute("showSearch", true);                              /* to show search bar in header */
+		
+		model.addAttribute("searchBarPagination", true);                     /* to control route to controller (href) in product.jsp */
 		
 		String productImageUrl = environment.getProperty("product.image.url");
 		
 		if(keyword.trim() == null || keyword.trim().isEmpty()) {
 			
-			List<Product> allActiveProductsList = productServiceImpl.getAllActiveProductsList(category);
-			model.addAttribute("activeProductList", allActiveProductsList);
+//			List<Product> allActiveProductsList = productServiceImpl.getAllActiveProductsList(category);
+			
+			Page<Product> allActiveProductsListPaginated = productServiceImpl.getAllActiveProductsListPaginated(category, pageNo, pageSize);
+			
+			List<Product> activeProductsListPaginated = allActiveProductsListPaginated.getContent();
+			
+			model.addAttribute("activeProductsListPaginated", activeProductsListPaginated);
+			model.addAttribute("totalPages", allActiveProductsListPaginated.getTotalPages());
+			model.addAttribute("totalProducts", allActiveProductsListPaginated.getTotalElements());
+			model.addAttribute("pageNo", allActiveProductsListPaginated.getNumber());
+			model.addAttribute("isFirst", allActiveProductsListPaginated.isFirst());
+			model.addAttribute("isLast", allActiveProductsListPaginated.isLast());
 		}else {
 			
-			List<Product> searchedProductList = productServiceImpl.searchProductByKeyword(keyword);
-			model.addAttribute("activeProductList", searchedProductList);
+//			List<Product> searchedProductList = productServiceImpl.searchProductByKeyword(keyword);
+			
+			Page<Product> searchActiveProductsListPaginated = productServiceImpl.searchActiveProductByKeywordPaginated(keyword, pageNo, pageSize);
+			
+			List<Product> searchActiveProductsPaginated = searchActiveProductsListPaginated.getContent();
+			
+			model.addAttribute("activeProductsListPaginated", searchActiveProductsPaginated);
+			model.addAttribute("totalPages", searchActiveProductsListPaginated.getTotalPages());
+			model.addAttribute("totalProducts", searchActiveProductsListPaginated.getTotalElements());
+			model.addAttribute("pageNo", searchActiveProductsListPaginated.getNumber());
+			model.addAttribute("isFirst", searchActiveProductsListPaginated.isFirst());
+			model.addAttribute("isLast", searchActiveProductsListPaginated.isLast());
+			
+			model.addAttribute("keyword", keyword);                       // without this pagination will throw error if we click on button 1,2,3.........
+			
+			
 		}
 		
 		   List<Category> activeCategoryList = categoryServiceImpl.getAllActiveCategoriesList();

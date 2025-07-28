@@ -31,7 +31,10 @@ public interface ProductService {
 	// this method is for pagination
 	Page<Product> getAllActiveProductsListPaginated(String category,Integer pageNo,Integer pageSize);
 	
-	// this method is for pagination
+	// this method is for pagination (including active and inactive products)
 	public Page<Product> searchProductByKeywordPaginated(String keyword,Integer pageNo,Integer pageSize);
+	
+	// this method is for pagination (only active products)
+	public Page<Product> searchActiveProductByKeywordPaginated(String keyword,Integer pageNo,Integer pageSize);
 	
 }

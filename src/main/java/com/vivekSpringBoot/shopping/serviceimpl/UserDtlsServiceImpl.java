@@ -165,6 +165,26 @@ public class UserDtlsServiceImpl implements UserDtlsService {
 		return userDtls;
 	}
 
+	@Override
+	public UserDtls saveAdminUserDtlsData(UserDtls newAdmin) {
+		
+
+		newAdmin.setRole("ROLE_ADMIN");
+		newAdmin.setIsEnabled(true);
+		newAdmin.setIsAccountNonLocked(true);
+		newAdmin.setFailedAttempt(0);
+		newAdmin.setLockTime(null);
+		
+		String encodedPassword = bCryptPasswordEncoder.encode(newAdmin.getPassword());
+		
+		newAdmin.setPassword(encodedPassword);
+		
+		UserDtls savedUserDtls = userDtlsRepo.save(newAdmin);
+		
+		return savedUserDtls;
+		
+	}
+
 
 
 }

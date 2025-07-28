@@ -202,6 +202,16 @@ public class ProductServiceImpl implements ProductService {
 		
 		return searchProductsListPaginated;
 	}
+
+	@Override
+	public Page<Product> searchActiveProductByKeywordPaginated(String keyword, Integer pageNo, Integer pageSize) {
+		
+		Pageable pageable = PageRequest.of(pageNo, pageSize);
+		
+		Page<Product> searchActiveProductsListPaginated = productRepo.searchAnyActiveProductByTitleOrCategoryPaginated(keyword, pageable);
+		
+		return searchActiveProductsListPaginated;
+	}
 	
 	
 	
