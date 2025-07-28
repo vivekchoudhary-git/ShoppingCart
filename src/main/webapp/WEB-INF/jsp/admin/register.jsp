@@ -22,6 +22,10 @@
 	integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
 	crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+<!-- 	we can see our css file i.e style.css at http://localhost:8080/resources/css/style.css after using pageContext.request.contextPath -->
+<!-- this is recommended by chatGPT -->
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
+
 </head>
 <body>
 
@@ -53,7 +57,7 @@
 
 </div>
 <div class="card-body">
-<form action="/admin/saveAdminReg" method="post" enctype="multipart/form-data">
+<form action="/admin/saveAdminReg" method="post" enctype="multipart/form-data" id="adminRegisForm" novalidate="novalidate">
 
 <div class="row">
 <div class="col">
@@ -91,11 +95,11 @@
 
 <div class="row">
 <div class="col">
-<label class="form-label">Password</label><input class="form-control" name="password" type="password">
+<label class="form-label">Password</label><input class="form-control" name="password" type="password" id="pass">
 </div>
 
 <div class="col">
-<label class="form-label">Confirm Password</label><input class="form-control" name="confirmpincode" type="password">
+<label class="form-label">Confirm Password</label><input class="form-control" name="confirmpassword" type="password">
 </div>
 </div>
 
@@ -117,6 +121,21 @@ Have an account ? <a href="/login" class="text-decoration-none">Login</a>
 
 </div>
 </div>
+
+
+
+
+
+
+ <!-- starts jQuery Validation Library -->
+ 
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
+ <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/admin-registration.js"></script>
+ 
+  <!-- ends jQuery Validation Library -->
+
+
 
 
 <script

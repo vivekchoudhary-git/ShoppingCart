@@ -1,8 +1,9 @@
+
 $(function(){
 	
-	var $userRegForm=$("#userRegForm");
+	var $adminRegisForm=$("#adminRegisForm");
 	
-	$userRegForm.validate({
+	$adminRegisForm.validate({
 		
 		rules:{
 			

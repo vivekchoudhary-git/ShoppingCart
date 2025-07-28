@@ -73,7 +73,7 @@ session.removeAttribute("errorMsg");
 </div>
 
 <div class="card-body">
-<form action="/admin/saveCategory" method="post" enctype="multipart/form-data">
+<form action="/admin/saveCategory" method="post" enctype="multipart/form-data" id="categoryForm" novalidate="novalidate">
 
 <div class="mb-3">
 <label>Enter Category</label><input class="form-control" type="text" name="name">
@@ -149,6 +149,14 @@ session.removeAttribute("errorMsg");
 
 
 
+
+ <!-- starts jQuery Validation Library -->
+ 
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
+ <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/category.js"></script>
+ 
+  <!-- ends jQuery Validation Library -->
 
 
 <script

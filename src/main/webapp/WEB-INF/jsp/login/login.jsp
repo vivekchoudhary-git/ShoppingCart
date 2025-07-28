@@ -86,11 +86,11 @@
 <form action="/login" method="post">
 
 <div class="mb-3">
-<label class="form-label">Email</label><input class="form-control" name="username" type="email">
+<label class="form-label">Email</label><input class="form-control" name="username" type="email" required="required">
 </div>
 
 <div class="mb-3">
-<label class="form-label">Password</label><input class="form-control" name="password" type="password">
+<label class="form-label">Password</label><input class="form-control" name="password" type="password" required="required">
 </div>
 
 <button type="submit" class="btn bg-primary text-white col-md-12">Login</button>

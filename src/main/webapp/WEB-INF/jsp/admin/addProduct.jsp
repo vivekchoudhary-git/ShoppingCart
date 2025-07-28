@@ -60,7 +60,7 @@
 
 </div>
 <div class="card-body">
-<form action="/admin/saveProduct" method="post" enctype="multipart/form-data">
+<form action="/admin/saveProduct" method="post" enctype="multipart/form-data" id="productForm" novalidate="novalidate">
 
 <div class="mb-3">
 <label>Enter Title</label><input class="form-control" type="text" name="title">
@@ -141,6 +141,16 @@
 
 </div>
 
+
+
+
+<!-- starts jQuery Validation Library -->
+ 
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
+ <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/product.js"></script>
+ 
+  <!-- ends jQuery Validation Library -->
 
 
 
