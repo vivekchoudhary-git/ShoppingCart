@@ -25,6 +25,6 @@ public class Category {
 	private int id;
 	private String name;
 	private String imageName;
-	private Boolean isActive;                      // Note: Syntax is Boolean not boolean
+	private Boolean isActive;                      // Note: used Boolean (wrapper class) to handle null
 	
 }

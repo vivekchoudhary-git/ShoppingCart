@@ -57,126 +57,42 @@
 <div class="container">
     <div class="row">
         <p class="text-center fs-4">Category</p>
-
-        <!-- Dynamic categories -->
-        <%-- <c:forEach var="c" items="${category}">
-            <div class="col-md-2">
-                <div class="card rounded-circle shadow-sm p-3 mb-5 bg-body-tertiary rounded">
-                    <div class="card-body text-center">
-                        <img src="<c:url value='resources/images/category_img/laptop.jpg'/>" width="65%" height="140px"><br>
-                        <a href="<c:url value='/products?category=${c.name}'/>" class="text-decoration-none">${c.name}</a>
-                         <p>Electronics</p>
-                    </div>
-                </div>
-            </div>
-        </c:forEach> --%>
-        
+    
+        <c:forEach items="${activeCategoriesList}" var="cat">
         <div class="col-md-2">
             <div class="card rounded-circle shadow-sm p-3 mb-5 bg-body-tertiary rounded">
                 <div class="card-body text-center">
-                    <img src="<c:url value='resources/images/category_img/laptop.jpg'/>" width="65%" height="140px">
-                    <p>Electronics</p>
+                    <img alt="image not found" src="${pageContext.request.contextPath}${categoryImageUrl}${cat.imageName}" width="65%" height="140px">
+                   <a class="text-decoration-none" href="/product?category=${cat.name}"><p>${cat.name}</p></a>
                 </div>
             </div>
         </div>
-
-        <!-- Static Categories -->
-        <div class="col-md-2">
-            <div class="card rounded-circle shadow-sm p-3 mb-5 bg-body-tertiary rounded">
-                <div class="card-body text-center">
-                    <img src="<c:url value='resources/images/category_img/beuty.png'/>" width="65%" height="140px">
-                    <p>Beauty</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-2">
-            <div class="card rounded-circle shadow-sm p-3 mb-5 bg-body-tertiary rounded">
-                <div class="card-body text-center">
-                    <img src="<c:url value='resources/images/category_img/pant.png'/>" width="65%" height="140px">
-                    <p>Clothes</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-2">
-            <div class="card rounded-circle shadow-sm p-3 mb-5 bg-body-tertiary rounded">
-                <div class="card-body text-center">
-                    <img src="<c:url value='resources/images/category_img/laptop.jpg'/>" width="65%" height="140px">
-                    <p>Laptop</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-2">
-            <div class="card rounded-circle shadow-sm p-3 mb-5 bg-body-tertiary rounded">
-                <div class="card-body text-center">
-                    <img src="<c:url value='resources/images/category_img/mobile.png'/>" width="65%" height="140px">
-                    <p>Mobile</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-2">
-            <div class="card rounded-circle shadow-sm p-3 mb-5 bg-body-tertiary rounded">
-                <div class="card-body text-center">
-                    <img src="<c:url value='resources/images/category_img/groccery.jpg'/>" width="65%" height="140px">
-                    <p>Grocery</p>
-                </div>
-            </div>
-        </div>
+        </c:forEach>
 
     </div>
 </div>
 <!-- End Category Module -->
 
 
-<!-- Latest Product Module Start -->
+<!-- Product Module Start -->
 <div class="container-fluid bg-light p-3">
     <div class="row">
         <p class="text-center fs-4">Latest product</p>
 
+        <c:forEach items="${activeProductsList}" var="prod">
         <div class="col-md-3">
             <div class="card shadow-sm p-3 mb-5 bg-body-tertiary rounded">
                 <div class="card-body text-center">
-                    <img src="<c:url value='resources/images/category_img/laptop.jpg'/>" width="65%" height="140px">
-                    <p>HP Laptop</p>
+                    <img alt="image not found" src="${pageContext.request.contextPath}${productImageUrl}${prod.imageName}" width="65%" height="140px">
+                    <a class="text-decoration-none" href="/viewProduct/${prod.id}"><p>${prod.title}</p></a>
                 </div>
             </div>
         </div>
-
-        
-        <div class="col-md-3">
-            <div class="card shadow-sm p-3 mb-5 bg-body-tertiary rounded">
-                <div class="card-body text-center">
-                    <img src="<c:url value='resources/images/category_img/laptop.jpg'/>" width="65%" height="140px">
-                    <p>HP Laptop</p>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="col-md-3">
-            <div class="card shadow-sm p-3 mb-5 bg-body-tertiary rounded">
-                <div class="card-body text-center">
-                    <img src="<c:url value='resources/images/category_img/laptop.jpg'/>" width="65%" height="140px">
-                    <p>HP Laptop</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card shadow-sm p-3 mb-5 bg-body-tertiary rounded">
-                <div class="card-body text-center">
-                    <img src="<c:url value='resources/images/category_img/laptop.jpg'/>" width="65%" height="140px">
-                    <p>HP Laptop</p>
-                </div>
-            </div>
-        </div>
+       </c:forEach>
 
     </div>
 </div>
-<!-- Latest Product Module End  --> 
+<!-- Product Module End  --> 
 	
 	
 

@@ -61,7 +61,18 @@ public class HomeController {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	@GetMapping("/")
-	public String index() {
+	public String index(Model model) {
+		
+		String categoryImageUrl = environment.getProperty("category.image.url");
+		String productImageUrl = environment.getProperty("product.image.url");
+		
+		List<Category> activeCategoriesList = categoryServiceImpl.getAllActiveCategoriesList().stream().limit(6).toList();
+		List<Product> activeProductsList = productServiceImpl.getAllActiveProductsList("all").stream().limit(4).toList();
+		
+		model.addAttribute("activeCategoriesList", activeCategoriesList);
+		model.addAttribute("activeProductsList", activeProductsList);
+		model.addAttribute("categoryImageUrl", categoryImageUrl);
+		model.addAttribute("productImageUrl", productImageUrl);
 		
 		return "indexx";
 	}
