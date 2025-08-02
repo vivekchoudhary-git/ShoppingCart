@@ -157,34 +157,42 @@ public class HomeController {
 	@PostMapping("/saveReg")
 	public String saveRegistrationDetails(@ModelAttribute UserDtls userDtls,@RequestParam("file") MultipartFile file,HttpSession session) throws IOException {
 		
-		String userImageName = (!file.isEmpty() && file != null) ? file.getOriginalFilename() : "default.jpg";
-		
-		String userImageUploadPath = environment.getProperty("userimage.upload.path");
-		
-		userDtls.setProfileImage(userImageName);
-		
-		UserDtls savedUserDtls = userDtlsServiceImpl.saveUserDtlsData(userDtls);
-		
-		if(!ObjectUtils.isEmpty(savedUserDtls)) {
-			
-			if(!file.isEmpty() && file != null) {
-			
-			Path userImagePath = Paths.get(userImageUploadPath);
-			
-			if(!Files.exists(userImagePath)) {
-				
-				Files.createDirectories(userImagePath);
-			}
-			
-			Path fullUserImagePath = userImagePath.resolve(file.getOriginalFilename());
-			
-			Files.copy(file.getInputStream(), fullUserImagePath, StandardCopyOption.REPLACE_EXISTING);
-			
-			}
-			session.setAttribute("successMsg", "Successfully User Details are saved");
-		}else {
-			session.setAttribute("errorMsg", "Failed User Details are not saved");
-		}
+        if(userDtlsServiceImpl.checkUserExists(userDtls.getEmail())) {
+        	
+        	session.setAttribute("errorMsg", "User already Exists");
+        }else {
+        	
+        	String userImageName = (!file.isEmpty() && file != null) ? file.getOriginalFilename() : "default.jpg";
+    		
+    		String userImageUploadPath = environment.getProperty("userimage.upload.path");
+    		
+    		userDtls.setProfileImage(userImageName);
+    		
+    		UserDtls savedUserDtls = userDtlsServiceImpl.saveUserDtlsData(userDtls);
+    		
+    		if(!ObjectUtils.isEmpty(savedUserDtls)) {
+    			
+    			if(!file.isEmpty() && file != null) {
+    			
+    			Path userImagePath = Paths.get(userImageUploadPath);
+    			
+    			if(!Files.exists(userImagePath)) {
+    				
+    				Files.createDirectories(userImagePath);
+    			}
+    			
+    			Path fullUserImagePath = userImagePath.resolve(file.getOriginalFilename());
+    			
+    			Files.copy(file.getInputStream(), fullUserImagePath, StandardCopyOption.REPLACE_EXISTING);
+    			
+    			}
+    			session.setAttribute("successMsg", "Successfully User Details are saved");
+    		}else {
+    			session.setAttribute("errorMsg", "Failed User Details are not saved");
+    		}
+    		
+        	
+        }
 		
 		return "redirect:/register";
 	}

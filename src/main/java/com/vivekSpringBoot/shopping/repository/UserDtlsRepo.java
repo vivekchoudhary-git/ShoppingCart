@@ -16,4 +16,6 @@ public interface UserDtlsRepo extends JpaRepository<UserDtls, Integer> {
 	
 	public UserDtls findByPassResetToken(String resetToken);
 	
+	public Boolean existsByEmail(String email);
+	
 }

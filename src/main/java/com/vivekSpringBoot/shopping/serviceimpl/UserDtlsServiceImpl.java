@@ -185,6 +185,14 @@ public class UserDtlsServiceImpl implements UserDtlsService {
 		
 	}
 
+	@Override
+	public Boolean checkUserExists(String email) {
+	
+		Boolean userExists = userDtlsRepo.existsByEmail(email);
+		
+		return userExists;
+	}
+
 
 
 }

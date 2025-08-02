@@ -566,47 +566,54 @@ public class AdminController {
 	@PostMapping("/saveAdminReg")
 	public String saveAdminRegistrationDetails(@ModelAttribute AdminRegDTO adminRegDTO,@RequestParam("file") MultipartFile file,HttpSession session) throws IOException {
 		
-String userImageName = (!file.isEmpty() && file != null) ? file.getOriginalFilename() : "default.jpg";
+        String userImageName = (!file.isEmpty() && file != null) ? file.getOriginalFilename() : "default.jpg";
 		
-		String userImageUploadPath = environment.getProperty("userimage.upload.path");
-		
-		adminRegDTO.setProfileImage(userImageName);
-		
-		UserDtls newAdmin = new UserDtls();
-		
-		newAdmin.setName(adminRegDTO.getName());
-		newAdmin.setPhoneNo(adminRegDTO.getPhoneNo());
-		newAdmin.setEmail(adminRegDTO.getEmail());
-		newAdmin.setAddress(adminRegDTO.getAddress());
-		newAdmin.setCity(adminRegDTO.getCity());
-		newAdmin.setState(adminRegDTO.getState());
-		newAdmin.setPincode(adminRegDTO.getPincode());
-		newAdmin.setPassword(adminRegDTO.getPassword());
-		newAdmin.setProfileImage(adminRegDTO.getProfileImage());
-		
-		UserDtls savedUserDtls = userDtlsServiceImpl.saveAdminUserDtlsData(newAdmin);
-		
-		if(!ObjectUtils.isEmpty(savedUserDtls)) {
-			
-			if(!file.isEmpty() && file != null) {
-			
-			Path userImagePath = Paths.get(userImageUploadPath);
-			
-			if(!Files.exists(userImagePath)) {
-				
-				Files.createDirectories(userImagePath);
-			}
-			
-			Path fullUserImagePath = userImagePath.resolve(file.getOriginalFilename());
-			
-			Files.copy(file.getInputStream(), fullUserImagePath, StandardCopyOption.REPLACE_EXISTING);
-			
-			}
-			session.setAttribute("successMsg", "Successfully Admin Details are saved");
-		}else {
-			session.setAttribute("errorMsg", "Failed Admin Details are not saved");
-		}
-		
+        if(userDtlsServiceImpl.checkUserExists(adminRegDTO.getEmail())) {
+        	
+        	session.setAttribute("errorMsg", "Admin already exists");
+        }else {
+        
+    		String userImageUploadPath = environment.getProperty("userimage.upload.path");
+    		
+    		adminRegDTO.setProfileImage(userImageName);
+    		
+    		UserDtls newAdmin = new UserDtls();
+    		
+    		newAdmin.setName(adminRegDTO.getName());
+    		newAdmin.setPhoneNo(adminRegDTO.getPhoneNo());
+    		newAdmin.setEmail(adminRegDTO.getEmail());
+    		newAdmin.setAddress(adminRegDTO.getAddress());
+    		newAdmin.setCity(adminRegDTO.getCity());
+    		newAdmin.setState(adminRegDTO.getState());
+    		newAdmin.setPincode(adminRegDTO.getPincode());
+    		newAdmin.setPassword(adminRegDTO.getPassword());
+    		newAdmin.setProfileImage(adminRegDTO.getProfileImage());
+    		
+    		UserDtls savedUserDtls = userDtlsServiceImpl.saveAdminUserDtlsData(newAdmin);
+    		
+    		if(!ObjectUtils.isEmpty(savedUserDtls)) {
+    			
+    			if(!file.isEmpty() && file != null) {
+    			
+    			Path userImagePath = Paths.get(userImageUploadPath);
+    			
+    			if(!Files.exists(userImagePath)) {
+    				
+    				Files.createDirectories(userImagePath);
+    			}
+    			
+    			Path fullUserImagePath = userImagePath.resolve(file.getOriginalFilename());
+    			
+    			Files.copy(file.getInputStream(), fullUserImagePath, StandardCopyOption.REPLACE_EXISTING);
+    			
+    			}
+    			session.setAttribute("successMsg", "Successfully Admin Details are saved");
+    		}else {
+    			session.setAttribute("errorMsg", "Failed Admin Details are not saved");
+    		}
+    		      
+        }
+
 		return "redirect:/admin/register";
 		
 	}
