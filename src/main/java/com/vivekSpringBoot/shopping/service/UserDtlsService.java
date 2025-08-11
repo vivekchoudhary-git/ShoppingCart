@@ -33,4 +33,6 @@ public interface UserDtlsService {
 	
 	public Boolean checkUserExists(String email);
 	
+	public UserDtls saveSellerUserDtlsData(UserDtls userDtls);
+	
 }

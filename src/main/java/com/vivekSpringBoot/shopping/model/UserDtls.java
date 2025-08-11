@@ -2,10 +2,12 @@ package com.vivekSpringBoot.shopping.model;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import org.springframework.stereotype.Component;
 
@@ -19,7 +21,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Component
+@Component                                        
 public class UserDtls {
 
 	@Id
@@ -39,5 +41,9 @@ public class UserDtls {
 	private Boolean isAccountNonLocked;                    // added later
 	private Integer failedAttempt;                            // added later
 	private Date lockTime;                                       // added later
-	private String passResetToken;                      // to reset the password
+	private String passResetToken;                                 // to reset the password
+	
+	@OneToOne(mappedBy = "userDtls",cascade = CascadeType.ALL)                      // note userDtls should match with userDtls mentioned in SellerProfile Class
+	private SellerProfile sellerProfile;
+	
 }

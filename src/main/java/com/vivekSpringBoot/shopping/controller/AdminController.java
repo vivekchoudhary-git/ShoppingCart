@@ -35,17 +35,21 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 import com.vivekSpringBoot.shopping.dto.AdminRegDTO;
+import com.vivekSpringBoot.shopping.dto.SellersDTO;
 import com.vivekSpringBoot.shopping.model.Category;
 import com.vivekSpringBoot.shopping.model.Product;
 import com.vivekSpringBoot.shopping.model.ProductOrder;
+import com.vivekSpringBoot.shopping.model.SellerProfile;
 import com.vivekSpringBoot.shopping.model.UserDtls;
 import com.vivekSpringBoot.shopping.service.CategoryService;
 import com.vivekSpringBoot.shopping.service.OrderService;
 import com.vivekSpringBoot.shopping.service.ProductService;
+import com.vivekSpringBoot.shopping.service.SellerProfileService;
 import com.vivekSpringBoot.shopping.serviceimpl.UserDtlsServiceImpl;
 import com.vivekSpringBoot.shopping.utility.DiscountUtility;
 import com.vivekSpringBoot.shopping.utility.EmailUtility;
 import com.vivekSpringBoot.shopping.utility.OrderStatus;
+import com.vivekSpringBoot.shopping.utility.SellerAccountStatus;
 
 
 @Controller
@@ -76,6 +80,8 @@ public class AdminController {
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
+	@Autowired
+	private SellerProfileService sellerProfileServiceImpl;
 	
 	
 	@GetMapping("/")
@@ -710,7 +716,45 @@ public class AdminController {
 		return "redirect:/admin/viewAdmProfile";
 	}
 	
+	
+	@GetMapping("/viewSellers")
+	public String viewAllSellers(HttpSession session,Model model) {
 		
+		String userImageUrl = environment.getProperty("userimage.url");
+		
+		List<SellersDTO> allSellersList = sellerProfileServiceImpl.getAllSellersDetails();
+		
+		if(CollectionUtils.isEmpty(allSellersList)) {
+			
+			session.setAttribute("errorMsg", "Could not get Sellers List , Internal Server Error");
+		}else {
+			
+			model.addAttribute("allSellersList", allSellersList);
+			model.addAttribute("userImageUrl", userImageUrl);
+		}
+		
+		return "sellerss";
+	}
+	
+	
+	@PostMapping("/upAccStatus")
+	public String changeSellerAccountStatus(@RequestParam("sid") Integer sellerId,@RequestParam("accStatusId") Integer accStatusId,HttpSession session) {
+		
+		String accStatus = SellerAccountStatus.getDescriptionById(accStatusId);
+		
+		SellerProfile updatedSellAccStatus = sellerProfileServiceImpl.updateSellerAccountStatus(sellerId, accStatus);
+		
+		if(ObjectUtils.isEmpty(updatedSellAccStatus)) {
+			
+			session.setAttribute("errorMsg", "Could not update Account Status");
+		}else {
+			session.setAttribute("successMsg", "Account Status is updated");
+		}
+		
+		
+		return "redirect:/admin/viewSellers";
+		
+	}
 	
 	
 }

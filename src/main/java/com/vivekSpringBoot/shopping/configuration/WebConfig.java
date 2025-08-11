@@ -43,6 +43,7 @@ public class WebConfig implements WebMvcConfigurer {
 	        String uploadDir = environment.getProperty("category.upload.path");
 	        String productUploadDir = environment.getProperty("product.upload.path");
 	        String userImageUploadPath = environment.getProperty("userimage.upload.path");
+	        String sellerCertificateUploadPath = environment.getProperty("sellerCertificate.upload.path");
 	        
 	        // this is to read external directory path where we would store uploaded category images, suggested by chatGPT
 	        registry
@@ -62,6 +63,13 @@ public class WebConfig implements WebMvcConfigurer {
 	        registry
             .addResourceHandler("/shoppingcart/userimage/**")
 	        .addResourceLocations("file:///"+userImageUploadPath+"/");
+	        
+	        // this is to read external directory path where we would store uploaded seller company registration certificate images, suggested by chatGPT
+		     // i would recommend below code to define image location
+		       registry
+	           .addResourceHandler("/shoppingcart/sellercertificates/**")
+		       .addResourceLocations("file:///"+sellerCertificateUploadPath+"/");
+		      
 	      
 	    }
 	    

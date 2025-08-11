@@ -193,6 +193,24 @@ public class UserDtlsServiceImpl implements UserDtlsService {
 		return userExists;
 	}
 
+	@Override
+	public UserDtls saveSellerUserDtlsData(UserDtls newSellerUser) {
+	
+		newSellerUser.setRole("ROLE_SELLER");
+		newSellerUser.setIsEnabled(true);
+		newSellerUser.setIsAccountNonLocked(true);
+		newSellerUser.setFailedAttempt(0);
+		newSellerUser.setLockTime(null);
+		
+		String encodedPassword = bCryptPasswordEncoder.encode(newSellerUser.getPassword());
+		
+		newSellerUser.setPassword(encodedPassword);
+		
+		UserDtls savedSellerUserDtls = userDtlsRepo.save(newSellerUser);
+		
+		return savedSellerUserDtls;
+	}
+
 
 
 }

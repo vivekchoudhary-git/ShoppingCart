@@ -108,4 +108,20 @@
 <put-attribute name="ab" value="/WEB-INF/jsp/admin/adm-profile.jsp"></put-attribute>
 </definition>
 
+<definition name="sellerIndexx" extends="admin">
+<put-attribute name="ab" value="/WEB-INF/jsp/seller/index.jsp"></put-attribute>
+</definition>
+
+<definition name="addSellerProductt" extends="admin">
+<put-attribute name="ab" value="/WEB-INF/jsp/seller/add-product.jsp"></put-attribute>
+</definition>
+
+<definition name="sellerRegg" extends="admin">
+<put-attribute name="ab" value="/WEB-INF/jsp/seller/sell-register.jsp"></put-attribute>
+</definition>
+
+<definition name="sellerss" extends="admin">
+<put-attribute name="ab" value="/WEB-INF/jsp/admin/sellers.jsp"></put-attribute>
+</definition>
+
 </tiles-definitions>

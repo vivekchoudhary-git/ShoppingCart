@@ -56,8 +56,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity httpsecurtiy) throws Exception {
 		
-		httpsecurtiy.authorizeRequests().antMatchers("/admin/**").hasRole("ADMIN").antMatchers("/user/**")
-		.hasRole("USER")
+		httpsecurtiy.authorizeRequests().antMatchers("/admin/**").hasRole("ADMIN")
+		.antMatchers("/user/**").hasRole("USER")
+		.antMatchers("/seller/entry","/seller/sellReg","/seller/saveSellReg").permitAll()
+		.antMatchers("/seller/**").hasRole("SELLER")
 		.antMatchers("/**").permitAll().and().formLogin().loginPage("/signin")
 		.loginProcessingUrl("/login").successHandler(authSuccessHandlerImpl).failureHandler(authFailureHandlerImpl).and()                              
 		.logout().logoutUrl("/logout").logoutSuccessUrl("/signin?logout=true").and()

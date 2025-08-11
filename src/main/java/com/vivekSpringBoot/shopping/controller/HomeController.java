@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
@@ -78,7 +79,14 @@ public class HomeController {
 	}
 	
 	@GetMapping("/signin")
-	public String login() {
+	public String login(@RequestParam(value = "seller",required = false) Boolean seller,HttpServletRequest request,Model model) {
+		
+		// using seller=true logic for custom seller login page
+		 if(Boolean.TRUE.equals(seller)) {	
+		
+	    // by default sellerAccess value will be false
+	    	model.addAttribute("sellerAccess", true);                       // don't set sellerAccess in session.Not recommended by chatGPT as it can cause many issues.
+	    }
 		
 		return "loginn";
 	}

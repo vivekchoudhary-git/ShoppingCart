@@ -92,6 +92,9 @@
 						<li class="nav-item">
 							<a class="nav-link active" href="/admin/">Admin</a>
 						</li>
+						<li class="nav-item">
+							<a class="nav-link active" href="/seller/entry">Seller</a>
+						</li>
 					</c:when>
 					
 						<c:when test="${not empty userDtls}">
@@ -125,6 +128,20 @@
 							<ul class="dropdown-menu dropdown-menu-end">
 							
 							<li><a class="dropdown-item" href="/admin/viewAdmProfile">Profile</a></li>
+							<li><a class="dropdown-item" href="/logout">Logout</a></li>
+							
+							</ul>
+							
+						</li>
+						</c:if>
+						
+						<c:if test="${userDtls.role eq 'ROLE_SELLER'}">
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-user"></i> ${userDtls.name}</a>
+							
+							<ul class="dropdown-menu dropdown-menu-end">
+							
+							<li><a class="dropdown-item" href="#">Profile</a></li>
 							<li><a class="dropdown-item" href="/logout">Logout</a></li>
 							
 							</ul>

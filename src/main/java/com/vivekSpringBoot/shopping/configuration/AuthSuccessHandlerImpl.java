@@ -29,6 +29,9 @@ public class AuthSuccessHandlerImpl implements AuthenticationSuccessHandler {
 		if(rolesSet.contains("ROLE_ADMIN")) {
 			
 			response.sendRedirect("/admin/");             // this is the home page of ADMIN 
+		}else if(rolesSet.contains("ROLE_SELLER")){
+			
+			response.sendRedirect("/seller/index");                   // this is the home page of Seller
 		}else {
 			
 			response.sendRedirect("/");                   // this is the home page of User and others

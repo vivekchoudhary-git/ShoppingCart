@@ -98,10 +98,20 @@
 </form>
 </div>
 
+
+<c:if test="${empty sellerAccess or sellerAccess == false}">
 <div class="card-footer text-center">
 <a href="/forgotPass" class="text-decoration-none">Forgot Password</a><br>
 Don't have an account ? <a href="/register" class="text-decoration-none">Create One</a>
 </div>
+</c:if>
+
+<c:if test="${sellerAccess == true}">
+<div class="card-footer text-center">
+<a href="#" class="text-decoration-none">Forgot Password</a><br>
+Don't have a seller account ? <a href="${pageContext.request.contextPath}/seller/sellReg" class="text-decoration-none">Create One</a>
+</div>
+</c:if>
 
 </div>
 </div>
