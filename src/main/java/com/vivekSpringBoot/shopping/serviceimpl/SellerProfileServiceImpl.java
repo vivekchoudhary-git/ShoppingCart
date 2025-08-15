@@ -66,5 +66,13 @@ public class SellerProfileServiceImpl implements SellerProfileService{
 		return null;
 	}
 
+	@Override
+	public SellerProfile getSellersProfileByUserDtlsId(int uid) {
+		
+		SellerProfile existingSellerProfile = sellerProfileRepo.findByUserDtlsId(uid);
+		
+		return existingSellerProfile;
+	}
+
 	
 }

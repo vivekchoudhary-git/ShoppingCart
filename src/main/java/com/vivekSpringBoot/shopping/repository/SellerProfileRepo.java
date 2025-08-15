@@ -28,4 +28,8 @@ public interface SellerProfileRepo extends JpaRepository<SellerProfile, Integer>
 			"on us.id = sell.user_id ",nativeQuery = true)
 	List<SellersDTO> fetchAllSellersData();
 	
+	
+	SellerProfile findByUserDtlsId(Integer uid);
+	
+	
 }

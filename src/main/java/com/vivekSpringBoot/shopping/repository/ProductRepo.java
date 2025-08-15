@@ -59,6 +59,24 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
     nativeQuery = true)
     Page<Product> searchAnyActiveProductByTitleOrCategoryPaginated(@Param("keyword") String keyword, Pageable pageable);
 	
+	
+	Page<Product> findBySellerProfileId(Integer sid,Pageable pageable);
+	
+	
+	// using method overloading concept
+	// this method is for pagination (including both active and inactive products)
+	@Query(value = "SELECT * FROM product " +
+            "WHERE seller_id = :sid AND " +
+            "(LOWER(title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "OR LOWER(category) LIKE LOWER(CONCAT('%', :keyword, '%')))",
+    countQuery = "SELECT COUNT(*) FROM product " +
+                 "WHERE seller_id = :sid AND " +
+                 "(LOWER(title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+                 "OR LOWER(category) LIKE LOWER(CONCAT('%', :keyword, '%')))",
+    nativeQuery = true)
+    Page<Product> searchAnyProductByTitleOrCategoryPaginated(@Param("keyword") String keyword,@Param("sid") Integer sid ,Pageable pageable);
+	
+	
 }
 
 

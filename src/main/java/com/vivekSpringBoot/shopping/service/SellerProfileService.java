@@ -15,4 +15,6 @@ public interface SellerProfileService {
 	
 	SellerProfile updateSellerAccountStatus(int id,String accStatus);
 	
+	SellerProfile getSellersProfileByUserDtlsId(int uid);
+	
 }

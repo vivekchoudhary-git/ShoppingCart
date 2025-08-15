@@ -1,17 +1,22 @@
 package com.vivekSpringBoot.shopping.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.security.Principal;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,10 +27,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.vivekSpringBoot.shopping.dto.SellerRegisterDTO;
+import com.vivekSpringBoot.shopping.model.Category;
+import com.vivekSpringBoot.shopping.model.Product;
 import com.vivekSpringBoot.shopping.model.SellerProfile;
 import com.vivekSpringBoot.shopping.model.UserDtls;
+import com.vivekSpringBoot.shopping.service.CategoryService;
+import com.vivekSpringBoot.shopping.service.ProductService;
 import com.vivekSpringBoot.shopping.service.SellerProfileService;
 import com.vivekSpringBoot.shopping.service.UserDtlsService;
+import com.vivekSpringBoot.shopping.utility.DiscountUtility;
 
 @Controller
 @RequestMapping("/seller")
@@ -39,6 +49,15 @@ public class SellerController {
 	
 	@Autowired
 	private Environment environment;
+	
+	@Autowired
+	private DiscountUtility discountUtility;
+	
+	@Autowired
+	ProductService productServiceImpl;
+	
+	@Autowired
+	private CategoryService categoryServiceImpl;
 	
 	@GetMapping("/entry")
 	public String sellerLogin(HttpServletRequest request) {
@@ -182,11 +201,140 @@ public class SellerController {
 	
 	
 	@GetMapping("/loadAddProduct")
-	public String addProduct() {
+	public String addProduct(Model model) {
 		
+         List<Category> categoryList = categoryServiceImpl.getAllCategory();
+		
+        model.addAttribute("categoryList", categoryList);
 		
 		return "addSellerProductt";
 	}
+	
+	
+	@PostMapping("/saveProd")
+	public String saveSellerProductData(@ModelAttribute Product product,@RequestParam("file") MultipartFile file,Principal principal,HttpSession session) throws IOException {
+		
+		UserDtls userDtls = getLoggedInUserDetails(principal);
+		SellerProfile loggedInSellerProfile = sellerProfileServiceImpl.getSellersProfileByUserDtlsId(userDtls.getId());
+		
+		// applied logic that product will be added only if sellerprofile account is approved.
+		if(loggedInSellerProfile.getAccountStatus().equals("Approved")) {
+			
+			String imageName = (file != null && !file.isEmpty()) ? file.getOriginalFilename() : "default.jpg" ;
+			
+			product.setImageName(imageName);
+			
+			// set Discounted Price of the product
+			
+			if(product.getDiscount() == null) {
+				
+				product.setDiscount(0);
+			}else if (product.getDiscount() < 0 || product.getDiscount() > 100) {
+				
+				session.setAttribute("errorMsg", "Invalid Discount");
+				return "redirect:/seller/loadAddProduct";
+			}
+			
+			Double discountedPrice = discountUtility.calculateDiscountedPrice(product.getDiscount(), product.getPrice());
+			
+			product.setDiscountedPrice(discountedPrice);
+
+			product.setSellerProfile(loggedInSellerProfile);
+			
+			Product savedProduct = productServiceImpl.saveProductData(product);
+			
+			List<Product> sellerProductsList = loggedInSellerProfile.getProductsList();
+			sellerProductsList.add(savedProduct);
+			sellerProfileServiceImpl.saveSellerProfileDetails(loggedInSellerProfile);
+		
+			System.out.println("savedProduct : "+savedProduct);
+			
+			if(!ObjectUtils.isEmpty(savedProduct)) {
+				
+				if(!file.isEmpty() && file != null) {
+					
+					String productUploadPath = environment.getProperty("product.upload.path");
+					
+					File productUploadPathFile = new File(productUploadPath);
+					
+					if(!productUploadPathFile.exists()) {
+						productUploadPathFile.mkdirs();                      // Create the directory if it doesn't exist
+					}
+					
+					Path productFullPath = Paths.get(productUploadPath,file.getOriginalFilename());
+					
+					Files.copy(file.getInputStream(), productFullPath, StandardCopyOption.REPLACE_EXISTING);
+					
+					session.setAttribute("successMsg", "Successfully Product data is saved in database");
+					
+				}
+				
+				session.setAttribute("successMsg", "Successfully Product data is saved in database");
+			}else {
+				
+				session.setAttribute("errorMsg", "Failed Product data is not saved in database");
+			}
+			
+		}else {
+			session.setAttribute("errorMsg", "Account approval is pending.Can not add Product");
+		}
+		
+		return "redirect:/seller/loadAddProduct";
+		
+	}
+	
+	
+	// created method to get logged in user details
+	private UserDtls getLoggedInUserDetails(Principal principal) {
+		
+        String userEmail = principal.getName();
+		
+		UserDtls userDtls = userDtlsServiceImpl.getUserDtlsDataByEmail(userEmail);
+
+		return userDtls;
+	}
+	
+	
+	@GetMapping("/viewProd")
+	public String viewProductsDetails(@RequestParam(value = "keyword",defaultValue = "") String keyword,@RequestParam(value = "pageNo",defaultValue = "0") Integer pageNo,@RequestParam(value = "pageSize",defaultValue = "2") Integer pageSize,Model model,HttpSession session,Principal principal) {
+		
+		String productImageUrl = environment.getProperty("product.image.url");
+		
+		UserDtls userDtls = getLoggedInUserDetails(principal);
+		SellerProfile loggedInSellerProfile = sellerProfileServiceImpl.getSellersProfileByUserDtlsId(userDtls.getId());
+		
+		Page<Product> productsListPaginated = null;
+		
+		if(keyword == null || keyword.isEmpty()){
+			
+		productsListPaginated = productServiceImpl.getAllProductsBySellerIdPaginated(loggedInSellerProfile.getId(), pageNo, pageSize);
+		}else {
+			
+		productsListPaginated = productServiceImpl.searchSellerProductByKeywordPaginated(loggedInSellerProfile.getId(),keyword,pageNo,pageSize);
+		}
+		
+		
+//		Page<Product> productsListPaginated = productServiceImpl.getAllProductsBySellerIdPaginated(loggedInSellerProfile.getId(), pageNo, pageSize);
+		
+		if(productsListPaginated == null) {
+			
+			session.setAttribute("errorMsg", "Products not found");
+		}else {
+		List<Product> productsList = productsListPaginated.getContent();
+		
+		model.addAttribute("productsList", productsList);
+		model.addAttribute("totalProducts", productsListPaginated.getTotalElements());
+		model.addAttribute("isFirst", productsListPaginated.isFirst());
+		model.addAttribute("isLast", productsListPaginated.isLast());
+		model.addAttribute("totalPages", productsListPaginated.getTotalPages());
+		model.addAttribute("productImageUrl", productImageUrl);
+		model.addAttribute("pageNo", pageNo);
+		
+		}
+		
+		return "sellerProductss";
+	}
+	
 	
 	
 }

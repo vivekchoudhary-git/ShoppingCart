@@ -60,7 +60,7 @@
 
 </div>
 <div class="card-body">
-<form action="/admin/saveProduct" method="post" enctype="multipart/form-data" id="productForm" novalidate="novalidate">
+<form action="/seller/saveProd" method="post" enctype="multipart/form-data" id="sellerProductForm" novalidate="novalidate">
 
 <div class="mb-3">
 <label>Enter Title</label><input class="form-control" type="text" name="title">

@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.springframework.stereotype.Component;
@@ -38,6 +40,10 @@ public class Product {
 	private int stock;
 	private String imageName;
 	private Boolean isActive;
+	
+	@ManyToOne
+	@JoinColumn(name = "seller_id")
+	private SellerProfile sellerProfile;              // added later
 	
 	
 }

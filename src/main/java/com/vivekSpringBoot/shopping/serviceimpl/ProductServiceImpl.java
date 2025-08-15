@@ -212,6 +212,27 @@ public class ProductServiceImpl implements ProductService {
 		
 		return searchActiveProductsListPaginated;
 	}
+
+	@Override
+	public Page<Product> getAllProductsBySellerIdPaginated(Integer sid, Integer pageNo, Integer pageSize) {
+		
+		Pageable pageable = PageRequest.of(pageNo, pageSize);
+		
+		Page<Product> paginatedProducts = productRepo.findBySellerProfileId(sid,pageable);
+		
+		return paginatedProducts;
+	}
+
+	@Override
+	public Page<Product> searchSellerProductByKeywordPaginated(Integer sid, String keyword, Integer pageNo,
+			Integer pageSize) {
+		
+		Pageable pageable = PageRequest.of(pageNo, pageSize);
+		
+		Page<Product> searchedProductsPaginated = productRepo.searchAnyProductByTitleOrCategoryPaginated(keyword,sid,pageable);
+		
+		return searchedProductsPaginated;
+	}
 	
 	
 	

@@ -52,11 +52,19 @@
 								<a class="nav-link active" href="/admin/"><i class="fa-solid fa-house-chimney"></i> Home</a>
 							</li>
 						</c:if>
+						
 						<c:if test="${userDtls.role == 'ROLE_USER'}">
 							<li class="nav-item">
 								<a class="nav-link active" href="/"><i class="fa-solid fa-house-chimney"></i> Home</a>
 							</li>
 						</c:if>
+						
+							<c:if test="${userDtls.role == 'ROLE_SELLER'}">
+							<li class="nav-item">
+								<a class="nav-link active" href="/seller/index"><i class="fa-solid fa-house-chimney"></i> Home</a>
+							</li>
+						</c:if>
+						
 					</c:otherwise>
 				</c:choose>
 
