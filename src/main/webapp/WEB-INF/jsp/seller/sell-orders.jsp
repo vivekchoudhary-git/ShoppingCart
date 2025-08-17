@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title> orders.jsp (admin) </title>
+<title> sell-orders.jsp (sellers) </title>
 
 <!-- this link is to use bootstrap taken from bootstrap website -->
 <link
@@ -36,14 +36,14 @@
 
 <div class="row">
 <div class="col-md-2 mb-2">
-<a href="/admin/"><button class="btn btn-sm btn-warning"><i class="fa-solid fa-arrow-left"></i> Back</button></a>
+<a href="/seller/index"><button class="btn btn-sm btn-warning"><i class="fa-solid fa-arrow-left"></i> Back</button></a>
 </div>
 </div>
 
 <!-- search option starts -->
 <div class="row">
 <div class="col-md-4">
-<form action="/admin/searchOrder">
+<form action="/seller/searchOrder">
 <div class="row">
 
 <div class="col">
@@ -101,20 +101,20 @@
   </thead>
   
   <tbody>
-  <c:forEach items="${allOrdersList}" var="order">
+  <c:forEach items="${sellerOrdersList}" var="order">
     <tr>
       <td>${order.orderId}</td>
-      <td>Name : ${order.orderAddress.firstName} ${order.orderAddress.lastName} <br>
-          Email : ${order.orderAddress.email} <br>
-          Mobile No : ${order.orderAddress.mobileNo} <br>
-          Address : ${order.orderAddress.address} <br>
-          City : ${order.orderAddress.city} <br>
-          State : ${order.orderAddress.state} <br>
-          Pincode : ${order.orderAddress.pincode} <br>
+      <td>Name : ${order.firstName} ${order.lastName} <br>
+          Email : ${order.email} <br>
+          Mobile No : ${order.mobileNo} <br>
+          Address : ${order.address} <br>
+          City : ${order.city} <br>
+          State : ${order.state} <br>
+          Pincode : ${order.pincode} <br>
       
       </td>
       <td>${order.orderDate}</td>
-      <td>${order.product.title}</td>
+      <td>${order.title}</td>
       <td>Quantity : ${order.quantity} <br>
           Price : ${order.price} <br>
           Total Price : ${order.quantity * order.price}
@@ -122,7 +122,7 @@
       <td>${order.status}</td>
           
      <td>
-    <form action="/admin/changeStatusAdmin" method="post">
+    <form action="/seller/changeStatusSeller" method="post">
     <div class="row">
 
     <div class="col">
@@ -174,7 +174,7 @@
 <nav aria-label="Page navigation example">
   <ul class="pagination">
     <li class="page-item ${isFirst ? 'disabled' : '' }">
-      <a class="page-link" href="/admin/allOrders?pageNo=${pageNo-1}&pageSize=3" aria-label="Previous">
+      <a class="page-link" href="/seller/orders?pageNo=${pageNo-1}&pageSize=2" aria-label="Previous">
         <span aria-hidden="true">&laquo;</span>
       </a>
     </li>
@@ -182,12 +182,12 @@
     <!-- Note : here i is a local variable -->
     <c:forEach begin="1" end="${totalPages}" var="i">
     
-    <li class="page-item ${pageNo+1 == i ? 'active':''}"><a class="page-link" href="/admin/allOrders?pageNo=${i-1}&pageSize=3">${i}</a></li>
+    <li class="page-item ${pageNo+1 == i ? 'active':''}"><a class="page-link" href="/seller/orders?pageNo=${i-1}&pageSize=2">${i}</a></li>
     
     </c:forEach>
     
     <li class="page-item ${isLast ? 'disabled' : '' }">
-      <a class="page-link" href="/admin/allOrders?pageNo=${pageNo+1}&pageSize=3" aria-label="Next">
+      <a class="page-link" href="/seller/orders?pageNo=${pageNo+1}&pageSize=2" aria-label="Next">
         <span aria-hidden="true">&raquo;</span>
       </a>
     </li>
@@ -217,31 +217,31 @@
   
   <tbody>
     <tr>
-      <td>${searchOrder.orderId}</td>
-      <td>Name : ${searchOrder.orderAddress.firstName} ${order.orderAddress.lastName} <br>
-          Email : ${searchOrder.orderAddress.email} <br>
-          Mobile No : ${searchOrder.orderAddress.mobileNo} <br>
-          Address : ${searchOrder.orderAddress.address} <br>
-          City : ${searchOrder.orderAddress.city} <br>
-          State : ${searchOrder.orderAddress.state} <br>
-          Pincode : ${searchOrder.orderAddress.pincode} <br>
+      <td>${sellerOrder.orderId}</td>
+      <td>Name : ${sellerOrder.firstName} ${sellerOrder.lastName} <br>
+          Email : ${sellerOrder.email} <br>
+          Mobile No : ${sellerOrder.mobileNo} <br>
+          Address : ${sellerOrder.address} <br>
+          City : ${sellerOrder.city} <br>
+          State : ${sellerOrder.state} <br>
+          Pincode : ${sellerOrder.pincode} <br>
       
       </td>
-      <td>${searchOrder.orderDate}</td>
-      <td>${searchOrder.product.title}</td>
-      <td>Quantity : ${searchOrder.quantity} <br>
-          Price : ${searchOrder.price} <br>
-          Total Price : ${searchOrder.quantity * order.price}
+      <td>${sellerOrder.orderDate}</td>
+      <td>${sellerOrder.title}</td>
+      <td>Quantity : ${sellerOrder.quantity} <br>
+          Price : ${sellerOrder.price} <br>
+          Total Price : ${sellerOrder.quantity * order.price}
       </td>
-      <td>${searchOrder.status}</td>
+      <td>${sellerOrder.status}</td>
           
      <td>
-    <form action="/admin/changeStatusAdmin" method="post">
+    <form action="/seller/changeStatusSeller" method="post">
     <div class="row">
 
     <div class="col">
     
-    <input type="hidden" value="${searchOrder.id}" name="oid">
+    <input type="hidden" value="${sellerOrder.id}" name="oid">
     
     <select class="form-control" name="statusId">
     <option value="" disabled="disabled" selected="selected">-- Select --</option>
@@ -256,7 +256,7 @@
 
     <div class="col">
     <c:choose>
-    <c:when test="${searchOrder.status == 'Cancelled' || searchOrder.status == 'Delivered' }">
+    <c:when test="${sellerOrder.status == 'Cancelled' || sellerOrder.status == 'Delivered' }">
     <button class="btn btn-sm btn-primary disabled">Update</button>
     </c:when>
     

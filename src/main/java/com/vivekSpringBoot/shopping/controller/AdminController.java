@@ -480,7 +480,7 @@ public class AdminController {
 	@GetMapping("/allOrders")
 	public String viewAllOrders(@RequestParam(value = "pageNo",defaultValue = "0") Integer pageNo,@RequestParam(value = "pageSize",defaultValue = "3") Integer pageSize,Model model) {
 		
-		model.addAttribute("orderDisplayLogic", true);    // testing only
+		model.addAttribute("orderDisplayLogic", true);    
 		
 //		List<ProductOrder> allOrdersList = orderServiceImpl.getAllOrders();
 		

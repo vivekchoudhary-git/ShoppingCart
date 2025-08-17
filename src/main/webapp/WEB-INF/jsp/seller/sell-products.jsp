@@ -110,7 +110,7 @@
       <td>${prod.discount}</td>
       <td>${prod.discountedPrice}</td>
       <td>${prod.stock}</td>
-      <td><a href="#" class="btn btn-primary btn btn-sm"><i class="fa-solid fa-pen-to-square"></i>Edit</a><a href="#" class="btn btn-danger btn-sm ms-2"><i class="fa-solid fa-trash"></i>Delete</a></td>
+      <td><a href="/seller/editProd?pid=${prod.id}" class="btn btn-primary btn btn-sm"><i class="fa-solid fa-pen-to-square"></i>Edit</a><a href="/seller/deleteProd/${prod.id}" class="btn btn-danger btn-sm ms-2"><i class="fa-solid fa-trash"></i>Delete</a></td>
     </tr>
     </c:forEach>
   </tbody>

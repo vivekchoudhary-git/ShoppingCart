@@ -74,5 +74,13 @@ public class SellerProfileServiceImpl implements SellerProfileService{
 		return existingSellerProfile;
 	}
 
+	@Override
+	public SellerProfile updateSellerProfileDetails(SellerProfile sellerProfile) {
+		
+		SellerProfile savedSellerProfile = sellerProfileRepo.save(sellerProfile);
+		
+		return savedSellerProfile;
+	}
+
 	
 }

@@ -7,6 +7,7 @@ import javax.mail.MessagingException;
 
 import org.springframework.data.domain.Page;
 
+import com.vivekSpringBoot.shopping.dto.SellerOrderDTO;
 import com.vivekSpringBoot.shopping.model.OrderRequest;
 import com.vivekSpringBoot.shopping.model.ProductOrder;
 
@@ -24,5 +25,10 @@ public interface OrderService {
 	
 	// this method is for pagination
 	public Page<ProductOrder> getAllOrdersPaginated(Integer pageNo,Integer pageSize);
+	
+	// getting orders of each sellers
+	 public Page<SellerOrderDTO> getOrdersOfEachSellerPaginated(Integer sellerid,Integer pageNo,Integer pageSize);
+	 
+	 public SellerOrderDTO getOrderDataByOrderIdAndSellerId(String orderId,Integer sellerId);
 	
 }

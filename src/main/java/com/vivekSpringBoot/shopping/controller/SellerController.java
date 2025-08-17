@@ -2,6 +2,7 @@ package com.vivekSpringBoot.shopping.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -9,6 +10,7 @@ import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.List;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -18,24 +20,32 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.vivekSpringBoot.shopping.dto.SellerOrderDTO;
 import com.vivekSpringBoot.shopping.dto.SellerRegisterDTO;
 import com.vivekSpringBoot.shopping.model.Category;
 import com.vivekSpringBoot.shopping.model.Product;
+import com.vivekSpringBoot.shopping.model.ProductOrder;
 import com.vivekSpringBoot.shopping.model.SellerProfile;
 import com.vivekSpringBoot.shopping.model.UserDtls;
 import com.vivekSpringBoot.shopping.service.CategoryService;
+import com.vivekSpringBoot.shopping.service.OrderService;
 import com.vivekSpringBoot.shopping.service.ProductService;
 import com.vivekSpringBoot.shopping.service.SellerProfileService;
 import com.vivekSpringBoot.shopping.service.UserDtlsService;
 import com.vivekSpringBoot.shopping.utility.DiscountUtility;
+import com.vivekSpringBoot.shopping.utility.EmailUtility;
+import com.vivekSpringBoot.shopping.utility.OrderStatus;
 
 @Controller
 @RequestMapping("/seller")
@@ -58,6 +68,12 @@ public class SellerController {
 	
 	@Autowired
 	private CategoryService categoryServiceImpl;
+	
+	@Autowired
+	private OrderService orderServiceImpl;
+	
+	@Autowired
+	private EmailUtility emailUtility;
 	
 	@GetMapping("/entry")
 	public String sellerLogin(HttpServletRequest request) {
@@ -245,7 +261,7 @@ public class SellerController {
 			
 			List<Product> sellerProductsList = loggedInSellerProfile.getProductsList();
 			sellerProductsList.add(savedProduct);
-			sellerProfileServiceImpl.saveSellerProfileDetails(loggedInSellerProfile);
+			sellerProfileServiceImpl.updateSellerProfileDetails(loggedInSellerProfile);
 		
 			System.out.println("savedProduct : "+savedProduct);
 			
@@ -335,6 +351,150 @@ public class SellerController {
 		return "sellerProductss";
 	}
 	
+	
+	@GetMapping("/editProd")
+	public String editProductDetails(@RequestParam("pid") Integer pid,Model model) {
+		
+		String productImageUrl = environment.getProperty("product.image.url");
+		
+		Product oldProduct = productServiceImpl.getProductById(pid);
+		model.addAttribute("oldProduct", oldProduct);
+		model.addAttribute("productImageUrl", productImageUrl);
+		
+		return "sellEditProductt";
+	}
+	
+	
+	@PostMapping("/upProd")
+	public String updateProductDetails(@ModelAttribute Product product,@RequestParam("file") MultipartFile file,HttpSession session) throws IOException {
+		
+		 // set Discounted Price of the product
+		
+		if(product.getDiscount() == null) {
+			
+			product.setDiscount(0);
+		}else if (product.getDiscount() < 0 || product.getDiscount() > 100) {
+			
+			session.setAttribute("errorMsg", "Invalid Discount");
+			return "redirect:/seller/editProd?pid="+product.getId();
+		}
+
+      Product savedUpdatedProduct = productServiceImpl.updateProduct(product, file);
+
+      if(savedUpdatedProduct != null) {
+	
+	  session.setAttribute("successMsg", "Successfully Product is Updated");
+	
+      }else {
+	
+	  session.setAttribute("errorMsg", "Failed Product is not Updated");
+      }
+		
+		
+		return "redirect:/seller/editProd?pid="+product.getId();
+	}
+	
+	
+	@GetMapping("/deleteProd/{pid}")
+	public String deleteProduct(@PathVariable("pid") Integer pid,HttpSession session) {
+		
+        Boolean deleteStatus = productServiceImpl.deleteSellerProductById(pid);
+		
+		if(deleteStatus) {
+			
+			session.setAttribute("successMsg", "Successfully product is deleted");
+		}else {
+			
+			session.setAttribute("errorMsg", "Failed product is not deleted");
+		}
+		
+		return "redirect:/seller/viewProd";
+	}
+	
+	
+	@GetMapping("/orders")
+	public String viewOrders(@RequestParam(value = "pageNo",defaultValue = "0") Integer pageNo,@RequestParam(value = "pageSize",defaultValue = "2") Integer pageSize,Model model,Principal principal) {
+		
+		model.addAttribute("orderDisplayLogic", true); 
+		
+		UserDtls userDtls = getLoggedInUserDetails(principal);
+		SellerProfile loggedInSellerProfile = sellerProfileServiceImpl.getSellersProfileByUserDtlsId(userDtls.getId());
+		
+		Page<SellerOrderDTO> sellerOrdersPaginated = orderServiceImpl.getOrdersOfEachSellerPaginated(loggedInSellerProfile.getId(),pageNo,pageSize);
+		
+		List<SellerOrderDTO> sellerOrdersList = sellerOrdersPaginated.getContent();
+		
+		model.addAttribute("sellerOrdersList", sellerOrdersList);
+		model.addAttribute("totalOrders", sellerOrdersPaginated.getTotalElements());
+		model.addAttribute("isFirst", sellerOrdersPaginated.isFirst());
+		model.addAttribute("isLast", sellerOrdersPaginated.isLast());
+		model.addAttribute("totalPages", sellerOrdersPaginated.getTotalPages());
+		model.addAttribute("pageNo", pageNo);
+		
+		
+		return "sellerOrderss";
+	}
+	
+	
+	@GetMapping("/searchOrder")
+	public String searchSellerOrder(@RequestParam("orderId") String orderId,@RequestParam(value = "pageNo",defaultValue = "0") Integer pageNo,@RequestParam(value = "pageSize",defaultValue = "2") Integer pageSize,Model model,Principal principal) {
+		
+		model.addAttribute("orderDisplayLogic", true); 
+		
+		UserDtls userDtls = getLoggedInUserDetails(principal);
+		SellerProfile loggedInSellerProfile = sellerProfileServiceImpl.getSellersProfileByUserDtlsId(userDtls.getId());
+		
+		SellerOrderDTO sellerOrder = orderServiceImpl.getOrderDataByOrderIdAndSellerId(orderId, loggedInSellerProfile.getId());
+		
+		if(sellerOrder != null) {
+			
+			model.addAttribute("sellerOrder", sellerOrder);
+			model.addAttribute("orderDisplayLogic", false); 
+			
+		}else {
+			
+			Page<SellerOrderDTO> sellerOrdersPaginated = orderServiceImpl.getOrdersOfEachSellerPaginated(loggedInSellerProfile.getId(),pageNo,pageSize);
+			
+			List<SellerOrderDTO> sellerOrdersList = sellerOrdersPaginated.getContent();
+			
+			model.addAttribute("sellerOrdersList", sellerOrdersList);
+			model.addAttribute("totalOrders", sellerOrdersPaginated.getTotalElements());
+			model.addAttribute("isFirst", sellerOrdersPaginated.isFirst());
+			model.addAttribute("isLast", sellerOrdersPaginated.isLast());
+			model.addAttribute("totalPages", sellerOrdersPaginated.getTotalPages());
+			model.addAttribute("pageNo", pageNo);
+			
+		}
+		return "sellerOrderss";
+	}
+	
+	
+	@PostMapping("/changeStatusSeller")
+	public String updateOrderStatusSeller(@RequestParam("oid") Integer oid,@RequestParam("statusId") Integer statusId,HttpSession session) throws UnsupportedEncodingException, MessagingException {
+		
+		String statusName = OrderStatus.getNameById(statusId);
+		
+		ProductOrder updatedOrderStatus = orderServiceImpl.updateOrderStatus(oid, statusName);
+			
+		if(!ObjectUtils.isEmpty(updatedOrderStatus)) {
+		
+			session.setAttribute("successMsg", "Order Status Changed");
+		
+			// sending email to user about the status of the order
+		if(emailUtility.sendEmailToUserAboutOrderStatus(updatedOrderStatus, statusName)) {
+			
+			session.setAttribute("successMsg", "Order Status Changed,Email sent to User");
+		}else {
+			session.setAttribute("successMsg", "Order Status Changed,Email could not sent to User");
+		}
+			
+		}else {	
+			session.setAttribute("errorMsg", "Order Status is not Changed");
+		
+		}
+		
+		return "redirect:/seller/orders";
+	}
 	
 	
 }

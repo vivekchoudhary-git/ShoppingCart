@@ -14,11 +14,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.vivekSpringBoot.shopping.model.Product;
+import com.vivekSpringBoot.shopping.model.SellerProfile;
 import com.vivekSpringBoot.shopping.repository.ProductRepo;
 import com.vivekSpringBoot.shopping.service.ProductService;
 import com.vivekSpringBoot.shopping.utility.DiscountUtility;
@@ -232,6 +234,26 @@ public class ProductServiceImpl implements ProductService {
 		Page<Product> searchedProductsPaginated = productRepo.searchAnyProductByTitleOrCategoryPaginated(keyword,sid,pageable);
 		
 		return searchedProductsPaginated;
+	}
+
+	@Override
+	@Transactional                                                // required to delete product,suggested by chatGPT
+	public Boolean deleteSellerProductById(int id) {
+		
+		Optional<Product> productOptional = productRepo.findById(id);
+		
+		if(productOptional.isPresent()) {
+			
+			Product product = productOptional.get();
+			SellerProfile sellerProfile = product.getSellerProfile();
+			List<Product> productsList = sellerProfile.getProductsList();
+			boolean removeStatus = productsList.remove(product);
+			
+			return removeStatus;
+			
+		}
+		
+		return false;
 	}
 	
 	

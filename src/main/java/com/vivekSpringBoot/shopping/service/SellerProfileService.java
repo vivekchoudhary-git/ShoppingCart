@@ -17,4 +17,6 @@ public interface SellerProfileService {
 	
 	SellerProfile getSellersProfileByUserDtlsId(int uid);
 	
+	public SellerProfile updateSellerProfileDetails(SellerProfile sellerProfile);
+	
 }

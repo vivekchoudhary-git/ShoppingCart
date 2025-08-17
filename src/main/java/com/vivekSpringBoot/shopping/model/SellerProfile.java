@@ -41,25 +41,14 @@ public class SellerProfile {
 	private LocalDateTime accountCreatedAt;
 	private LocalDateTime accountUpdatedAt;
 	
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id",nullable = false,unique = true)
 	private UserDtls userDtls;
 	
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "sellerProfile",cascade = CascadeType.ALL,orphanRemoval = true)
 	private List<Product> productsList = new ArrayList<>();           // to handle null pointer exception  // added later
 	
 	
-	// using helper methods as recommended by chatGPT
-	
-//	public void addProduct(Product product) {
-//		productsList.add(product);
-//		product.setSellerProfile(this);           // bidirectional mapping
-//	}
-//	
-//	public void removeProduct(Product product) {
-//		productsList.remove(product);
-//		product.setSellerProfile(null);
-//	}
 	
 	
 }

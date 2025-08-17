@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
+import com.vivekSpringBoot.shopping.dto.SellerOrderDTO;
 import com.vivekSpringBoot.shopping.model.Cart;
 import com.vivekSpringBoot.shopping.model.OrderAddress;
 import com.vivekSpringBoot.shopping.model.OrderRequest;
@@ -149,6 +150,24 @@ public class OrderServiceImpl implements OrderService {
 		Page<ProductOrder> ordersListPaginated = productOrderRepo.findAll(pageable);
 		
 		return ordersListPaginated;
+	}
+
+	@Override
+	public Page<SellerOrderDTO> getOrdersOfEachSellerPaginated(Integer sellerid,Integer pageNo,Integer pageSize) {
+		
+		Pageable pageable= PageRequest.of(pageNo, pageSize);
+		
+		Page<SellerOrderDTO> sellerOrdersList = productOrderRepo.findOrdersOfEachSellers(sellerid, pageable);
+		
+		return sellerOrdersList;
+	}
+
+	@Override
+	public SellerOrderDTO getOrderDataByOrderIdAndSellerId(String orderId, Integer sellerId) {
+		
+		SellerOrderDTO sellerOrder = productOrderRepo.findOrdersOfEachSellerByOrderId(sellerId, orderId);
+		
+		return sellerOrder;
 	}
 
 	

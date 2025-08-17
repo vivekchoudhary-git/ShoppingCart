@@ -43,4 +43,7 @@ public interface ProductService {
 	// this method gives paginated Products list by keyword and seller id(including active and inactive products)
 	public Page<Product> searchSellerProductByKeywordPaginated(Integer sid,String keyword,Integer pageNo,Integer pageSize);
 	
+	// this method is to delete Product (customized as per SellerProfile -> Product relation)
+	public Boolean deleteSellerProductById(int id);
+	
 }
