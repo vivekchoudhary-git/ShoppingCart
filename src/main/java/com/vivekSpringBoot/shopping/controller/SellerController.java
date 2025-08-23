@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
@@ -74,6 +75,9 @@ public class SellerController {
 	
 	@Autowired
 	private EmailUtility emailUtility;
+	
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	@GetMapping("/entry")
 	public String sellerLogin(HttpServletRequest request) {
@@ -496,5 +500,66 @@ public class SellerController {
 		return "redirect:/seller/orders";
 	}
 	
+	
+	@GetMapping("/viewSeller")
+    public String viewSellerProfile(Principal principal,Model model) {
+	 
+		String userImageUrl = environment.getProperty("userimage.url");
+		model.addAttribute("userImageUrl", userImageUrl);
+		
+	  UserDtls userDtls = getLoggedInUserDetails(principal);
+	  SellerProfile loggedInSellerProfile = sellerProfileServiceImpl.getSellersProfileByUserDtlsId(userDtls.getId());
+	  model.addAttribute("sellerProfile", loggedInSellerProfile);
+		
+	 return "sellerProfilee";
+			 
+    }
+	
+	
+	@PostMapping("/updateProfile")
+	public String updateSellerProfile(@ModelAttribute SellerProfile sellerProfile,@RequestParam("profileFile") MultipartFile profileFile,@RequestParam("certificateFile") MultipartFile certificateFile,HttpSession session ) throws IOException {
+		
+		
+		Boolean updateStatus = sellerProfileServiceImpl.updateSellerProfileAndUserDtls(sellerProfile, profileFile, certificateFile);
+		
+		if(updateStatus) {
+			
+			session.setAttribute("successMsg", "Profile is updated");
+		}else {
+			
+			session.setAttribute("errorMsg", "Profile is not updated");
+		}
+		
+		return "redirect:/seller/viewSeller";
+	}
+	
+	
+	@PostMapping("/changePassword")
+	public String changePassword(@RequestParam("currentPassword") String currentPassword,@RequestParam("newPassword") String newPassword,Principal principal,HttpSession session) {
+		
+		UserDtls userDtls = getLoggedInUserDetails(principal);
+		
+		boolean passResult = bCryptPasswordEncoder.matches(currentPassword, userDtls.getPassword());
+		
+		if(passResult) {
+			
+			String encodedNewPass = bCryptPasswordEncoder.encode(newPassword);
+			
+			userDtls.setPassword(encodedNewPass);
+			UserDtls updatedUserDtls = userDtlsServiceImpl.updateUserDtlsData(userDtls);
+			
+			if(!ObjectUtils.isEmpty(updatedUserDtls)) {
+				
+				session.setAttribute("successMsg", "Password is Updated");
+			}else {
+				session.setAttribute("errorMsg", "Password is not Updated");
+			}
+			
+		}else {
+			session.setAttribute("errorMsg", "Invalid Password");
+		}
+		
+		return "redirect:/seller/viewSeller";
+	}
 	
 }

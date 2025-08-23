@@ -136,4 +136,8 @@
 <put-attribute name="ab" value="/WEB-INF/jsp/seller/sell-orders.jsp"></put-attribute>
 </definition>
 
+<definition name="sellerProfilee" extends="admin">
+<put-attribute name="ab" value="/WEB-INF/jsp/seller/sell-profile.jsp"></put-attribute>
+</definition>
+
 </tiles-definitions>
