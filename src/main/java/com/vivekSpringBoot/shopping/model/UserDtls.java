@@ -1,12 +1,14 @@
 package com.vivekSpringBoot.shopping.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import org.springframework.stereotype.Component;
@@ -45,5 +47,8 @@ public class UserDtls {
 	
 	@OneToOne(mappedBy = "userDtls",cascade = CascadeType.ALL)                      // note userDtls should match with userDtls mentioned in SellerProfile Class
 	private SellerProfile sellerProfile;
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Cart> cartList;
 	
 }

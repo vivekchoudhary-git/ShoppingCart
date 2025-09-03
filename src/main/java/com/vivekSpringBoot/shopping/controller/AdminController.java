@@ -233,7 +233,7 @@ public class AdminController {
 		
 		Category oldCategory = categoryServiceImpl.getCategoryDetailsById(category.getId());
 		
-		String imageName = file != null ? file.getOriginalFilename() : oldCategory.getImageName();
+		String imageName = (file != null && !file.isEmpty()) ? file.getOriginalFilename() : oldCategory.getImageName();
 		
 		if(!ObjectUtils.isEmpty(oldCategory)) {
 			
@@ -273,10 +273,14 @@ public class AdminController {
 	}
 	
 	@PostMapping("/saveProduct")
-	public String insertProductData(@ModelAttribute Product product,@RequestParam("file") MultipartFile file,HttpSession session) throws IOException {
+	public String insertProductData(@ModelAttribute Product product,@RequestParam("categoryId") Integer categoryId,@RequestParam("file") MultipartFile file,HttpSession session) throws IOException {
 		
 		String imageName = (file != null && !file.isEmpty()) ? file.getOriginalFilename() : "default.jpg" ;
 		
+		Category category = categoryServiceImpl.getCategoryDetailsById(categoryId);
+		
+		// setting category object in product
+		product.setCategory(category);
 		product.setImageName(imageName);
 		
 		// set Discounted Price of the product
@@ -295,6 +299,9 @@ public class AdminController {
 		product.setDiscountedPrice(discountedPrice);
 
 		Product savedProduct = productServiceImpl.saveProductData(product);
+		
+		// setting product object in category list.
+		category.getProductsList().add(savedProduct);
 		
 		System.out.println("savedProduct : "+savedProduct);
 		
@@ -404,7 +411,7 @@ public class AdminController {
 	}
 	
 	@PostMapping("/updateProduct")
-	public String updateProductData(@ModelAttribute Product product,@RequestParam("file") MultipartFile file,HttpSession session) throws IOException {
+	public String updateProductData(@ModelAttribute Product product,@RequestParam("categoryId") int categoryId,@RequestParam("file") MultipartFile file,HttpSession session) throws IOException {
 		
 		        // set Discounted Price of the product
 		
@@ -417,7 +424,7 @@ public class AdminController {
 					return "redirect:/admin/editProduct/"+product.getId();
 				}
 		
-		Product savedUpdatedProduct = productServiceImpl.updateProduct(product, file);
+		Product savedUpdatedProduct = productServiceImpl.updateProduct(product, file,categoryId);
 		
 		if(savedUpdatedProduct != null) {
 			

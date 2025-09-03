@@ -232,7 +232,9 @@ public class SellerController {
 	
 	
 	@PostMapping("/saveProd")
-	public String saveSellerProductData(@ModelAttribute Product product,@RequestParam("file") MultipartFile file,Principal principal,HttpSession session) throws IOException {
+	public String saveSellerProductData(@ModelAttribute Product product,@RequestParam("categoryId") int categoryId,@RequestParam("file") MultipartFile file,Principal principal,HttpSession session) throws IOException {
+		
+		Category category = categoryServiceImpl.getCategoryDetailsById(categoryId);
 		
 		UserDtls userDtls = getLoggedInUserDetails(principal);
 		SellerProfile loggedInSellerProfile = sellerProfileServiceImpl.getSellersProfileByUserDtlsId(userDtls.getId());
@@ -261,7 +263,12 @@ public class SellerController {
 
 			product.setSellerProfile(loggedInSellerProfile);
 			
+		    product.setCategory(category);
+			
 			Product savedProduct = productServiceImpl.saveProductData(product);
+			
+			category.getProductsList().add(savedProduct);                                          // notice this
+			categoryServiceImpl.updateCategoryDetails(category);
 			
 			List<Product> sellerProductsList = loggedInSellerProfile.getProductsList();
 			sellerProductsList.add(savedProduct);
@@ -370,7 +377,7 @@ public class SellerController {
 	
 	
 	@PostMapping("/upProd")
-	public String updateProductDetails(@ModelAttribute Product product,@RequestParam("file") MultipartFile file,HttpSession session) throws IOException {
+	public String updateProductDetails(@ModelAttribute Product product,@RequestParam("categoryId") int categoryId,@RequestParam("file") MultipartFile file,HttpSession session) throws IOException {
 		
 		 // set Discounted Price of the product
 		
@@ -383,7 +390,7 @@ public class SellerController {
 			return "redirect:/seller/editProd?pid="+product.getId();
 		}
 
-      Product savedUpdatedProduct = productServiceImpl.updateProduct(product, file);
+      Product savedUpdatedProduct = productServiceImpl.updateProduct(product, file,categoryId);
 
       if(savedUpdatedProduct != null) {
 	

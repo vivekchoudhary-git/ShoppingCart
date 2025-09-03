@@ -15,7 +15,8 @@ public interface CartRepo extends JpaRepository<Cart, Integer> {
 	@Query(value = "select count(*) from cart where user_dtls_id = :uid",nativeQuery = true)
 	public Integer countCartUsingUserId(@Param("uid") Integer uid);
 	
-	
 	public List<Cart> findByUserDtlsId(Integer uid);
+	
+	public void deleteByUserDtlsId(Integer uid);
 	
 }

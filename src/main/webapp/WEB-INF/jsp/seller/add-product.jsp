@@ -74,10 +74,10 @@
 
 <div class="mb-3 col">
 <label>Category ( <i class="fa-solid fa-list"></i> ) </label>
-<select class="form-control" name="category">
+<select class="form-control" name="categoryId">
 <option value="" disabled="disabled" selected="selected">---- Select ----</option>
 <c:forEach items="${categoryList}" var="cat">
-<option value="${cat.name}">${cat.name}</option>
+<option value="${cat.id}">${cat.name}</option>
 </c:forEach>
 </select>
 </div>

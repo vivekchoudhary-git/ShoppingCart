@@ -14,4 +14,6 @@ public interface CartService {
 	
 	public void updateCartQuantityById(Integer cid,String symbol);
 	
+	public void deleteCartByUserId(Integer uid);
+	
 }

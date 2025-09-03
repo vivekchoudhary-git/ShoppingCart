@@ -181,7 +181,11 @@ public class UserController {
 	}
 	
 	@GetMapping("/success")
-	public String getSuccessPage() {
+	public String getSuccessPage(Principal principal) {
+		
+		UserDtls userDtls = getLoggedInUserDetails(principal);
+		
+		cartServiceImpl.deleteCartByUserId(userDtls.getId());
 		
 		return "successs";
 	}

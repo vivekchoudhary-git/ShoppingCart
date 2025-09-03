@@ -105,7 +105,7 @@
       <th scope="row">${c.count}</th>
       <td><img alt="not found" src="${pageContext.request.contextPath}${productImageUrl}${prod.imageName}" width="50px" height="50px"></td>
       <td>${prod.title}</td>
-      <td>${prod.category}</td>
+      <td>${prod.category.name}</td>
       <td>${prod.price}</td>
       <td>${prod.discount}</td>
       <td>${prod.discountedPrice}</td>

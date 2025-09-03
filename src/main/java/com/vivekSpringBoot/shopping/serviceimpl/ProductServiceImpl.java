@@ -19,9 +19,12 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.vivekSpringBoot.shopping.model.Category;
 import com.vivekSpringBoot.shopping.model.Product;
 import com.vivekSpringBoot.shopping.model.SellerProfile;
+import com.vivekSpringBoot.shopping.repository.CategoryRepo;
 import com.vivekSpringBoot.shopping.repository.ProductRepo;
+import com.vivekSpringBoot.shopping.service.CategoryService;
 import com.vivekSpringBoot.shopping.service.ProductService;
 import com.vivekSpringBoot.shopping.utility.DiscountUtility;
 
@@ -36,6 +39,12 @@ public class ProductServiceImpl implements ProductService {
 	
 	@Autowired
 	private DiscountUtility discountUtility;
+	
+	@Autowired
+	private CategoryRepo categoryRepo;
+	
+	@Autowired
+	private CategoryService categoryServiceImpl;
 	
 	@Override
 	public Product saveProductData(Product product) {
@@ -58,7 +67,8 @@ public class ProductServiceImpl implements ProductService {
 		
 		Optional<Product> productOptional = productRepo.findById(id);
 		
-		if(!productOptional.isEmpty()) {
+//		if(!productOptional.isEmpty()) {                                            // this method is not compatible with java 1.8 as it is java 11 feature
+		if(productOptional.isPresent()) {
 			
 			Product product = productOptional.get();
 			
@@ -75,7 +85,8 @@ public class ProductServiceImpl implements ProductService {
 		
 		Optional<Product> productOptional = productRepo.findById(id);
 		
-		if(!productOptional.isEmpty()) {
+//		if(!productOptional.isEmpty()) {                                        // this method is not compatible with java 1.8 as it is java 11 feature
+			if(productOptional.isPresent()) {
 			
 			Product product = productOptional.get();
 			return product;
@@ -85,15 +96,18 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Product updateProduct(Product product,MultipartFile file) throws IOException {
+	public Product updateProduct(Product product,MultipartFile file,int CategoryId) throws IOException {
 	
         Double discountedPrice = discountUtility.calculateDiscountedPrice(product.getDiscount(), product.getPrice());
 		
+       Category category = categoryRepo.findById(CategoryId).get();
+        
 		product.setDiscountedPrice(discountedPrice);
 		
 		Optional<Product> oldProductOptional = productRepo.findById(product.getId());
 		
-		if(!oldProductOptional.isEmpty()) {
+//		if(!oldProductOptional.isEmpty()) {                                                  // this method is not compatible with java 1.8 as it is java 11 feature
+			if(oldProductOptional.isPresent()) {
 			
 			Product oldProduct = oldProductOptional.get();
 			
@@ -101,7 +115,7 @@ public class ProductServiceImpl implements ProductService {
 			
 			oldProduct.setTitle(product.getTitle());
 			oldProduct.setDescription(product.getDescription());
-			oldProduct.setCategory(product.getCategory());
+			oldProduct.setCategory(category);
 			oldProduct.setPrice(product.getPrice());
 			oldProduct.setDiscount(product.getDiscount());
 			oldProduct.setDiscountedPrice(product.getDiscountedPrice());
@@ -109,7 +123,10 @@ public class ProductServiceImpl implements ProductService {
 			oldProduct.setStock(product.getStock());
 			oldProduct.setImageName(updatedImageName);
 			
+			category.getProductsList().add(oldProduct);                                       // note this ,must do for bi-directional mapping
+			categoryServiceImpl.updateCategoryDetails(category);
 			Product savedUpdatedProduct = productRepo.save(oldProduct);
+			
 			
 			if(!file.isEmpty() && file != null) {
 				

@@ -1,5 +1,6 @@
 package com.vivekSpringBoot.shopping.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,7 +31,7 @@ public class Cart {
 	@ManyToOne
 	private Product product;
 	@ManyToOne
-	private UserDtls userDtls;
+	private UserDtls userDtls;                        // note UserDtls Bean class does not have Cart as Property
 	private Integer quantity;
 	@Transient                               // this annotation will not allow to create  totalPrice column in table
 	private Double totalPrice;

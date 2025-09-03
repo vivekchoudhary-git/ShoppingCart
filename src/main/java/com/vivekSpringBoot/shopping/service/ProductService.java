@@ -21,7 +21,7 @@ public interface ProductService {
 	
 	public Boolean deleteProductById(int id);
 	public Product getProductById(int id);
-	public Product updateProduct(Product product,MultipartFile file) throws IOException;
+	public Product updateProduct(Product product,MultipartFile file,int CategoryId) throws IOException;
 	
 	// this method is not for pagination
 	public List<Product> getAllActiveProductsList(String category);

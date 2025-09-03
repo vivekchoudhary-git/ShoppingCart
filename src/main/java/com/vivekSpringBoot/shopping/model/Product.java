@@ -33,7 +33,7 @@ public class Product {
 	private String title;
 	@Column(length = 5000)
 	private String description;
-	private String category;
+//	private String category;                    // removed as we are using new field Category object
 	private Double price;
 	@Column(nullable = true)                    // The annotation @Column(nullable = true) tells the JPA provider (like Hibernate) that this column can be NULL in the database.
 	private Integer discount;                          // added later  // use Integer to handle null values
@@ -45,6 +45,11 @@ public class Product {
 	@ManyToOne
 	@JoinColumn(name = "seller_id")
 	private SellerProfile sellerProfile;              // added later
+	
+	
+	@ManyToOne
+	@JoinColumn(name = "category_id")
+	private Category category;
 	
 	
 }

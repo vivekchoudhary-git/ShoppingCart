@@ -74,7 +74,7 @@ ${product.description}
 <span class="badge bg-warning">Out of Stock</span>
  </c:if>
 <br>
-Category : ${product.category} <br> Policy : 7 Days Replacement and Return
+Category : ${product.category.name} <br> Policy : 7 Days Replacement and Return
  </p>
 
  

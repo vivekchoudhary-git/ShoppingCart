@@ -104,7 +104,8 @@ public class SellerProfileServiceImpl implements SellerProfileService{
 		
 		UserDtls userDtls = sellerProfile.getUserDtls();
 		
-		if(existingSellerProfileOptional.isEmpty()) {
+//		if(existingSellerProfileOptional.isEmpty()) {                                      // this method is not compatible with java 1.8 as it is java 11 feature
+			if(!existingSellerProfileOptional.isPresent()) {
 			
 			System.out.println("existingSellerProfile is null");
 			

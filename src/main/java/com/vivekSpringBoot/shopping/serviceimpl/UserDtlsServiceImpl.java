@@ -154,7 +154,8 @@ public class UserDtlsServiceImpl implements UserDtlsService {
 		
 		UserDtls userDtls = null;
 		
-		if(!optionalUserDtls.isEmpty()) {
+//		if(!optionalUserDtls.isEmpty()) {                                             // this method is not compatible with java 1.8 as it is java 11 feature
+			if(optionalUserDtls.isPresent()) {
 			
 			userDtls = optionalUserDtls.get();
 		}else {

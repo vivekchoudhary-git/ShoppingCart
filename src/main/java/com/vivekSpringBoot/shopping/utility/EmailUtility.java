@@ -76,7 +76,7 @@ public class EmailUtility {
 			    productOrder.getOrderAddress().getFirstName(),
 			    status,
 			    productOrder.getProduct().getTitle(),
-			    productOrder.getProduct().getCategory(),
+			    productOrder.getProduct().getCategory().getName(),
 			    productOrder.getQuantity(),
 			    productOrder.getPrice(),
 			    productOrder.getPaymentType()

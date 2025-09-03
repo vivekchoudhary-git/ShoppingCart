@@ -1,9 +1,13 @@
 package com.vivekSpringBoot.shopping.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import org.springframework.stereotype.Component;
 
@@ -26,5 +30,8 @@ public class Category {
 	private String name;
 	private String imageName;
 	private Boolean isActive;                      // Note: used Boolean (wrapper class) to handle null
+	
+	@OneToMany(mappedBy = "category",cascade = CascadeType.ALL)
+	private List<Product> productsList;
 	
 }

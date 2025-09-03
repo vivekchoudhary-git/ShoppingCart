@@ -11,6 +11,7 @@ import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
@@ -67,8 +68,8 @@ public class HomeController {
 		String categoryImageUrl = environment.getProperty("category.image.url");
 		String productImageUrl = environment.getProperty("product.image.url");
 		
-		List<Category> activeCategoriesList = categoryServiceImpl.getAllActiveCategoriesList().stream().limit(6).toList();
-		List<Product> activeProductsList = productServiceImpl.getAllActiveProductsList("all").stream().limit(4).toList();
+		List<Category> activeCategoriesList = categoryServiceImpl.getAllActiveCategoriesList().stream().limit(6).collect(Collectors.toList());
+		List<Product> activeProductsList = productServiceImpl.getAllActiveProductsList("all").stream().limit(4).collect(Collectors.toList());
 		
 		model.addAttribute("activeCategoriesList", activeCategoriesList);
 		model.addAttribute("activeProductsList", activeProductsList);

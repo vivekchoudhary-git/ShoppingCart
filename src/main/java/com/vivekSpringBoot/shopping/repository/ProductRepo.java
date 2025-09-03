@@ -34,15 +34,31 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
 	// this method is for pagination
 	Page<Product> findByIsActiveTrue(Pageable pageable);
 	
+//	------------------ OLD METHOD STARTS -------------
 	// this method is for pagination (including both active and inactive products)
-	@Query(value = "SELECT * FROM product " +
-            "WHERE " +
-            "(LOWER(title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-            "OR LOWER(category) LIKE LOWER(CONCAT('%', :keyword, '%')))",
-    countQuery = "SELECT COUNT(*) FROM product " +
-                 "WHERE " +
-                 "(LOWER(title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-                 "OR LOWER(category) LIKE LOWER(CONCAT('%', :keyword, '%')))",
+//	@Query(value = "SELECT * FROM product " +
+//            "WHERE " +
+//            "(LOWER(title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+//            "OR LOWER(category) LIKE LOWER(CONCAT('%', :keyword, '%')))",
+//    countQuery = "SELECT COUNT(*) FROM product " +
+//                 "WHERE " +
+//                 "(LOWER(title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+//                 "OR LOWER(category) LIKE LOWER(CONCAT('%', :keyword, '%')))",
+//    nativeQuery = true)
+//    Page<Product> searchAnyProductByTitleOrCategoryPaginated(@Param("keyword") String keyword, Pageable pageable);
+//	------------------ OLD METHOD ENDS -------------
+	
+	
+	@Query(value = "SELECT * FROM product p inner join category c "+
+			"on p.category_id = c.id "+
+			"WHERE LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%')) "+
+			" OR LOWER(c.name) LIKE LOWER(CONCAT('%', :keyword, '%')) "+
+			" OR LOWER(p.description) LIKE LOWER(CONCAT('%', :keyword, '%')) ",
+    countQuery = "SELECT COUNT(*) FROM product p inner join category c "+
+    		"on p.category_id = c.id "+
+    		"WHERE LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%')) "+
+    		" OR LOWER(c.name) LIKE LOWER(CONCAT('%', :keyword, '%')) "+
+    		" OR LOWER(p.description) LIKE LOWER(CONCAT('%', :keyword, '%')) ",
     nativeQuery = true)
     Page<Product> searchAnyProductByTitleOrCategoryPaginated(@Param("keyword") String keyword, Pageable pageable);
 
@@ -62,17 +78,33 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
 	
 	Page<Product> findBySellerProfileId(Integer sid,Pageable pageable);
 	
-	
+//	------------------ OLD METHOD STARTS -------------
 	// using method overloading concept
 	// this method is for pagination (including both active and inactive products)
-	@Query(value = "SELECT * FROM product " +
-            "WHERE seller_id = :sid AND " +
-            "(LOWER(title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-            "OR LOWER(category) LIKE LOWER(CONCAT('%', :keyword, '%')))",
-    countQuery = "SELECT COUNT(*) FROM product " +
-                 "WHERE seller_id = :sid AND " +
-                 "(LOWER(title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-                 "OR LOWER(category) LIKE LOWER(CONCAT('%', :keyword, '%')))",
+//	@Query(value = "SELECT * FROM product " +
+//            "WHERE seller_id = :sid AND " +
+//            "(LOWER(title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+//            "OR LOWER(category) LIKE LOWER(CONCAT('%', :keyword, '%')))",
+//    countQuery = "SELECT COUNT(*) FROM product " +
+//                 "WHERE seller_id = :sid AND " +
+//                 "(LOWER(title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+//                 "OR LOWER(category) LIKE LOWER(CONCAT('%', :keyword, '%')))",
+//    nativeQuery = true)
+//    Page<Product> searchAnyProductByTitleOrCategoryPaginated(@Param("keyword") String keyword,@Param("sid") Integer sid ,Pageable pageable);
+//	------------------ OLD METHOD ENDS -------------
+	
+	// using method overloading concept
+	@Query(value = "SELECT * FROM product p inner join category c "+
+			"on p.category_id = c.id "+
+			"WHERE p.seller_id = :sid AND "+
+			" LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%')) "+
+			" OR LOWER(c.name) LIKE LOWER(CONCAT('%', :keyword, '%')) "+
+			" OR LOWER(p.description) LIKE LOWER(CONCAT('%', :keyword, '%')) ",
+    countQuery = "SELECT COUNT(*) FROM product p inner join category c "+
+    		"on p.category_id = c.id "+
+    		"WHERE LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%')) "+
+    		" OR LOWER(c.name) LIKE LOWER(CONCAT('%', :keyword, '%')) "+
+    		" OR LOWER(p.description) LIKE LOWER(CONCAT('%', :keyword, '%')) ",
     nativeQuery = true)
     Page<Product> searchAnyProductByTitleOrCategoryPaginated(@Param("keyword") String keyword,@Param("sid") Integer sid ,Pageable pageable);
 	

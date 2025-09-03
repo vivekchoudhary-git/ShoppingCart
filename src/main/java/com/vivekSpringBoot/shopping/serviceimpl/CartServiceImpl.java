@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
@@ -149,6 +150,15 @@ public class CartServiceImpl implements CartService {
 			
 		}
 		
+		
+	}
+
+	
+	@Override
+	@Transactional
+	public void deleteCartByUserId(Integer uid) {
+		
+		cartRepo.deleteByUserDtlsId(uid);
 		
 	}
 
