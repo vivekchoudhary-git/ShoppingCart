@@ -29,8 +29,23 @@
 <!-- Navbar start -->
 
 <nav class="navbar navbar-expand-lg bg-primary fixed-top navbar-dark" style="margin-bottom : 0px;border :1px solid black; height : 60.86px;"">
+	
 	<div class="container-fluid">
-		<a class="navbar-brand" href="#"><i class="fa-solid fa-cart-plus"></i> Ecom Store</a>
+		
+		<c:choose>
+		<c:when test="${userDtls == null}">
+		<a class="navbar-brand" href="/"><i class="fa-solid fa-cart-shopping"></i> Shopkart</a>
+		</c:when>
+		<c:otherwise>
+		<c:if test="${userDtls.role == 'ROLE_ADMIN'}">
+		<a class="navbar-brand" href="/admin/"><i class="fa-solid fa-cart-shopping"></i> Shopkart</a>
+		</c:if>
+		<c:if test="${userDtls.role == 'ROLE_SELLER'}">
+		<a class="navbar-brand" href="/seller/index"><i class="fa-solid fa-cart-shopping"></i> Shopkart</a>
+		</c:if>		
+		</c:otherwise>
+		</c:choose>
+		
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
 			data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
 			aria-expanded="false" aria-label="Toggle navigation">
@@ -79,7 +94,7 @@
 					<ul class="dropdown-menu">
 						<c:forEach var="cat" items="${activeCatg}">
 							<li>
-								<a class="dropdown-item" href="/product?category=${cat.name}">${cat.name}</a>
+								<a class="dropdown-item" href="/product?category=${cat.id}">${cat.name}</a>
 							</li>
 						</c:forEach>
 					</ul>

@@ -183,19 +183,19 @@ public class ProductServiceImpl implements ProductService {
 	
 	// this method is for pagination
 	@Override
-	public Page<Product> getAllActiveProductsListPaginated(String category,Integer pageNo,Integer pageSize) {
+	public Page<Product> getAllActiveProductsListPaginated(Integer categoryId,Integer pageNo,Integer pageSize) {
 		
 		
 		Pageable pageable = PageRequest.of(pageNo, pageSize);
 		
 		Page<Product> activeProductsListPage = null;
 		
-		if(category.equals("all")) {
+		if(categoryId == 0) {
 			
 			activeProductsListPage = productRepo.findByIsActiveTrue(pageable);
 		}else {
 			
-			activeProductsListPage = productRepo.fetchActiveProductByCategory(category,pageable);
+			activeProductsListPage = productRepo.fetchActiveProductByCategory(categoryId,pageable);
 		}
 		
 		return activeProductsListPage;

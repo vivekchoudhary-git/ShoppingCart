@@ -118,7 +118,7 @@ public class HomeController {
 	
 	
 	@GetMapping("/product")
-	public String product(@RequestParam(value = "category",defaultValue = "all") String category,@RequestParam(value = "pageNo",defaultValue = "0") Integer pageNo,@RequestParam(value = "pageSize",defaultValue = "4") Integer pageSize,Model model) {
+	public String product(@RequestParam(value = "category",defaultValue = "0") Integer category,@RequestParam(value = "pageNo",defaultValue = "0") Integer pageNo,@RequestParam(value = "pageSize",defaultValue = "4") Integer pageSize,Model model) {
 		
 		model.addAttribute("showSearch", true);                          /* to show search bar in header */
 		
@@ -304,7 +304,7 @@ public class HomeController {
 	
 	// search product by keyword
 	@GetMapping("/searchProduct")
-	public String searchAnyProduct(@RequestParam("keyword") String keyword,@RequestParam(value = "category",defaultValue = "all") String category,@RequestParam(value = "pageNo",defaultValue = "0") Integer pageNo,@RequestParam(value = "pageSize",defaultValue = "4") Integer pageSize,Model model ,HttpSession session) {
+	public String searchAnyProduct(@RequestParam("keyword") String keyword,@RequestParam(value = "category",defaultValue = "0") Integer category,@RequestParam(value = "pageNo",defaultValue = "0") Integer pageNo,@RequestParam(value = "pageSize",defaultValue = "4") Integer pageSize,Model model ,HttpSession session) {
 		
 		model.addAttribute("showSearch", true);                              /* to show search bar in header */
 		

@@ -35,12 +35,12 @@
 <div class="card-body">
 <div class="list-group text-center">
 <p class="fs-5">Category</p>
-<a href="/product" class="list-group-item list-group-item-action ${paramValue == 'all' ? 'active' : '' }" aria-current="${paramValue == 'all' ? 'page' : ''}">
+<a href="/product" class="list-group-item list-group-item-action ${paramValue == '0' ? 'active' : '' }" aria-current="${paramValue == '0' ? 'page' : ''}">
     All
 </a>
   
 <c:forEach items="${activeCategoryList}" var="cat">
-<a href="/product?category=${cat.name}" class="list-group-item list-group-item-action ${paramValue == cat.name ? 'active' :'' }" aria-current="${paramValue == cat.name ? 'page' : ''}">${cat.name}</a>
+<a href="/product?category=${cat.id}" class="list-group-item list-group-item-action ${paramValue == cat.id ? 'active' :'' }" aria-current="${paramValue == cat.id ? 'page' : ''}">${cat.name}</a>
 </c:forEach>
   
 </div>

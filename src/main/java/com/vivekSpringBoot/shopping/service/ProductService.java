@@ -29,7 +29,7 @@ public interface ProductService {
 	public List<Product> searchProductByKeyword(String keyword);
 	
 	// this method is for pagination
-	Page<Product> getAllActiveProductsListPaginated(String category,Integer pageNo,Integer pageSize);
+	Page<Product> getAllActiveProductsListPaginated(Integer categoryId,Integer pageNo,Integer pageSize);
 	
 	// this method is for pagination (including active and inactive products)
 	public Page<Product> searchProductByKeywordPaginated(String keyword,Integer pageNo,Integer pageSize);

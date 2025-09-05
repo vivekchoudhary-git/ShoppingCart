@@ -38,7 +38,7 @@ public class Product {
 	@Column(nullable = true)                    // The annotation @Column(nullable = true) tells the JPA provider (like Hibernate) that this column can be NULL in the database.
 	private Integer discount;                          // added later  // use Integer to handle null values
 	private Double discountedPrice;            // added later
-	private int stock;
+	private Integer stock;
 	private String imageName;
 	private Boolean isActive;
 	

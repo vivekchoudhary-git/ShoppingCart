@@ -9,7 +9,7 @@
 <body>
 
 <!-- Start Footer -->
-	<p style="text-align:center;font-weight:bold;">ecom.com</p>
+	<p style="text-align:center;font-weight:bold;">Shopkart.com</p>
 	<!-- End Footer  -->
 
 </body>

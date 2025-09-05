@@ -32,13 +32,13 @@
 <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="resources/images/ecom1.png" class="d-block w-100" alt="Ecom1 image" >
+      <img src="resources/images/homepage1.jpg" class="d-block w-100" alt="Ecom1 image" >
     </div>
     <div class="carousel-item">
       <img src="resources/images/ecom3.jpg" class="d-block w-100" alt="Ecom3 image" >
     </div>
     <div class="carousel-item">
-      <img src="resources/images/ecom2.jpg" class="d-block w-100" alt="Ecom2 image" >
+      <img src="resources/images/ecom1.png" class="d-block w-100" alt="Ecom2 image" >
     </div>
   </div>
   <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
@@ -63,7 +63,7 @@
             <div class="card rounded-circle shadow-sm p-3 mb-5 bg-body-tertiary rounded">
                 <div class="card-body text-center">
                     <img alt="image not found" src="${pageContext.request.contextPath}${categoryImageUrl}${cat.imageName}" width="65%" height="140px">
-                   <a class="text-decoration-none" href="/product?category=${cat.name}"><p>${cat.name}</p></a>
+                   <a class="text-decoration-none" href="/product?category=${cat.id}"><p>${cat.name}</p></a>
                 </div>
             </div>
         </div>

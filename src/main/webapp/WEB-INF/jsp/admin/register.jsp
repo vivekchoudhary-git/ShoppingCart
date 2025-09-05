@@ -32,7 +32,7 @@
 <div class="container mt-5 p-9">
 <div class="row">
 <div class="col-md-6 p-4">
-<img alt="not found" src="${pageContext.request.contextPath}/resources/images/ecom.png">
+<img alt="not found" src="${pageContext.request.contextPath}/resources/images/delivery.jpg">
 </div>
 <div class="col-md-6 mt-3 p-5">
 <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">

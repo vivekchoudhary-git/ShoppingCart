@@ -20,11 +20,21 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
 	@Query(value = "select * from product"+" where is_active = true"+" AND (LOWER(title) LIKE LOWER('%' || :keyword || '%')"+" OR LOWER(category) LIKE LOWER('%' || :keyword || '%'))",nativeQuery = true)
 	public List<Product> searchAnyProductByTitleOrCategory(@Param("keyword") String keyword);
 	
+	// --------------- old method starts ------------ 
 	// this method is for pagination
-	@Query(value = "select * from product where category = :category AND is_active = true", 
-		       countQuery = "select count(*) from product where category = :category AND is_active = true", 
+//	@Query(value = "select * from product where category = :category AND is_active = true", 
+//		       countQuery = "select count(*) from product where category = :category AND is_active = true", 
+//		       nativeQuery = true)
+//	Page<Product> fetchActiveProductByCategory(@Param("category") String category, Pageable pageable);
+	// --------------- old method ends ------------ 
+	
+	
+	// this method is for pagination
+	@Query(value = "select * from product where category_id = :categoryId AND is_active = true", 
+		       countQuery = "select count(*) from product where category_id = :categoryId AND is_active = true", 
 		       nativeQuery = true)
-	Page<Product> fetchActiveProductByCategory(@Param("category") String category, Pageable pageable);
+	Page<Product> fetchActiveProductByCategory(@Param("categoryId") Integer categoryId, Pageable pageable);
+	
 
 	
 	// Alternate way to write the above method without SQL Query
@@ -63,17 +73,38 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
     Page<Product> searchAnyProductByTitleOrCategoryPaginated(@Param("keyword") String keyword, Pageable pageable);
 
 	
+//	------------------ OLD METHOD STARTS -------------
 	// this method is for pagination (only active products)
-	@Query(value = "SELECT * FROM product " +
-            "WHERE is_active = true " +
-            "AND (LOWER(title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-            "OR LOWER(category) LIKE LOWER(CONCAT('%', :keyword, '%')))",
-    countQuery = "SELECT COUNT(*) FROM product " +
-                 "WHERE is_active = true" +
-                 "AND (LOWER(title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-                 "OR LOWER(category) LIKE LOWER(CONCAT('%', :keyword, '%')))",
+//	@Query(value = "SELECT * FROM product " +
+//            "WHERE is_active = true " +
+//            "AND (LOWER(title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+//            "OR LOWER(category) LIKE LOWER(CONCAT('%', :keyword, '%')))",
+//    countQuery = "SELECT COUNT(*) FROM product " +
+//                 "WHERE is_active = true" +
+//                 "AND (LOWER(title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+//                 "OR LOWER(category) LIKE LOWER(CONCAT('%', :keyword, '%')))",
+//    nativeQuery = true)
+//    Page<Product> searchAnyActiveProductByTitleOrCategoryPaginated(@Param("keyword") String keyword, Pageable pageable);
+//	------------------ OLD METHOD ENDS -------------
+	
+	
+	
+	@Query(value = "SELECT * FROM product p inner join category c "+
+			"on p.category_id = c.id "+
+			"WHERE p.is_active = true AND "+ " ( "
+			+ " LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%')) "+
+			" OR LOWER(c.name) LIKE LOWER(CONCAT('%', :keyword, '%')) "+
+			" OR LOWER(p.description) LIKE LOWER(CONCAT('%', :keyword, '%')) "
+			+ " ) ",
+    countQuery = "SELECT COUNT(*) FROM product p inner join category c "+
+    		"on p.category_id = c.id "+
+    		"WHERE p.is_active = true AND "+ " ( "
+    		+ "LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%')) "+
+    		" OR LOWER(c.name) LIKE LOWER(CONCAT('%', :keyword, '%')) "+
+    		" OR LOWER(p.description) LIKE LOWER(CONCAT('%', :keyword, '%')) "
+    		+" ) ",
     nativeQuery = true)
-    Page<Product> searchAnyActiveProductByTitleOrCategoryPaginated(@Param("keyword") String keyword, Pageable pageable);
+	Page<Product> searchAnyActiveProductByTitleOrCategoryPaginated(@Param("keyword") String keyword, Pageable pageable);
 	
 	
 	Page<Product> findBySellerProfileId(Integer sid,Pageable pageable);

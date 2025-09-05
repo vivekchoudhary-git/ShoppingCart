@@ -32,10 +32,10 @@
 
 <div class="container mt-5 p-9">
 <div class="row">
-<div class="col-md-6 p-4">
-<img alt="not found" src="resources/images/ecom.png">
+<div class="col-md-6 p-4 mt-5">
+<img alt="not found" src="resources/images/delivery.jpg">
 </div>
-<div class="col-md-6 mt-3 p-5">
+<div class="col-md-6 mt-1 p-5">
 <div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
 <div class="card-header">
 <p class="fs-4 text-center">Register</p>
@@ -114,7 +114,7 @@
 </div>
 
 <div class="card-footer text-center">
-Have an account ? <a href="/login" class="text-decoration-none">Login</a>
+Have an account ? <a href="/signin" class="text-decoration-none">Login</a>
 </div>
 
 </div>
