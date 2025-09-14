@@ -33,7 +33,7 @@ public class ProductOrder {
 	private LocalDate orderDate;
 	@ManyToOne
 	private Product product;
-	private Double price;
+	private Double price;                             // discounted price
 	private Integer quantity;
 	@ManyToOne
 	private UserDtls userDtls;

@@ -63,44 +63,71 @@
 <div class="row">
 <div class="col">
 <label class="form-label">Full Name</label><input class="form-control" name="name" type="text">
+<c:if test="${not empty errors and errors.hasFieldErrors('name')}">
+<span style="color:red">${errors.getFieldError('name').defaultMessage}</span>
+</c:if>
 </div>
 
 <div class="col">
 <label class="form-label">Mobile Number</label><input class="form-control" name="phoneNo" type="number">
+<c:if test="${not empty errors and errors.hasFieldErrors('phoneNo')}">
+<span style="color:red">${errors.getFieldError('phoneNo').defaultMessage}</span>
+</c:if>
 </div>
 </div>
 
 <div class="mb-3">
 <label class="form-label">Email</label><input class="form-control" name="email" type="email">
+<c:if test="${not empty errors and errors.hasFieldErrors('email')}">
+<span style="color:red">${errors.getFieldError('email').defaultMessage}</span>
+</c:if>
 </div>
 
 <div class="row">
 <div class="col">
 <label class="form-label">Address</label><input class="form-control" name="address" type="text">
+<c:if test="${not empty errors and errors.hasFieldErrors('address')}">
+<span style="color:red">${errors.getFieldError('address').defaultMessage}</span>
+</c:if>
 </div>
 
 <div class="col">
 <label class="form-label">City</label><input class="form-control" name="city" type="text">
+<c:if test="${not empty errors and errors.hasFieldErrors('city')}">
+<span style="color:red">${errors.getFieldError('city').defaultMessage}</span>
+</c:if>
 </div>
 </div>
 
 <div class="row">
 <div class="col">
 <label class="form-label">State</label><input class="form-control" name="state" type="text">
+<c:if test="${not empty errors and errors.hasFieldErrors('state')}">
+<span style="color:red">${errors.getFieldError('state').defaultMessage}</span>
+</c:if>
 </div>
 
 <div class="col">
 <label class="form-label">Pincode</label><input class="form-control" name="pincode" type="number">
+<c:if test="${not empty errors and errors.hasFieldErrors('pincode')}">
+<span style="color:red">${errors.getFieldError('pincode').defaultMessage}</span>
+</c:if>
 </div>
 </div>
 
 <div class="row">
 <div class="col">
 <label class="form-label">Password</label><input class="form-control" name="password" type="password" id="pass">
+<c:if test="${not empty errors and errors.hasFieldErrors('password')}">
+<span style="color:red">${errors.getFieldError('password').defaultMessage}</span>
+</c:if>
 </div>
 
 <div class="col">
 <label class="form-label">Confirm Password</label><input class="form-control" name="confirmpassword" type="password">
+<c:if test="${not empty errors and errors.hasFieldErrors('confirmpassword')}">
+<span style="color:red">${errors.getFieldError('confirmpassword').defaultMessage}</span>
+</c:if>
 </div>
 </div>
 
@@ -113,36 +140,69 @@
 <div class="row mt-5">
 <div class="col">
 <label class="form-label">Company Name</label><input class="form-control" name="companyName" type="text" id="pass">
+<c:if test="${not empty errors and errors.hasFieldErrors('companyName')}">
+<span style="color:red">${errors.getFieldError('companyName').defaultMessage}</span>
+</c:if>
+
 </div>
 
 <div class="col">
 <label class="form-label">Company Address</label><input class="form-control" name="companyAddress" type="text">
+<c:if test="${not empty errors and errors.hasFieldErrors('companyAddress')}">
+<span style="color:red">${errors.getFieldError('companyAddress').defaultMessage}</span>
+</c:if>
 </div>
 </div>
 
 <div class="row">
 <div class="col">
 <label class="form-label">GST No</label><input class="form-control" name="gstNo" type="text" id="pass">
+<c:if test="${not empty errors and errors.hasFieldErrors('gstNo')}">
+<span style="color:red">${errors.getFieldError('gstNo').defaultMessage}</span>
+</c:if>
 </div>
 
 <div class="col">
 <label class="form-label">PAN No</label><input class="form-control" name="panNo" type="text">
+<c:if test="${not empty errors and errors.hasFieldErrors('panNo')}">
+<span style="color:red">${errors.getFieldError('panNo').defaultMessage}</span>
+</c:if>
 </div>
 </div>
 
 <div class="row">
 <div class="col">
 <label class="form-label">Bank Account</label><input class="form-control" name="bankAccount" type="text" id="pass">
+<c:if test="${not empty errors and errors.hasFieldErrors('bankAccount')}">
+<span style="color:red">${errors.getFieldError('bankAccount').defaultMessage}</span>
+</c:if>
 </div>
 
 <div class="col">
 <label class="form-label">IFSC Code</label><input class="form-control" name="ifscCode" type="text">
+<c:if test="${not empty errors and errors.hasFieldErrors('ifscCode')}">
+<span style="color:red">${errors.getFieldError('ifscCode').defaultMessage}</span>
+</c:if>
 </div>
 </div>
 
 <div class="mb-3 mt-3">
 <label class="form-label">Company Registration Certificate</label><input class="form-control" name="compfile" type="file">
+<c:if test="${not empty errors and errors.hasFieldErrors('compfile')}">
+<span style="color:red">${errors.getFieldError('compfile').defaultMessage}</span>
+</c:if>
 </div>
+
+
+<!-- Global error for the class-level validation -->
+   <c:if test="${not empty errors and errors.globalErrorCount > 0}">
+       <div style="color:red">
+           <c:forEach var="err" items="${errors.globalErrors}">
+               ${err.defaultMessage}<br/>
+           </c:forEach>
+       </div>
+   </c:if>
+
 
 <button type="submit" class="btn bg-primary text-white col-md-12">Register</button>
 

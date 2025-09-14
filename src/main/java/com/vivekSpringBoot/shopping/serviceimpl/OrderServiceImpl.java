@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -168,6 +169,57 @@ public class OrderServiceImpl implements OrderService {
 		SellerOrderDTO sellerOrder = productOrderRepo.findOrdersOfEachSellerByOrderId(sellerId, orderId);
 		
 		return sellerOrder;
+	}
+
+	
+	@Scheduled(cron = "0 */5 * ? * *")
+	@Override
+	public long countAllOrders() {
+		
+		long countOrders = productOrderRepo.countOrders();
+			
+		return countOrders;
+	}
+
+	
+	@Scheduled(cron = "0 */5 * ? * *")
+	@Override
+	public long countAllDeliveredOrders() {
+		
+		long deliveredOrdersCount = productOrderRepo.countDeliveredOrders();
+		System.out.println("countAllDeliveredOrders method called :"+deliveredOrdersCount);                         // only for checking crone scheduler
+		
+		return deliveredOrdersCount;
+	}
+
+	
+	@Scheduled(cron = "0 */5 * ? * *")
+	@Override
+	public long countAllPendingOrders() {
+		
+		long pendingOrdersCount = productOrderRepo.countPendingOrders();
+		
+		return pendingOrdersCount;
+	}
+
+	
+	@Scheduled(cron = "0 */5 * ? * *")
+	@Override
+	public long countAllCancelledOrders() {
+		
+		long cancelledOrdersCount = productOrderRepo.countCancelledOrders();
+		
+		return cancelledOrdersCount;
+	}
+
+	
+	@Scheduled(cron = "0 */5 * ? * *")
+	@Override
+	public Double totalRevenueGeneratedByDeliveredOrders() {
+		
+		Double revenueDeliveredOrders = productOrderRepo.revenueGeneratedByDeliveredOrders();
+		
+		return revenueDeliveredOrders;
 	}
 
 	

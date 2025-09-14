@@ -63,6 +63,9 @@
 <div class="row">
 <div class="col">
 <label class="form-label">Full Name</label><input class="form-control" name="name" type="text">
+<c:if test="${not empty errors and errors.hasFieldErrors('name')}">
+<span style="color:red">${errors.getFieldError('name').defaultMessage}</span>
+</c:if>
 </div>
 
 <div class="col">
@@ -72,6 +75,9 @@
 
 <div class="mb-3">
 <label class="form-label">Email</label><input class="form-control" name="email" type="email">
+<c:if test="${not empty errors and errors.hasFieldErrors('email')}">
+<span style="color:red">${errors.getFieldError('email').defaultMessage}</span>
+</c:if>
 </div>
 
 <div class="row">
@@ -97,16 +103,33 @@
 <div class="row">
 <div class="col">
 <label class="form-label">Password</label><input class="form-control" name="password" type="password" id="pass">
+<c:if test="${not empty errors and errors.hasFieldErrors('password')}">
+<span style="color:red">${errors.getFieldError('password').defaultMessage}</span>
+</c:if>
 </div>
 
 <div class="col">
 <label class="form-label">Confirm Password</label><input class="form-control" name="confirmpassword" type="password">
+<c:if test="${not empty errors and errors.hasFieldErrors('confirmpassword')}">
+<span style="color:red">${errors.getFieldError('confirmpassword').defaultMessage}</span>
+</c:if>
 </div>
 </div>
 
 <div class="mb-3">
 <label class="form-label">Profile Image</label><input class="form-control" name="file" type="file">
 </div>
+
+
+<!-- Global error for the class-level validation -->
+   <c:if test="${not empty errors and errors.globalErrorCount > 0}">
+       <div style="color:red">
+           <c:forEach var="err" items="${errors.globalErrors}">
+               ${err.defaultMessage}<br/>
+           </c:forEach>
+       </div>
+   </c:if>
+
 
 <button type="submit" class="btn bg-primary text-white col-md-12">Register</button>
 
@@ -126,9 +149,9 @@ Have an account ? <a href="/signin" class="text-decoration-none">Login</a>
 
  <!-- starts jQuery Validation Library -->
  
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
  <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
- <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/script.js"></script>
+ <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/script.js"></script>-->
  
   <!-- ends jQuery Validation Library -->
 

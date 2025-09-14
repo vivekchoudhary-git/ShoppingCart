@@ -1,10 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+	
+	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+	
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>index.jsp (admin)</title>
+<title>stats.jsp (admin)</title>
 
 <!-- this link is to use bootstrap taken from bootstrap website -->
 <link
@@ -31,7 +34,7 @@
 <body>
 
 <div class="container p-5 mt-1">
-<p class="text-center fs-3">Admin Dashboard</p>
+<p class="text-center fs-3">Statistics Dashboard</p>
 
 <div class="row p-5">
 
@@ -39,8 +42,8 @@
 <a class="text-decoration-none" href="/admin/loadAddProduct">
 <div class="card card-sh">
 <div class="card-body text-center text-primary">
-<i class="fa-solid fa-square-plus fa-3x"></i>
-<h4>Add Product</h4>
+<h4>Total Orders Received Till Now</h4>
+<h2 style="color:black">[ ${ordersCount} ]</h2>
 </div>
 </div>
 </a>
@@ -49,9 +52,9 @@
 <div class="col-md-4">
 <a class="text-decoration-none" href="loadCategory">
 <div class="card card-sh">
-<div class="card-body text-center text-primary">
-<i class="fa-solid fa-table-list fa-3x"></i>
-<h4>Category</h4>
+<div class="card-body text-center text-success">
+<h4>Total Orders Delivered Till Now</h4>
+<h2 style="color:black">[ ${deliveredOrdersCount} ]</h2>
 </div>
 </div>
 </a>
@@ -60,79 +63,39 @@
 <div class="col-md-4">
 <a class="text-decoration-none" href="/admin/viewProducts">
 <div class="card card-sh">
-<div class="card-body text-center text-success">
-<i class="fa-solid fa-book-open fa-3x"></i>
-<h4>View Products</h4>
+<div class="card-body text-center text-danger">
+<h4>Total Orders Pending Till Now</h4>
+<h2 style="color:black">[ ${pendingOrdersCount} ]</h2>
 </div>
 </div>
 </a>
 </div>
 
-<div class="col-md-4 mt-3">
-<a class="text-decoration-none" href="/admin/allOrders">
-<div class="card card-sh">
-<div class="card-body text-center text-warning">
-<i class="fa-solid fa-box-open fa-3x"></i>
-<h4>Orders</h4>
-</div>
-</div>
-</a>
-</div>
 
 <div class="col-md-4 mt-3">
 <a class="text-decoration-none" href="/admin/viewUsers?userType=1">
 <div class="card card-sh">
-<div class="card-body text-center text-primary">
-<i class="fa-solid fa-users fa-3x"></i>
-<h4>Users</h4>
-</div>
-</div>
-</a>
-</div>
-
-<div class="col-md-4 mt-3">
-<a class="text-decoration-none" href="/admin/register">
-<div class="card card-sh">
 <div class="card-body text-center text-danger">
-<i class="fa-solid fa-circle-user fa-3x"></i>
-<h4>Add Admin</h4>
+<h4>Total Orders Cancelled Till Now</h4>
+<h2 style="color:black">[ ${cancelledOrdersCount} ]</h2>
 </div>
 </div>
 </a>
 </div>
 
+
 <div class="col-md-4 mt-3">
-<a class="text-decoration-none" href="/admin/viewUsers?userType=2">
+<a class="text-decoration-none" href="/admin/allOrders">
 <div class="card card-sh">
-<div class="card-body text-center text-danger">
-<i class="fa-solid fa-circle-user fa-3x"></i>
-<h4>Admins</h4>
+<div class="card-body text-center text-success">
+<h4>Total Revenue Generated Till Now</h4>
+<h2 style="color:black">[ <i class="fa-solid fa-indian-rupee-sign fa-xs"></i>  ${revenueDeliveredOrders} ]</h2>
 </div>
 </div>
 </a>
 </div>
 
-<div class="col-md-4 mt-3">
-<a class="text-decoration-none" href="/admin/viewSellers">
-<div class="card card-sh">
-<div class="card-body text-center text-danger">
-<i class="fa-solid fa-circle-user fa-3x"></i>
-<h4>Sellers</h4>
-</div>
-</div>
-</a>
-</div>
 
-<div class="col-md-4 mt-3">
-<a class="text-decoration-none" href="/admin/stats">
-<div class="card card-sh">
-<div class="card-body text-center text-primary">
-<i class="fa-solid fa-chart-line fa-3x"></i>
-<h4>Statistics</h4>
-</div>
-</div>
-</a>
-</div>
 
 
 </div>

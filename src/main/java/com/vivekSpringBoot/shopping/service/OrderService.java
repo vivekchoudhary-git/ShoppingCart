@@ -31,4 +31,14 @@ public interface OrderService {
 	 
 	 public SellerOrderDTO getOrderDataByOrderIdAndSellerId(String orderId,Integer sellerId);
 	
+	 public long countAllOrders();
+	 
+	 public long countAllDeliveredOrders();
+	 
+	 public long countAllPendingOrders();
+	 
+	 public long countAllCancelledOrders();
+	 
+	 public Double totalRevenueGeneratedByDeliveredOrders();
+	 
 }

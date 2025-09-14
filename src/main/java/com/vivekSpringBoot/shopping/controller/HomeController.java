@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -163,8 +165,17 @@ public class HomeController {
 		return "viewProductt";
 	}
 	
+	// Note : BindingResult must come immediately after @Valid parameter.
 	@PostMapping("/saveReg")
-	public String saveRegistrationDetails(@ModelAttribute UserDtls userDtls,@RequestParam("file") MultipartFile file,HttpSession session) throws IOException {
+	public String saveRegistrationDetails(@Valid @ModelAttribute UserDtls userDtls,BindingResult bindingResult,@RequestParam("file") MultipartFile file,HttpSession session,Model model) throws IOException {
+		
+		if(bindingResult.hasErrors()) {
+			
+			model.addAttribute("errors", bindingResult);
+			
+			return "registerr";                                             // if there is error in any form fields than show error in the register page
+		}
+		
 		
         if(userDtlsServiceImpl.checkUserExists(userDtls.getEmail())) {
         	

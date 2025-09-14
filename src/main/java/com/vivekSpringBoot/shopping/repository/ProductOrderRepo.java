@@ -36,4 +36,21 @@ public interface ProductOrderRepo extends JpaRepository<ProductOrder, Integer> {
 			" where p.seller_id = :sellerId  and po.order_id = :orderId ",nativeQuery = true)
 	public SellerOrderDTO findOrdersOfEachSellerByOrderId(@Param("sellerId") Integer sellerId,@Param("orderId") String orderId);
 	
+	
+	@Query(value = "select count(*) from product_order",nativeQuery = true)
+	public long countOrders();
+	
+	@Query(value = "select count(*) from product_order where status = 'Delivered'",nativeQuery = true)
+	public long countDeliveredOrders();
+	
+	@Query(value = "select count(*) from product_order where status = 'In Progress'",nativeQuery = true)
+	public long countPendingOrders();
+	
+	@Query(value = "select count(*) from product_order where status = 'Cancelled'",nativeQuery = true)
+	public long countCancelledOrders();
+	
+	@Query(value = "select sum(price*quantity) from product_order where status = 'Delivered'",nativeQuery = true)
+	public Double revenueGeneratedByDeliveredOrders();
+	
+	
 }

@@ -764,6 +764,25 @@ public class AdminController {
 	}
 	
 	
+	@GetMapping("/stats")
+	public String viewAllStatistics(Model model) {
+		
+		long ordersCount = orderServiceImpl.countAllOrders();
+		long deliveredOrdersCount = orderServiceImpl.countAllDeliveredOrders();
+		long pendingOrdersCount = orderServiceImpl.countAllPendingOrders();
+		long cancelledOrdersCount = orderServiceImpl.countAllCancelledOrders();
+		Double revenueDeliveredOrders = orderServiceImpl.totalRevenueGeneratedByDeliveredOrders();
+		
+		model.addAttribute("ordersCount", ordersCount);
+		model.addAttribute("deliveredOrdersCount", deliveredOrdersCount);
+		model.addAttribute("pendingOrdersCount", pendingOrdersCount);
+		model.addAttribute("cancelledOrdersCount", cancelledOrdersCount);
+		model.addAttribute("revenueDeliveredOrders", revenueDeliveredOrders);
+		
+		return "statss";
+	}
+	
+	
 }
 
 

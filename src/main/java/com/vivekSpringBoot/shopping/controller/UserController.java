@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
+import java.util.Collections;
 import java.util.List;
 
 import javax.mail.MessagingException;
@@ -18,6 +19,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -116,11 +118,20 @@ public class UserController {
 			
 			List<Cart> updatedCartList = cartServiceImpl.getCartsByUserId(userDtls.getId());
 			
-			Cart lastIndexCart = updatedCartList.get(updatedCartList.size()-1);
+			Cart lastIndexCart = null;
+			Double totalOrderPrice = null;
 			
-			Double totalOrderPrice = lastIndexCart.getTotalOrderPrice();
+			if(updatedCartList != null && !CollectionUtils.isEmpty(updatedCartList)) {
+				
+				model.addAttribute("cartsList", updatedCartList);
+				lastIndexCart = updatedCartList.get(updatedCartList.size()-1);
+				totalOrderPrice = lastIndexCart.getTotalOrderPrice();
+			}else {
+				System.out.println("updatedCartList is null");
+			}
 			
-			model.addAttribute("cartsList", updatedCartList);
+			
+			
 			model.addAttribute("productImageUrl", productImageUrl);
 			model.addAttribute("totalOrderPrice", totalOrderPrice);
 			

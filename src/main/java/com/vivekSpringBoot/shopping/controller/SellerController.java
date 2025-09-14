@@ -13,6 +13,7 @@ import java.util.List;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -21,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -96,7 +98,15 @@ public class SellerController {
 	
 	
 	@PostMapping("/saveSellReg")
-	public String saveSellerRegistrationData(@ModelAttribute SellerRegisterDTO sellerRegisterDTO,@RequestParam("file") MultipartFile file,@RequestParam("compfile") MultipartFile compfile,HttpSession session) throws IOException {
+	public String saveSellerRegistrationData(@Valid @ModelAttribute SellerRegisterDTO sellerRegisterDTO,BindingResult bindingResult,@RequestParam("file") MultipartFile file,@RequestParam("compfile") MultipartFile compfile,HttpSession session,Model model) throws IOException {
+		
+		if(bindingResult.hasErrors()) {
+			
+			model.addAttribute("errors", bindingResult);                           // if there is error in any form fields than show error in the sell-register page
+			
+			return "sellerRegg";
+		}
+		
 		
 		// Set UserDtls Data
 		UserDtls newSellerUser = new UserDtls();
