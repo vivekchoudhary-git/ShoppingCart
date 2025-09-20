@@ -51,7 +51,28 @@
 <div class="col-md-10">
 <div class="card shadow-sm p-3 mb-5 bg-body-tertiary rounded">
 <div class="card-body">
-<p class="fs-3 text-center">Products</p>
+<p class="fs-3 text-center">Products</p>                                  <!--only for testing-->
+
+<!--only for testing starts-->
+<c:if test="${searchBarPagination == true }">
+<div class="row mb-3 align-items-center">
+  <div class="col-md-6">
+    <p class="fs-3 m-0"></p>                                                             <!--no text is written,used only for space-->
+  </div>
+  <div class="dropdown text-end">
+    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+      Sort by
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end">
+      <li><a class="dropdown-item" href="/searchProduct?sortDir=asc&keyword=${keyword}">Price: Low to High</a></li>
+      <li><a class="dropdown-item" href="/searchProduct?sortDir=desc&keyword=${keyword}">Price: High to Low</a></li>
+    </ul>
+  </div>
+
+</div>
+</c:if>
+<!--only for testing ends-->
+
 <div class="row">
 
 <c:if test="${not empty activeProductsListPaginated}">

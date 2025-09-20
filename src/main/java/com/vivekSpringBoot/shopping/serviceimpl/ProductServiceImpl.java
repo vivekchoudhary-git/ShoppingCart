@@ -13,6 +13,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -222,10 +223,17 @@ public class ProductServiceImpl implements ProductService {
 		return searchProductsListPaginated;
 	}
 
+	// pagination and sorting
 	@Override
-	public Page<Product> searchActiveProductByKeywordPaginated(String keyword, Integer pageNo, Integer pageSize) {
+	public Page<Product> searchActiveProductByKeywordPaginated(String keyword, Integer pageNo, Integer pageSize,String sortDir,String sortBy) {
 		
-		Pageable pageable = PageRequest.of(pageNo, pageSize);
+		Pageable pageable = null;
+		
+		if(sortDir.equalsIgnoreCase("desc")) {
+			pageable = PageRequest.of(pageNo, pageSize,Sort.by(Sort.Direction.DESC, sortBy));
+		}else {
+			pageable = PageRequest.of(pageNo, pageSize,Sort.by(Sort.Direction.ASC, sortBy));
+		}
 		
 		Page<Product> searchActiveProductsListPaginated = productRepo.searchAnyActiveProductByTitleOrCategoryPaginated(keyword, pageable);
 		

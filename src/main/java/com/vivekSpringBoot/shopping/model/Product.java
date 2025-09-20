@@ -37,6 +37,8 @@ public class Product {
 	private Double price;
 	@Column(nullable = true)                    // The annotation @Column(nullable = true) tells the JPA provider (like Hibernate) that this column can be NULL in the database.
 	private Integer discount;                          // added later  // use Integer to handle null values
+	
+	@Column(name = "discounted_price")               // needs to define column name for sorting by discountedPrice, suggested by chatGPT
 	private Double discountedPrice;            // added later
 	private Integer stock;
 	private String imageName;
@@ -53,3 +55,17 @@ public class Product {
 	
 	
 }
+
+
+
+
+// ----------- Notes -----------
+
+//    Because you are using a native query, Spring needs the column name to match.
+
+//    In your entity, the field is discountedPrice → the database column should be discounted_price.
+
+//    If it’s not, you should explicitly map it:
+
+
+

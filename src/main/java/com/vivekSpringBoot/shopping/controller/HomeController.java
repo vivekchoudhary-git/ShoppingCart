@@ -315,7 +315,7 @@ public class HomeController {
 	
 	// search product by keyword
 	@GetMapping("/searchProduct")
-	public String searchAnyProduct(@RequestParam("keyword") String keyword,@RequestParam(value = "category",defaultValue = "0") Integer category,@RequestParam(value = "pageNo",defaultValue = "0") Integer pageNo,@RequestParam(value = "pageSize",defaultValue = "4") Integer pageSize,Model model ,HttpSession session) {
+	public String searchAnyProduct(@RequestParam("keyword") String keyword,@RequestParam(value = "category",defaultValue = "0") Integer category,@RequestParam(value = "pageNo",defaultValue = "0") Integer pageNo,@RequestParam(value = "pageSize",defaultValue = "4") Integer pageSize,@RequestParam(value = "sortDir",defaultValue = "asc",required = false) String sortDir,@RequestParam(value = "sortBy",defaultValue = "discounted_price",required = false) String sortBy,Model model ,HttpSession session) {
 		
 		model.addAttribute("showSearch", true);                              /* to show search bar in header */
 		
@@ -341,7 +341,7 @@ public class HomeController {
 			
 //			List<Product> searchedProductList = productServiceImpl.searchProductByKeyword(keyword);
 			
-			Page<Product> searchActiveProductsListPaginated = productServiceImpl.searchActiveProductByKeywordPaginated(keyword, pageNo, pageSize);
+			Page<Product> searchActiveProductsListPaginated = productServiceImpl.searchActiveProductByKeywordPaginated(keyword, pageNo, pageSize,sortDir,sortBy);
 			
 			List<Product> searchActiveProductsPaginated = searchActiveProductsListPaginated.getContent();
 			
@@ -352,7 +352,7 @@ public class HomeController {
 			model.addAttribute("isFirst", searchActiveProductsListPaginated.isFirst());
 			model.addAttribute("isLast", searchActiveProductsListPaginated.isLast());
 			
-			model.addAttribute("keyword", keyword);                       // without this pagination will throw error if we click on button 1,2,3.........
+			model.addAttribute("keyword", keyword);                              // without this pagination will throw error if we click on button 1,2,3.........
 			
 			
 		}
