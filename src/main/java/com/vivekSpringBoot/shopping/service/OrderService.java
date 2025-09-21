@@ -41,4 +41,14 @@ public interface OrderService {
 	 
 	 public Double totalRevenueGeneratedByDeliveredOrders();
 	 
+	 public long countSellerOrdersData(Integer sellerId);
+	 
+	 public long countSellerDeliveredOrdersData(Integer sellerId);
+	 
+	 public long countSellerPendingOrdersData(Integer sellerId);
+	 
+	 public long countSellerCancelledOrdersData(Integer sellerId);
+	 
+	 public Double totalRevenueGeneratedBySellerByDeliveredOrders(Integer sellerId);
+	 
 }

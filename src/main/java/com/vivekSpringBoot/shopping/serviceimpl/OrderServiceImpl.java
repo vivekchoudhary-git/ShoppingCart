@@ -222,6 +222,46 @@ public class OrderServiceImpl implements OrderService {
 		return revenueDeliveredOrders;
 	}
 
+	@Override
+	public long countSellerOrdersData(Integer sellerId) {
+		
+		long sellerOrdersCount = productOrderRepo.countOrdersOfSeller(sellerId);
+		
+		return sellerOrdersCount;
+	}
+
+	@Override
+	public long countSellerDeliveredOrdersData(Integer sellerId) {
+		
+		long sellerDeliveredOrdersCount = productOrderRepo.countSellerDeliveredOrders(sellerId);
+		
+		return sellerDeliveredOrdersCount;
+	}
+
+	@Override
+	public long countSellerPendingOrdersData(Integer sellerId) {
+		
+		long sellerPendingOrdersCount = productOrderRepo.countSellerPendingOrders(sellerId);
+		
+		return sellerPendingOrdersCount;
+	}
+
+	@Override
+	public long countSellerCancelledOrdersData(Integer sellerId) {
+		
+		long sellerCancelledOrdersCount = productOrderRepo.countSellerCancelledOrders(sellerId);
+		
+		return sellerCancelledOrdersCount;
+	}
+
+	@Override
+	public Double totalRevenueGeneratedBySellerByDeliveredOrders(Integer sellerId) {
+		
+		Double revenueOfSeller = productOrderRepo.revenueGeneratedBySellerDeliveredOrders(sellerId);
+		
+		return revenueOfSeller;
+	}
+
 	
 	
 }

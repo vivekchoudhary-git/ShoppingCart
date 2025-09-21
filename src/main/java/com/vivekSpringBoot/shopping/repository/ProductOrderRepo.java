@@ -43,7 +43,7 @@ public interface ProductOrderRepo extends JpaRepository<ProductOrder, Integer> {
 	@Query(value = "select count(*) from product_order where status = 'Delivered'",nativeQuery = true)
 	public long countDeliveredOrders();
 	
-	@Query(value = "select count(*) from product_order where status = 'In Progress'",nativeQuery = true)
+	@Query(value = "select count(*) from product_order where status != 'Delivered' and status != 'Cancelled'",nativeQuery = true)
 	public long countPendingOrders();
 	
 	@Query(value = "select count(*) from product_order where status = 'Cancelled'",nativeQuery = true)
@@ -52,5 +52,39 @@ public interface ProductOrderRepo extends JpaRepository<ProductOrder, Integer> {
 	@Query(value = "select sum(price*quantity) from product_order where status = 'Delivered'",nativeQuery = true)
 	public Double revenueGeneratedByDeliveredOrders();
 	
+	
+	@Query(value = " select count(*) "+
+			" from product_order  po inner join product p "+
+			" on po.product_id = p.id "+
+			" where p.seller_id= :sellerId ",nativeQuery = true)
+	public long countOrdersOfSeller(@Param("sellerId") Integer sellerId);
+	
+	
+	@Query(value = " select count(*) "+
+			" from product_order  po inner join product p "+
+			" on po.product_id = p.id "+
+			" where p.seller_id= :sellerId and po.status='Delivered' ",nativeQuery = true)
+	public long countSellerDeliveredOrders(@Param("sellerId") Integer sellerId);
+	
+	
+	@Query(value = " select count(*) "+
+			" from product_order  po inner join product p "+
+			" on po.product_id = p.id "+
+			" where p.seller_id= :sellerId and po.status !='Delivered' and po.status != 'Cancelled' ",nativeQuery = true)
+	public long countSellerPendingOrders(@Param("sellerId") Integer sellerId);
+	
+	
+	@Query(value = " select count(*) "+
+			" from product_order  po inner join product p "+
+			" on po.product_id = p.id "+
+			" where p.seller_id= :sellerId and po.status ='Cancelled' ",nativeQuery = true)
+	public long countSellerCancelledOrders(@Param("sellerId") Integer sellerId);
+	
+	
+	@Query(value = " select sum(po.price*po.quantity) "+
+			" from product_order  po inner join product p "+
+			" on po.product_id = p.id "+
+			" where p.seller_id= :sellerId and po.status ='Delivered' ",nativeQuery = true)
+	public Double revenueGeneratedBySellerDeliveredOrders(@Param("sellerId") Integer sellerId);
 	
 }

@@ -579,4 +579,27 @@ public class SellerController {
 		return "redirect:/seller/viewSeller";
 	}
 	
+	
+	@GetMapping("/stats")
+	public String viewSellerStatistics(Principal principal,Model model) {
+		
+		UserDtls userDtls = getLoggedInUserDetails(principal);
+		SellerProfile loggedInSellerProfile = sellerProfileServiceImpl.getSellersProfileByUserDtlsId(userDtls.getId());
+		
+		long sellerOrdersCount = orderServiceImpl.countSellerOrdersData(loggedInSellerProfile.getId());
+		long sellerDeliveredOrdersCount = orderServiceImpl.countSellerDeliveredOrdersData(loggedInSellerProfile.getId());
+		long sellerPendingOrdersCount = orderServiceImpl.countSellerPendingOrdersData(loggedInSellerProfile.getId());
+		long sellerCancelledOrdersCount = orderServiceImpl.countSellerCancelledOrdersData(loggedInSellerProfile.getId());
+		Double revenueOfSeller = orderServiceImpl.totalRevenueGeneratedBySellerByDeliveredOrders(loggedInSellerProfile.getId());
+		
+		model.addAttribute("sellerOrdersCount", sellerOrdersCount);
+		model.addAttribute("sellerDeliveredOrdersCount", sellerDeliveredOrdersCount);
+		model.addAttribute("sellerPendingOrdersCount", sellerPendingOrdersCount);
+		model.addAttribute("sellerCancelledOrdersCount", sellerCancelledOrdersCount);
+		model.addAttribute("revenueOfSeller", revenueOfSeller);
+		
+		return "sellerStatss";
+	}
+	
+	
 }
