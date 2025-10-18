@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
+import com.lowagie.text.DocumentException;
 import com.vivekSpringBoot.shopping.dto.AdminRegDTO;
 import com.vivekSpringBoot.shopping.dto.SellersDTO;
 import com.vivekSpringBoot.shopping.model.Category;
@@ -49,6 +51,7 @@ import com.vivekSpringBoot.shopping.serviceimpl.UserDtlsServiceImpl;
 import com.vivekSpringBoot.shopping.utility.DiscountUtility;
 import com.vivekSpringBoot.shopping.utility.EmailUtility;
 import com.vivekSpringBoot.shopping.utility.OrderStatus;
+import com.vivekSpringBoot.shopping.utility.OrdersPDF;
 import com.vivekSpringBoot.shopping.utility.SellerAccountStatus;
 
 
@@ -83,6 +86,8 @@ public class AdminController {
 	@Autowired
 	private SellerProfileService sellerProfileServiceImpl;
 	
+	@Autowired
+	private OrdersPDF ordersPDF;
 	
 	@GetMapping("/")
 	public String index() {
@@ -781,6 +786,16 @@ public class AdminController {
 		
 		return "statss";
 	}
+	
+	
+	@GetMapping("/downPdf")
+	public String downloadOrdersPDF(HttpServletResponse response) throws DocumentException, IOException {
+		
+		ordersPDF.export(response);
+		
+		return "redirect:/admin/allOrders";
+	}
+	
 	
 	
 }

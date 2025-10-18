@@ -53,8 +53,14 @@
 <div class="col">
 <button class="btn btn-sm btn-primary">Search</button>
 </div>
+
 </div>
 </form>
+
+<div class="col mb-3">
+<a href="/admin/downPdf" target="_blank"> <button class="btn btn-sm btn-success">Download Orders</button></a>
+</div>	
+
 </div>
 </div>
 <!-- search option ends -->
