@@ -54,9 +54,12 @@ import com.vivekSpringBoot.shopping.utility.OrderStatus;
 import com.vivekSpringBoot.shopping.utility.OrdersPDF;
 import com.vivekSpringBoot.shopping.utility.SellerAccountStatus;
 
+import lombok.extern.slf4j.Slf4j;
+
 
 @Controller
 @RequestMapping("/admin")
+@Slf4j
 public class AdminController {
 
 	@Autowired
@@ -91,6 +94,8 @@ public class AdminController {
 	
 	@GetMapping("/")
 	public String index() {
+		
+		log.info("AdminController index method is called");
 		
 		return "adminIndex";
 	}

@@ -41,8 +41,11 @@ import com.vivekSpringBoot.shopping.serviceimpl.UserDtlsServiceImpl;
 import com.vivekSpringBoot.shopping.utility.EmailUtility;
 import com.vivekSpringBoot.shopping.utility.OrderStatus;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
 @RequestMapping("/user")
+@Slf4j
 public class UserController {
 
 	@Autowired
@@ -68,6 +71,8 @@ public class UserController {
 	
 	@GetMapping("/")
 	public String userHome() {
+		
+		log.info("UserController userHome method is called");
 		
 		return "userHome";
 	}

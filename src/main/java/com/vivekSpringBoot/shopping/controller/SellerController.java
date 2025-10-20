@@ -50,8 +50,11 @@ import com.vivekSpringBoot.shopping.utility.DiscountUtility;
 import com.vivekSpringBoot.shopping.utility.EmailUtility;
 import com.vivekSpringBoot.shopping.utility.OrderStatus;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
 @RequestMapping("/seller")
+@Slf4j
 public class SellerController {
 
 	@Autowired
@@ -225,6 +228,8 @@ public class SellerController {
 	
 	@GetMapping("/index")
 	public String loadIndex() {
+		
+		log.info("SellerController index method is called");
 		
 		return "sellerIndexx";
 	}

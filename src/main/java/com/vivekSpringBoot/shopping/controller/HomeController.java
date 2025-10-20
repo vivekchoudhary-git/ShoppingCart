@@ -43,7 +43,10 @@ import com.vivekSpringBoot.shopping.service.ProductService;
 import com.vivekSpringBoot.shopping.service.UserDtlsService;
 import com.vivekSpringBoot.shopping.utility.EmailUtility;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
+@Slf4j
 public class HomeController {
 
 	@Autowired
@@ -66,6 +69,8 @@ public class HomeController {
 	
 	@GetMapping("/")
 	public String index(Model model) {
+		
+		log.info("HomeController index method is called");
 		
 		String categoryImageUrl = environment.getProperty("category.image.url");
 		String productImageUrl = environment.getProperty("product.image.url");
